@@ -2,8 +2,8 @@ import './globals.css'
 import styles from './page.module.css'
 import { Inter } from 'next/font/google'
 
-import Header from './components/general/Header'
-import Banner from './components/general/Banner'
+import Header from './components/general/header/Header'
+import Banner from './components/general/banner/Banner'
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -1,6 +1,6 @@
 import styles from './page.module.css'
 /* Component imports */
-import Filter from './components/index/Filter'
+import Filter from './components/filter/Filter'
 
 
 
