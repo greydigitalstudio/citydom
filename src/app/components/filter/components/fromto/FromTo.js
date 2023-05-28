@@ -19,21 +19,20 @@ const FromTo = (props) => {
 
     return (
         <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed}`}>
-            <div className={styles__filter.filter__field_title}>{props.title} {from} {to}</div>
+            <div className={styles__filter.filter__field_title}>{props.title}</div>
             <div className={styles__filter.filter__field_row}>
                 <input
-                    type='text'
+                    type={props.from_type}
                     value={from}
-                    name={props.name}
+                    name={props.from_name}
                     onChange={handleInputFrom}
-                    placeholder={props.placeholder}
-                />
-                <input
-                    type='text'
+                    placeholder={props.from_placeholder}
+                />                <input
+                    type={props.to_type}
                     value={to}
-                    name={props.name}
+                    name={props.to_name}
                     onChange={handleInputTo}
-                    placeholder={props.placeholder}
+                    placeholder={props.to_placeholder}
                 />
             </div>
         </div>
