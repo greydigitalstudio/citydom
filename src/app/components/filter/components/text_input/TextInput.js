@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import styles__filter from '../../filter.module.css'
 // import styles__select from './select.module.css'
 
-
 const TextInput = (props) => {
 
     const [value, setValue] = useState(props.value);
