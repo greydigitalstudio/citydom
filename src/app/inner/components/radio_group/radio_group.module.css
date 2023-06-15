@@ -1,0 +1,50 @@
+/* radio_group */
+
+.radio_group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #D6D6D6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.radio_group__label input {
+    display: none;
+}
+.radio_group_item {
+    display: flex;
+    justify-self: center;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: rgba(44, 44, 46, 0.5);
+    padding: 0 13.5px;
+    cursor: pointer;
+}
+.radio_group__label:not(:last-child) .radio_group_item {
+    border-right: 1px solid #D6D6D6;
+}
+
+.radio_group__label input:checked + .radio_group_item {
+    background: #F7C026;
+    color: #2C2C2E;
+}
+
+.filter__field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filter__field_title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    letter-spacing: -0.01em;
+
+    color: #B1BAC1;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
