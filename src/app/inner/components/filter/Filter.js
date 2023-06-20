@@ -67,7 +67,7 @@ const Filter = (props) => {
         </div>
  {
     props.chess.map((house, index) => {
-        return <div id={"house-" + index} className={styles.filter__row} onClick={setHouse}>
+        return <div id={"house-" + index} key={index} className={styles.filter__row} onClick={setHouse}>
             <div className={index == 0 ? styles.filter__button_primary : styles.filter__button_secondary}>
                 {house.title}
             </div>

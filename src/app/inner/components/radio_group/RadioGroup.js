@@ -18,7 +18,7 @@ const RadioGroup = (props) => {
             <div className={styles__radio_group.radio_group}>
                 {props.options.map(({ value, label }, index) => 
                     <label className={styles__radio_group.radio_group__label} key={index}>
-                        <input type="radio" name="rooms" value={value} onChange={handleChange} />
+                        <input type="radio" name={props.name} value={value} onChange={handleChange} />
                         <div className={styles__radio_group.radio_group_item}>
                             {label}
                         </div>
