@@ -14,7 +14,7 @@ import RadioGroup from './components/radio_group/RadioGroup';
 import FromTo from './components/fromto/FromTo';
 import Switch from './components/switch/Switch';
 
-const Filter = () => {
+const Filter = (props) => {
 
     const [isSectionOpened, setSectionOpened] = useState(true);
     const nodeRef = useRef(null);
@@ -23,6 +23,10 @@ const Filter = () => {
         setSectionOpened(!isSectionOpened);
         console.log(isSectionOpened);
     }
+
+    
+
+
 
     return (
         <div className={styles.filter}>

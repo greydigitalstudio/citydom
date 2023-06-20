@@ -23,6 +23,22 @@ const getData = async () => {
   return res
 }
 
+const getLayouts = async () => {
+  let id = window.location.href.split('?')[1].split('&')[0].split('=')[1]
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate/${id}/layouts`);
+  res = await res.json();
+  return res.items
+}
+
+const getChess = async () => {
+  // example https://tyumen.citidom.com/housing-estate/81/chess
+  let id = window.location.href.split('?')[1].split('&')[0].split('=')[1]
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate/${id}/chess`);
+  res = await res.json();
+  console.log(res)
+  return res.houses
+}
+
 export default class Test extends React.Component {
 
   constructor(props) {
@@ -31,8 +47,13 @@ export default class Test extends React.Component {
       data: {
         flatsCount: 0
       },
+      layouts: [],
+      filteredLayouts: [],
+      chess: [],
+      house: null,
       loaded: false,
-      section: "floats"
+      section: "floats",
+      porche: 0
     }
   }
 
@@ -42,11 +63,41 @@ export default class Test extends React.Component {
     })
   }
 
-  componentDidMount() {
+  filterLayouts = (layouts) => {
+    this.setState({
+      filteredLayouts: layouts
+    })
+  }
+
+  setHouse = (house) => {
+    this.setState({
+      house: house
+    })
+  }
+
+  setPorche = (porche) => {
+    this.setState({
+      porche: porche - 1
+    })
+  }
+
+  async componentDidMount() {
+    await getChess().then(res => {
+      this.setState({
+        chess: res,
+        house: res[0]
+      })
+    })
     getData().then(res => {
       this.setState({
         data: res,
         loaded: true
+      })
+    })
+    getLayouts().then(res => {
+      this.setState({
+        layouts: res,
+        filteredLayouts: res
       })
     })
   }
@@ -59,8 +110,13 @@ export default class Test extends React.Component {
           {
             this.state.loaded &&
             <Filter
-          change={this.changeSection}
-          />
+              change={this.changeSection}
+              layouts={this.state.layouts}
+              filter={this.filterLayouts}
+              chess={this.state.chess}
+              setHouse={this.setHouse}
+              setPorche={this.setPorche}
+            />
           }
           
           {
@@ -69,7 +125,7 @@ export default class Test extends React.Component {
         </div>
         <div className={styles.content}>
           {
-            this.state.loaded ? <Content data={this.state.data} section={this.state.section}/> : null
+            this.state.loaded ? <Content data={this.state.data} section={this.state.section} layouts={this.state.filteredLayouts} house={this.state.house} porche={this.state.porche}/> : null
           }
             
         </div>

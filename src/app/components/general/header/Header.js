@@ -17,7 +17,7 @@ export default function Header() {
         <Phone tel="+ 8 (800) 888 - 88 - 88" />
       </div>
       <div className={header_styles.header__right}>
-        <Link href="/inner">Внутренняя страница</Link>
+        {/* <Link href="/inner">Внутренняя страница</Link> */}
       </div>
     </header>
   )

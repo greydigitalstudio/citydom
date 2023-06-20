@@ -9,6 +9,7 @@ const RadioGroup = (props) => {
 
     const handleChange = ({ target }) => {
         setSelected_radio(target.value);
+        props.change(target.value)
     }
 
     return (

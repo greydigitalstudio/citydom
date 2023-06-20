@@ -196,11 +196,12 @@
 
 
   .content__layouts {
-    height: 654px;
+    max-height: 654px;
     overflow-y: scroll;
     overflow-x: hidden;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
     gap: 9.5px;
     margin-top: 30px;
   }
@@ -209,7 +210,6 @@
     box-sizing: border-box;
 
     width: 155.5px;
-    height: 209.5px;
 
     border: 1px solid #DADADA;
     border-radius: 6px;
@@ -222,6 +222,10 @@
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  .content__layout_image img {
+    width: 130px;
   }
 
   .content__flats_text {

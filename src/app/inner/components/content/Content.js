@@ -10,36 +10,53 @@ const Content = (props) => {
     let section = props.section
 
     let data = props.data
+    let house = props.house
+    let porche = props.porche;
+    let layouts = props.layouts.filter(item => item.house.title === house.title)
+
+    
+
+    const [modalLayout, setModalLayout] = useState(null)
+    
 
     if(!data) data = {
         
     }
     let flats = []
 
-    for (let i = 0; i < 10; i++) {
-        flats.push([])
-        for (let j = 0; j < 10; j++) {
-            flats[i][j] = '1.8 млн'
-        }
+    function price(price) {
+        if(price == "0") return '—'
+        return (price/1000000).toFixed(1) + ' млн'
     }
 
-    let layouts = []
+    while(!house.porches[porche]) porche--
 
-    for (let i = 0; i < 20; i++) {
-        layouts.push({
-            cost: '2 940 000',
-            area: '34.5',
+    for (let i = 0; i < house.porches[porche].storeys.length ; i++) {
+        flats.push({
+            number: house.porches[porche].storeys[i].number,
+            flats: []
         })
+        for (let j = 0; j < house.porches[porche].storeys[i].flats.length; j++) {
+            flats[i].flats[j] = price(house.porches[porche].storeys[i].flats[j].price)
+        }
     }
 
     let [modal, setModal] = useState(false)
 
-    function showModal() {
+    function showModal({target}) {
+        while(!target.id) {
+            target = target.parentNode
+        }
+        let layoutId = target.id.split('-')[1]
+        let layout = layouts.filter(item => item.id === parseInt(layoutId))[0]
+        setModalLayout(layout)
         setModal(true)
     }
+
     function closeModal() {
         setModal(false)
     }
+
 
 
     return (
@@ -82,10 +99,10 @@ const Content = (props) => {
                             return <div className={styles.content__flats_row} key={index}>
                                 <div className={styles.content__flats_wrapper}>
                                     <div className={index === 0 ? styles.content__flats_index_first  : styles.content__flats_index}>
-                                    { 10 - index }
+                                    { row.number }
                                     </div>
                                     {
-                                        row.map((item, index) => {
+                                        row.flats.map((item, index) => {
                                             return (
                                                 <div className={styles.content__flats_item} key={index}>
                                                     { item }
@@ -105,17 +122,17 @@ const Content = (props) => {
                     {
                         layouts.map((item, index) => {
                             return (
-                                <div className={styles.content__layout} key={index} onClick={ showModal }>
+                                <div className={styles.content__layout} id={"layout-" + item.id} key={index} onClick={ showModal }>
                                     <div className={styles.content__layout_wrapper}>
                                         <div className={styles.content__layout_image}>
-                                            <img src="https://i.ibb.co/Dk13QcL/image-3.png" alt="" />
+                                            <img src={"https://files.citidom.com/" + item.layout } alt="" />
                                         </div>
                                         <div className={styles.content__flats_row}>
                                             <div className={styles.content__flats_text}>
                                                 Цена от:
                                             </div>
                                             <div className={styles.content__flats_bdtext}>
-                                                { item.cost } ₽
+                                                { item.price } ₽
                                             </div>
                                         </div>
                                         <div className={styles.content__flats_row}>
@@ -123,7 +140,7 @@ const Content = (props) => {
                                                 Площадь:
                                             </div>
                                             <div className={styles.content__flats_bdtext}>
-                                                { item.area } м²
+                                                { item.spaceTotal } м²
                                             </div>
                                         </div>
                                     </div>
@@ -150,23 +167,23 @@ const Content = (props) => {
                     </div>
                     <div className={styles.content__modal_content}>
                         <div className={styles.content__modal_image}>
-                            <img src="https://i.ibb.co/jZF0pB2/image-4.png" alt="" />
+                            <img src={"https://files.citidom.com/" + modalLayout.layout } alt="" />
                         </div>
                         <div className={styles.content__modal_info}>
                             <div className={styles.content__modal_title}>
-                                ЖК «Краснолесье»
+                                { modalLayout.estate.title }
                             </div>
                             <div className={styles.content__modal_text}>
-                                2 - комнатная
+                               { modalLayout.rooms } - комнатная
                             </div>
                             <div className={styles.content__modal_text}>
-                                76.24 кв.м.
+                                {modalLayout.spaceTotal} кв.м.
                             </div>
                             <div className={styles.content__modal_text}>
-                                2-этаж
+                                {modalLayout.storey.number}-этаж
                             </div>
                             <div className={styles.content__modal_text}>
-                                4-квартал 2022 года.
+                                {modalLayout.house.quarter}-квартал {modalLayout.house.year} года.
                             </div>
                             <div className={styles.content__modal_button}>
                                 Купить со скидкой

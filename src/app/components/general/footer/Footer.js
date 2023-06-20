@@ -9,7 +9,7 @@ import Logo from '../logo/Logo'
 
 // Icons
 import Vk from './icons/Vk'
-import Instagram from './icons/instagram'
+import Instagram from './icons/Instagram'
 import Whatsup from './icons/Whatsup';
 import Telegram from './icons/Telegram';
 
