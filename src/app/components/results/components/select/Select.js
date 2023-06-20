@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-import styles__filter from '../../filter.module.css'
-// import styles__select from './select.module.css'
+import styles from './select.module.css'
 
 
 const SelectMenu = (props) => {
@@ -11,12 +10,13 @@ const SelectMenu = (props) => {
 
     const handleChange = ({ target }) => {
         setSelected(target.value);
+        props.change({ target })
     }
 
     return (
-        <label className={styles__filter.filter__field}>
+        <label className={styles.filter__field}>
             <select
-                className={styles__filter.filter__field_item}
+                className={styles.filter__field_item}
                 value={selected}
                 onChange={handleChange}
             >

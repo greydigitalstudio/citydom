@@ -26,6 +26,11 @@
     letter-spacing: -0.05em;
 
     color: #4D5153;
+
+    cursor: pointer;
+
+    background: none;
+    border: none;
 }
 
 .filter__row_vertical_divider {

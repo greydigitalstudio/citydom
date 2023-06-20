@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-
 import styles from './phoneform.module.css'
-// import styles__select from './select.module.css'
+import './notoemoji.css'
+
+
 
 const PhoneForm = (props) => {
 
@@ -25,7 +26,9 @@ const PhoneForm = (props) => {
                 value={selected}
                 onChange={handleChange}
             >
-                {props.options.map(({ value, label }, index) => <option key={index} value={value} >{label}</option>)}
+                {props.options.map(({ value, label }, index) => <option className={styles.phoneform__option} key={index} value={value} >
+                        {label}
+                </option>)}
             </select>
             <label className={`${styles.filter__field} ${styles.filter__flexed}`}>
                 <div className={styles.filter__field_title}>{props.title}</div>

@@ -3,6 +3,8 @@
 import React, { useState, useRef } from 'react';
 import styles from './item.module.css'
 
+import Link from 'next/link'
+
 // Icons
 import Star from '../../icons/star'
 import Angle from '../../icons/angle'
@@ -33,6 +35,7 @@ const Item = (props) => {
     
     return (
         <div className={styles.item}>
+            <Link href={`/inner?id=${props.item.id}&page=${props.pageData.page}&sort=${props.sort}`}>
             <div className={styles.item__in}>
                 <div className={styles.item__uploaded}>
                     Внесён {getDate(new Date(props.item.createdAt))}
@@ -75,7 +78,10 @@ const Item = (props) => {
                 </div>
 
                 <div className={styles.item__address}>
-                    <Pin/> Адрес{/* {props.item.title} */}
+                    <Pin/>
+                    <div className={styles.item__address_text}>
+                        { props.item.title }
+                    </div>
                 </div>
 
                 <div className={styles.item__row}>
@@ -95,6 +101,7 @@ const Item = (props) => {
 
                 
             </div>
+            </Link>
         </div>
     );
 }

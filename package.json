@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "https://greydigitalstudio.github.io/citydom",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "",
+    "deploy": "gh-pages -d out",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -21,6 +21,7 @@
     "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
+    "@zeit/next-css": "^1.0.1",
     "gh-pages": "^5.0.0"
   }
 }

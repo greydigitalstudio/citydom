@@ -33,6 +33,10 @@
     line-height: 26px;
 
     color: #2B2F36;
+
+    display: flex;
+    width: 600px;
+    gap: 26px;
 }
 
 .results__lighttext {

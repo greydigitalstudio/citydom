@@ -6,17 +6,29 @@ import Checkerboard from './icons/Checkerboard'
 import Layouts from './icons/Layouts'
 
 
-const Filter = () => {
+let inicialized = []
+
+
+
+const Filter = (props) => {
+
+    function setFloats() {
+        props.change("floats")
+    }
+    function setLayouts() {
+        props.change("layouts")
+    }
+
   return (
     <div className={styles.filter}>
         <div className={styles.filter__row}>
-            <div className={styles.filter__row_button}>
+            <button className={styles.filter__row_button} onClick={setFloats}>
                 <Checkerboard/> Шахматка 
-            </div>
+            </button>
             <div className={styles.filter__row_vertical_divider}></div>
-            <div className={styles.filter__row_button}>
+            <button className={styles.filter__row_button} onClick={setLayouts}>
                 <Layouts/> Планировки
-            </div>
+            </button>
         </div>
         <div className={styles.filter__row}>
             <div className={styles.filter__button_primary}>
