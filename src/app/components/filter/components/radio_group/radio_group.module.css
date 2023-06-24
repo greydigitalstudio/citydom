@@ -29,3 +29,14 @@
     background: #F7C026;
     color: #2C2C2E;
 }
+
+@media only screen and (max-width: 600px) {
+    .radio_group {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .radio_group_item {
+        text-align: center;
+    }
+}

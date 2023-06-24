@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import styles__filter from '../../filter.module.css'
-// import styles__from_to from './from_to.module.css'
+import styles__from_to from './fromto.module.css'
 
 
 const FromTo = (props) => {
@@ -18,7 +18,7 @@ const FromTo = (props) => {
     }
 
     return (
-        <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed}`}>
+        <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed} ${styles__from_to.from_to}`}>
             <div className={styles__filter.filter__field_title}>{props.title}</div>
             <div className={styles__filter.filter__field_row}>
                 <input

@@ -48,3 +48,36 @@
     margin-bottom: 12px;
     margin-top: 12px;
 }
+
+@media only screen and (max-width: 767px) {
+    .radio_group__label:not(:last-child) .radio_group_item {
+        border: none;
+    }
+
+    .radio_group__label  {
+        border: 1px solid #EEEEEE;
+        border-radius: 21.375px;
+        margin-right: 8px;
+    }
+
+    .radio_group {
+        border: none;
+        overflow: hidden;
+        overflow-x: scroll;
+    }
+
+    .radio_group__label input:checked + .radio_group_item {
+        border-radius: 21.375px;
+    }
+
+    .radio_group_item {
+        color: black;
+        font-weight: 400;
+        font-size: 15.5319px;
+        line-height: 19px;
+        padding: 12px 18px;
+        white-space: nowrap;
+    }
+
+
+}

@@ -18,9 +18,11 @@
 .results__result {
     width: 260px;
 }
+
 .results__map {
-    padding-top: 40px;
+    margin-top: 38px;
 }
+
 .results__map ymaps {
     border-radius: 18px;
 }
@@ -100,4 +102,49 @@
 
 .results__pagination_primary {
     background: #F7C026;
+}
+
+@media only screen and (max-width: 767px) {
+    .results__header {
+    }
+    .results__title {
+        display: contents;
+        height: 75px;
+    }
+
+    .results__title div {
+        padding-bottom: 10px;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .results__lighttext {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .results__subtitle {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .results__box {
+        grid-template-columns: 1fr;
+        
+    }
+
+    .results__content {
+       display: flex;
+       justify-content: center;
+    }
+
+    .results__pagination_item {
+        padding: 9px 14px;
+        font-weight: 400;
+    }
 }

@@ -1,2 +1,16 @@
-/* select */
+/* from_to */
 
+.from_to {}
+
+@media  only screen and (max-width: 600px) {
+    .from_to {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+    }
+
+    .from_to div {
+        display: flex;
+        align-items: center;
+    }
+}

@@ -22,3 +22,13 @@
     gap: 6px;
     align-items: center;
 }
+
+@media  (max-width: 767px) {
+    .privilege__item {
+        gap: 10px;
+    }
+
+    .privilege_wrapper {
+        gap: 10px;
+    }
+}

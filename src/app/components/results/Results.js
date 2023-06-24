@@ -6,11 +6,14 @@ import { YMaps, Map, Placemark, Clusterer } from '@pbe/react-yandex-maps';
 import Item from './components/item/item'
 import Select from './components/select/Select'
 
+import MediaQuery from 'react-responsive'
+
 async function getHousing(options = {
     page: 1,
     limit: 6,
     sort: 'fresh_at_asc'
 }) {
+    console.log(options.limit)
     let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&limit=${options.limit}&sort=${options.sort}`);
     res = await res.json();
     return res
@@ -33,15 +36,46 @@ class Results extends React.Component  {
             },
             pageData: {
                 page: 1,
+                pageSize: 6,
                 last: 10
             },
             sort: 'fresh_at_asc',
-            houseCount: 0
+            houseCount: 0,
+            mounted: false,
+            maps: false
         }
     }
 
-    componentDidMount() {
-        getHousing().then(res => {
+    async componentDidMount() {
+        // ширина окна
+        this.setState({
+            mounted: true
+        })
+        let width = window.innerWidth;
+        // если ширина окна меньше 768px
+        if(width < 768) {
+            await this.setState({
+                pageData: {
+                    page: 1,
+                    last: 10,
+                    pageSize: 3
+                }
+            })
+        }
+
+        setTimeout(() => {
+            this.setState({
+                maps: true
+            })
+        }, 2000)
+
+
+        console.log(this.state.pageData.pageSize)
+        getHousing({
+            page: 1,
+            limit: this.state.pageData.pageSize,
+            sort: this.state.sort
+        }).then(res => {
             res.items.forEach(item => {
                 item.endConstruction = item.endConstruction.trim()
                 let regexp = new RegExp(/(1|2|3|4) кв\. \d\d\d\d$/g)
@@ -104,24 +138,15 @@ class Results extends React.Component  {
 
     render() {
 
-        // const [housing, setHousing] = useState([]);
-        // const [mapsData, setMapsData] = useState({
-        //     state: false
-        // });
-        // const [pageData, setPageData] = useState({
-        //     page: 1,
-        //     last: 10
-        // });
-
-        // const [sort, setSort] = useState('fresh_at_asc');
-
 
         return (
             <div className={styles.results}>
                 <div className={styles.results__in}>
                     <div className={styles.results__header}>
                         <div className={styles.results__title}>
-                            Продажа новостроек в Тюмени
+                            <div> 
+                                Продажа новостроек в Тюмени
+                            </div>
                             <div id="sort-select">
                             <Select
                                 change = {this.onChange}
@@ -158,12 +183,13 @@ class Results extends React.Component  {
                         }</div>
                         <div className={styles.results__subtitle}>Услуги компании бесплатны</div>
                     </div>
-                    <div className={styles.results__content}>
-                        <div className={styles.results__box}>
-                        {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
-                        </div>
-                        {
-                            this.state.mapsData.state && 
+                    { this.state.mounted && 
+                    <MediaQuery minDeviceWidth={768}>
+                        <div className={styles.results__content}>
+                            <div className={styles.results__box}>
+                            {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
+                            </div>
+                            { this.state.maps &&
                             <YMaps>
                                 <Map width='100%' className={styles.results__map} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
                                     <Clusterer
@@ -176,17 +202,37 @@ class Results extends React.Component  {
                                     </Clusterer>
                                 </Map>
                             </YMaps>
-                        }
-                    </div>
-                    <div className={styles.results__pagination}>
-                        <div className={styles.results__pagination_item}>
-                            первая
+                            }
                         </div>
-                            { this.getPages() }
-                        <div className={styles.results__pagination_item}>
-                            последняя
+                        <div className={styles.results__pagination}>
+                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
+                                первая
+                            </div>
+                                { this.getPages() }
+                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
+                                последняя
+                            </div>
                         </div>
-                    </div>
+                    </MediaQuery>
+                     }
+                     { this.state.mounted && 
+                    <MediaQuery maxDeviceWidth={767}>
+                        <div className={styles.results__content}>
+                            <div className={styles.results__box}>
+                            {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
+                            </div>
+                        </div>
+                        <div className={styles.results__pagination}>
+                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
+                                первая
+                            </div>
+                                { this.getPagesMobile() }
+                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
+                                последняя
+                            </div>
+                        </div>
+                    </MediaQuery>
+                    }
                 </div>
             </div>
         );
@@ -197,14 +243,14 @@ class Results extends React.Component  {
         let firstdots = false;
         let lastdots = false;
         for(let i = 0; i < this.state.pageData.last; i++) {
-            if(i < this.state.pageData.page - 2){
+            if(i < parseInt(this.state.pageData.page) - 2){
                 if(!firstdots) {
                     pages.push(<div id="page-1" className={styles.results__pagination_item}>...</div>)
                     firstdots = true;
                 }
                 continue;
             }
-            if(i > this.state.pageData.page + 2){
+            if(i >= parseInt(this.state.pageData.page) + 2){
                 if(!lastdots) {
                     pages.push(<div id={`page-${this.state.pageData.last}`} className={styles.results__pagination_item}>...</div>)
                     lastdots = true;
@@ -217,11 +263,37 @@ class Results extends React.Component  {
         }
         return pages;
     }
+
+    getPagesMobile() {
+        let pages = [];
+        let pagesSize = 0
+        for(let i = 0; i < this.state.pageData.last; i++) {
+            if(i < parseInt(this.state.pageData.page) - 2){
+                continue;
+            }
+            if( (i >= parseInt(this.state.pageData.page) + 1) && pagesSize >= 3){
+                continue;
+            }
+            pagesSize++;
+            pages.push(<div onClick={(e) => {
+                this.changePage(e)
+            }} id={`page-${i+1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i+1 ? (' ' + styles.results__pagination_primary) : '' }`}>{i + 1}</div>)
+        }
+        return pages;
+    }
+
+    firstPage = async () => {
+        this.changePage({ target: { id: 'page-1' } })
+    }
+
+    lastPage = async () => {
+        this.changePage({ target: { id: `page-${this.state.pageData.last}` } })
+    }
     
     async changePage(e) {
         let page = e ? e.target.id.split('-')[1] : this.state.pageData.page;
         let res = await getHousing({
-            page, limit: 6, sort: this.state.sort
+            page, limit: this.state.pageData.pageSize, sort: this.state.sort
         })
         res.items.forEach(item => {
             item.endConstruction = item.endConstruction.trim()
@@ -240,7 +312,8 @@ class Results extends React.Component  {
             housing: res.items,
             pageData: {
                 page: page,
-                last: res.pagination.end
+                pageSize: this.state.pageData.pageSize,
+                last: res.pagination.last
             }
         })
     }

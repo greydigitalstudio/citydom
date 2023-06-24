@@ -5,6 +5,7 @@ import Privilege from './components/privilege/Privilege'
 import Consultation from './components/consultation/Consultation'
 import Content from './components/content/Content'
 import React, { useEffect, useState } from 'react'
+import MediaQuery from 'react-responsive'
 
 import styles from './page.module.css'
 /* Component imports */
@@ -13,7 +14,8 @@ const getData = async () => {
   let id = window.location.href.split('?')[1].split('&')[0].split('=')[1]
   let page = window.location.href.split('?')[1].split('&')[1].split('=')[1]
   let sort = window.location.href.split('?')[1].split('&')[2].split('=')[1]
-  let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${page}&limit=6&sort=${sort}`);
+  let limit = window.location.href.split('?')[1].split('&')[3].split('=')[1]
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${page}&limit=${limit}&sort=${sort}`);
   res = await res.json();
 
   console.log(res.items)
@@ -82,23 +84,20 @@ export default class Test extends React.Component {
   }
 
   async componentDidMount() {
-    await getChess().then(res => {
-      this.setState({
-        chess: res,
-        house: res[0]
+    let chess = await getChess()
+      await this.setState({
+        chess: chess,
+        house: chess[0]
       })
-    })
-    getData().then(res => {
-      this.setState({
-        data: res,
+    let data = await getData()
+      await this.setState({
+        data: data
+      })
+    let layouts = await getLayouts()
+    await this.setState({
+        layouts: layouts,
+        filteredLayouts: layouts,
         loaded: true
-      })
-    })
-    getLayouts().then(res => {
-      this.setState({
-        layouts: res,
-        filteredLayouts: res
-      })
     })
   }
 
@@ -106,33 +105,62 @@ export default class Test extends React.Component {
 
     return (
       <main className={`${styles.main} ${styles.center}`}>
+        {
+          this.state.loaded &&
+        <MediaQuery minWidth={768}>
         <div className={styles.left}>
-          {
-            this.state.loaded &&
             <Filter
               change={this.changeSection}
               layouts={this.state.layouts}
               filter={this.filterLayouts}
               chess={this.state.chess}
+              section={this.state.section}
               setHouse={this.setHouse}
               setPorche={this.setPorche}
+              data={this.state.data}
+              house={this.state.house}
+              porche={this.state.porche}
             />
-          }
-          
-          {
-            this.state.loaded ? <Privilege data={this.state.data}/> : null
-          }
+         <Privilege data={this.state.data}/>
         </div>
         <div className={styles.content}>
-          {
-            this.state.loaded ? <Content data={this.state.data} section={this.state.section} layouts={this.state.filteredLayouts} house={this.state.house} porche={this.state.porche}/> : null
-          }
+          <Content data={this.state.data} section={this.state.section} layouts={this.state.filteredLayouts} house={this.state.house} porche={this.state.porche}/>
+          
             
         </div>
         <div className={styles.left}>
-          { this.state.loaded ? <Consultation data={this.state.data}/> : null }
+          <Consultation data={this.state.data}/>
         </div>
+        </MediaQuery>
+       }
 
+       {
+          this.state.loaded &&
+        <MediaQuery maxWidth={767}>
+          <div className={styles.left}>
+            <Filter
+              change={this.changeSection}
+              layouts={this.state.layouts}
+              filter={this.filterLayouts}
+              chess={this.state.chess}
+              section={this.state.section}
+              setHouse={this.setHouse}
+              setPorche={this.setPorche}
+              data={this.state.data}
+              house={this.state.house}
+              porche={this.state.porche}
+            />
+        </div>
+        <div className={styles.content}>
+          <Content data={this.state.data} section={this.state.section} layouts={this.state.filteredLayouts} house={this.state.house} porche={this.state.porche}/>
+          
+            
+        </div>
+        <div className={styles.left}>
+          <Consultation data={this.state.data}/>
+        </div>
+          </MediaQuery>
+       }
       </main>
     )
   }

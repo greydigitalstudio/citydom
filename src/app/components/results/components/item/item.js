@@ -35,15 +35,22 @@ const Item = (props) => {
 
     return (
         <div className={styles.item}>
-            <Link href={`/inner?id=${props.item.id}&page=${props.pageData.page}&sort=${props.sort}`}>
-                <div className={styles.item__in}>
-                    <div className={styles.item__top_dates}>
-                        <div className={styles.item__updated}>
-                            Обновлен: {getDate(new Date(props.item.updatedAt))}
-                        </div>
-                        <div className={styles.item__uploaded}>
-                            Внесён {getDate(new Date(props.item.createdAt))}
-                        </div>
+            <Link href={`/inner?id=${props.item.id}&page=${props.pageData.page}&sort=${props.sort}&size=${props.pageData.pageSize}`}>
+            <div className={styles.item__in}>
+                <div className={styles.item__uploaded}>
+                    Внесён {getDate(new Date(props.item.createdAt))}
+                </div>
+                <img className={styles.item__img} src={image} alt="" />
+                <div className={styles.item__star}
+                    style={{ display: "none" }}
+                >
+                    <Star />
+                </div>
+                <div
+                    style={{ display: "none" }}
+                className={styles.item__someinfo}>
+                    <div className={styles.item__someleter}>
+                        C
                     </div>
                     <img className={styles.item__img} src={image} alt="" />
                     <div className={styles.item__star}>

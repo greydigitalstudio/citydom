@@ -1,6 +1,7 @@
 .item {
     width: 260px;
     position: relative;
+    max-height: 325px;
 }
 
 .item__img {

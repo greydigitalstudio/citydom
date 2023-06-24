@@ -17,6 +17,7 @@ const Content = (props) => {
 
 
     const [modalLayout, setModalLayout] = useState(null)
+    let [modal, setModal] = useState(false)
 
 
     if (!data) data = {
@@ -41,7 +42,6 @@ const Content = (props) => {
         }
     }
 
-    let [modal, setModal] = useState(false)
 
     function showModal({ target }) {
         while (!target.id) {

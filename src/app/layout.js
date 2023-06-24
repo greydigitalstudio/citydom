@@ -1,3 +1,5 @@
+"use client";
+
 import './globals.css'
 import styles from './page.module.css'
 import { Inter } from 'next/font/google'
@@ -7,6 +9,7 @@ import Head from 'next/head'
 import Header from './components/general/header/Header'
 import Banner from './components/general/banner/Banner'
 import Footer from './components/general/footer/Footer'
+import { useEffect, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +20,29 @@ export const metadata = {
 
 
 export default function RootLayout({ children }) {
+
+  let [path, setPath] = useState('/')
+  let [device, setDevice] = useState('desktop')
+
+  useEffect(() => {
+    if(window.innerWidth < 768) {
+      setDevice('mobile')
+    }
+    setPath(window.location.pathname)
+    window.addEventListener('resize', () => {
+      if(window.innerWidth < 768) {
+        setDevice('mobile')
+      }
+      else {
+        setDevice('desktop')
+      }
+    })
+
+    window.addEventListener('popstate', () => {
+      setPath(window.location.pathname)
+    })
+  }, [])
+
   return (
     <html lang="en">
       
@@ -29,10 +55,16 @@ export default function RootLayout({ children }) {
         }
       <body className={inter.className}>
         <div className={styles.wrapper}>
-          <Header />
+          {
+            (device !== 'mobile' || path === '/' || path === '/citydom/') && <Header />
+          }
+          
           <Banner />
           {children}
-          <Footer />
+          {
+            (device !== 'mobile' || path === '/' || path === '/citydom/') && <Footer />
+          }
+          
         </div>        
       </body>
     </html>
