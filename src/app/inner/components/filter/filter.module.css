@@ -650,4 +650,26 @@
             right: 61px;
             z-index: 1;
         }
+
+        .filter__photos_pagination_item {
+          width: 7.5px;
+          height: 7.5px;
+          border-radius: 100%;
+          background: #fff;
+        }
+
+        .filter__photos_pagination_item_selected {
+          background: #E8BA4B;
+        }
+
+        .filter__photos_pagination {
+          position: absolute;
+          top: 250px;
+          left: 0px;
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          gap: 12px;
+        }
+
 }

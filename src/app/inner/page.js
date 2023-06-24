@@ -7,6 +7,7 @@ import Content from './components/content/Content'
 import React, { useEffect, useState } from 'react'
 import MediaQuery from 'react-responsive'
 
+import Banner from '../components/general/banner/Banner'
 import styles from './page.module.css'
 /* Component imports */
 const getData = async () => {
@@ -55,7 +56,8 @@ export default class Test extends React.Component {
       house: null,
       loaded: false,
       section: "floats",
-      porche: 0
+      porche: 0,
+      photoIndex: 0,
     }
   }
 
@@ -83,6 +85,22 @@ export default class Test extends React.Component {
     })
   }
 
+  setPhoto = (photo) => {
+    this.setState({
+      photoIndex: photo
+    })
+  }
+
+  oppenDescription = () => {
+    this.setState({
+      data: {
+        ...this.state.data,
+        descriptionOpened: true,
+        displayDescription: this.state.data.description
+      }
+    }) 
+  }
+
   async componentDidMount() {
     let chess = await getChess()
       await this.setState({
@@ -90,6 +108,14 @@ export default class Test extends React.Component {
         house: chess[0]
       })
     let data = await getData()
+    if(data.description.length > 550) {
+      data.displayDescription = data.description.slice(0, 550)
+      data.descriptionOpened = false
+    } else {
+      data.displayDescription = data.description
+      data.descriptionOpened = true
+    }
+      
       await this.setState({
         data: data
       })
@@ -104,6 +130,12 @@ export default class Test extends React.Component {
   render() {
 
     return (
+      <>
+      <Banner
+        data={this.state.data}
+        photoIndex={this.state.photoIndex}
+        setPhoto={this.setPhoto}
+      />
       <main className={`${styles.main} ${styles.center}`}>
         {
           this.state.loaded &&
@@ -120,11 +152,20 @@ export default class Test extends React.Component {
               data={this.state.data}
               house={this.state.house}
               porche={this.state.porche}
+              photoIndex={this.state.photoIndex}
+              setPhoto={this.setPhoto}
             />
          <Privilege data={this.state.data}/>
         </div>
         <div className={styles.content}>
-          <Content data={this.state.data} section={this.state.section} layouts={this.state.filteredLayouts} house={this.state.house} porche={this.state.porche}/>
+          <Content
+            data={this.state.data}
+            section={this.state.section}
+            layouts={this.state.filteredLayouts}
+            house={this.state.house}
+            porche={this.state.porche}
+            openDescription={this.oppenDescription}
+          />
           
             
         </div>
@@ -149,6 +190,8 @@ export default class Test extends React.Component {
               data={this.state.data}
               house={this.state.house}
               porche={this.state.porche}
+              photoIndex={this.state.photoIndex}
+              setPhoto={this.setPhoto}
             />
         </div>
         <div className={styles.content}>
@@ -162,6 +205,7 @@ export default class Test extends React.Component {
           </MediaQuery>
        }
       </main>
+      </>
     )
   }
 }

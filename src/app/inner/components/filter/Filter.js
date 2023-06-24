@@ -27,6 +27,10 @@ const Filter = (props) => {
 
     let photo = 'https://files.citidom.com/' + data.photos[0].name
 
+    let photos = data.photos.map(item => { return 'https://files.citidom.com/' + item.name })
+    let photoIndex = props.photoIndex
+    console.log(photoIndex)
+    console.log(photos[photoIndex])
     const [modalLayout, setModalLayout] = useState(null)
     let [modal, setModal] = useState(false)
 
@@ -231,7 +235,7 @@ const Filter = (props) => {
         </MediaQuery>
         }
         { mounted && <MediaQuery maxWidth={767}>
-        <Link href="/citydom"> 
+        <Link href="/"> 
         <div className={styles.filter__background_back}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
                     <g filter="url(#filter0_b_133_2516)">
@@ -285,7 +289,16 @@ const Filter = (props) => {
                             </svg>
                         </div>
             <div className={styles.filter__background}>
-                <img src={photo} alt="" />
+                <img src={photos[photoIndex]} alt="" />
+            </div>
+            <div className={styles.filter__photos_pagination}>
+                {
+                    photos.map((item, index) => {
+                        return <div onClick={ () => {
+                            props.setPhoto(index)
+                         } } key={index} className={styles.filter__photos_pagination_item + ((photoIndex == index) ? (' ' + styles.filter__photos_pagination_item_selected) : '')}></div>
+                    })
+                }
             </div>
         <div className={styles.content__title}>
                 <div className={styles.content__title_title}>

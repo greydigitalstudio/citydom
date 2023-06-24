@@ -7,7 +7,6 @@ import { Inter } from 'next/font/google'
 import Head from 'next/head'
 
 import Header from './components/general/header/Header'
-import Banner from './components/general/banner/Banner'
 import Footer from './components/general/footer/Footer'
 import { useEffect, useState } from 'react'
 
@@ -59,7 +58,6 @@ export default function RootLayout({ children }) {
             (device !== 'mobile' || path === '/' || path === '/citydom/') && <Header />
           }
           
-          <Banner />
           {children}
           {
             (device !== 'mobile' || path === '/' || path === '/citydom/') && <Footer />

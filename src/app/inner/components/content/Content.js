@@ -2,10 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import Pin from './icons/pin.js';
 
+import MediaQuery from 'react-responsive'
 import styles from './content.module.css'
 
 
 const Content = (props) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     let section = props.section
 
@@ -61,6 +67,9 @@ const Content = (props) => {
 
     return (
         <div className={styles.content}>
+             { mounted && <MediaQuery minWidth={768}>
+             </MediaQuery>
+            }
             <div className={styles.content__wrapper}>
                 <div className={styles.content__title}>
                     <Pin />
@@ -89,7 +98,13 @@ const Content = (props) => {
                         Описание
                     </div>
                     <div className={styles.content__description_text}>
-                        {data.description}
+                        {data.displayDescription}
+                        {
+                            !data.descriptionOpened &&
+                            <div className={styles.content__description_opener} onClick={props.openDescription}>
+                                Показать ещё
+                            </div>
+                        }
                     </div>
                 </div>
                 {section === 'floats' &&

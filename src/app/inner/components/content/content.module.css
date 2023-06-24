@@ -368,3 +368,11 @@
         width:  150px;
         margin-top: 25px;
     }
+
+    .content__description_opener {
+      cursor: pointer;
+      color: #48f;
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 10px;
+    }
