@@ -19,9 +19,9 @@
     font-size: 13px;
     line-height: 16px;
     letter-spacing: -0.01em;
-    color: #2C2C2E;
     margin-left: 15px;
     white-space: nowrap;
+    color: #B1BAC1;
 }
 
 .switch {
@@ -52,4 +52,7 @@
 }
 .filter__switch_left input:checked + .switch .switch_circle {
     left: calc(100% - 16px);
+}
+.filter__switch_right_checked {
+    color: #2C2C2E;
 }

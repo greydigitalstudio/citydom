@@ -12,13 +12,15 @@
     margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 15px;
+    grid-gap: 30px 15px;
 }
 
 .results__result {
     width: 260px;
 }
-
+.results__map {
+    padding-top: 40px;
+}
 .results__map ymaps {
     border-radius: 18px;
 }

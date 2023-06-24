@@ -8,16 +8,17 @@
     height: 209px;
     left: 0px;
     top: 18px;
-
+    object-fit: cover;
+    object-position: 50% 50%;
     border-radius: 15px;
 }
-
-.item__uploaded {
+.item__top_dates {
     display: flex;
-    justify-content: right;
-    padding-right: 13.5px;
+    align-items: center;
+    justify-content: space-between;
     padding-bottom: 5px; 
-    width: 260px;
+}
+.item__uploaded {
     font-style: normal;
     font-weight: 300;
     font-size: 11px;
@@ -48,6 +49,7 @@
     align-items: center;
     color: #FFFFFF;
     gap: 4px;
+    display: none;
 }
 
 .item__someleter {
@@ -84,6 +86,9 @@
     position: absolute;
     bottom: 95px;
     right: 10px;
+}
+.item__cost > svg {
+    display: none;
 }
 
 .item__angleLeft {

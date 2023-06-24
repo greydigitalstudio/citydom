@@ -13,7 +13,7 @@ const TextInput = (props) => {
     }
 
     return (
-        <label className={`${styles__filter.filter__field} ${styles__filter.filter__flexed}`}>
+        <label className={`${styles__filter.filter__field} ${styles__filter.filter__flexed} ${styles__filter.filter__text_input}`}>
             <div className={styles__filter.filter__field_title}>{props.title}</div>
             <input
                 type={props.type}

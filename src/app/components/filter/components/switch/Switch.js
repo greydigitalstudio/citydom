@@ -29,7 +29,7 @@ const Switch = (props) => {
                         <div className={styles__switch.switch_circle}></div>
                     </div>
                 </div>
-                <div className={styles__switch.filter__switch_right}>{props.title}</div>
+                <div className={`${styles__switch.filter__switch_right} ${checked ? styles__switch.filter__switch_right_checked : ''}`}>{props.title}</div>
             </label>
         </div>
     );

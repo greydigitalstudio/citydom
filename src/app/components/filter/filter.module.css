@@ -67,6 +67,7 @@
   line-height: 13px;
   letter-spacing: -0.01em;
   margin-bottom: 12px;
+  color: #B1BAC1;
 }
 .filter__field_item {
   height: 34px;
@@ -134,4 +135,16 @@
 
 .filter__form_section_closed {
   display: none;
+}
+.filter__form_buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 62px;
+}
+.filter__spacer {
+  margin-bottom: 40px;
+}
+.filter__text_input {
+  min-width: 25%;
 }
