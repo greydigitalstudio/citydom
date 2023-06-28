@@ -465,27 +465,30 @@ const Filter = (props) => {
 
                                     </div>
                                     <div className={styles.filter__column}>
-                                        <Switch
-                                            title="Паркинг"
-                                            name="has_parking"
-                                            value="has_parking"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Закрытая территория"
-                                            name="closed_territory"
-                                            value="closed_territory"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Рядом школа"
-                                            name="school_around"
-                                            value="school_around"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
+                                    <Switch
+                                    title="Паркинг"
+                                    name="has_parking"
+                                    value="has_parking"
+                                    isChecked={filters.hasGroundParking}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasGroundParking: checked })}
+                                />
+                                <Switch
+                                    title="Закрытая территория"
+                                    name="closed_territory"
+                                    value="closed_territory"
+                                    isChecked={filters.isClosedArea}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, isClosedArea: checked })}
+                                />
+                                <Switch
+                                    title="Рядом школа"
+                                    name="school_around"
+                                    value="school_around"
+                                    isChecked={filters.hasBesideSchool}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasBesideSchool: checked })}
+                                />
                                     </div>
                                 </div>
                             </div>
@@ -494,9 +497,9 @@ const Filter = (props) => {
                     <div className={styles.filter__form_buttons}>
                         <div className={styles.filter__form_buttons_left}>
                             {
-                                filtersButtons.map( btn => {
+                                filtersButtons.map( (btn, index) => {
                                     return (
-                                        <div className={styles.filter__form_filter_button} >
+                                        <div key={index} className={styles.filter__form_filter_button} >
                                             <div>
                                                 {btn.title} 
                                             </div>
@@ -843,9 +846,9 @@ const Filter = (props) => {
 
                         <div className={styles.filter__form_buttons_left}>
                             {
-                                filtersButtons.map( btn => {
+                                filtersButtons.map( (btn, key) => {
                                     return (
-                                        <div className={styles.filter__form_filter_button} >
+                                        <div key={key} className={styles.filter__form_filter_button} >
                                             <div>
                                                 {btn.title} 
                                             </div>
