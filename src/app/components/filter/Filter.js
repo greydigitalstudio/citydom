@@ -489,35 +489,8 @@ const Filter = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className={styles.filter__column}>
-                                <Switch
-                                    title="Паркинг"
-                                    name="has_parking"
-                                    value="has_parking"
-                                    isChecked={filters.hasGroundParking}
-                                    className={styles.filter__switch_mb}
-                                    change={(checked) => setFilters({ ...filters, hasGroundParking: checked })}
-                                />
-                                <Switch
-                                    title="Закрытая территория"
-                                    name="closed_territory"
-                                    value="closed_territory"
-                                    isChecked={filters.isClosedArea}
-                                    className={styles.filter__switch_mb}
-                                    change={(checked) => setFilters({ ...filters, isClosedArea: checked })}
-                                />
-                                <Switch
-                                    title="Рядом школа"
-                                    name="school_around"
-                                    value="school_around"
-                                    isChecked={filters.hasBesideSchool}
-                                    className={styles.filter__switch_mb}
-                                    change={(checked) => setFilters({ ...filters, hasBesideSchool: checked })}
-                                />
-                            </div>
 
                         </div>
-                    </div>
                     <div className={styles.filter__form_buttons}>
                         <div className={styles.filter__form_buttons_left}>
                             {
@@ -561,8 +534,6 @@ const Filter = (props) => {
                             </div>
                         </div>
                     </div>
-
-                </div>
             </div>
             </MediaQuery>
             }
