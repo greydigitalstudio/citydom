@@ -35,7 +35,7 @@ const Item = (props) => {
 
     return (
         <div className={styles.item}>
-            <Link href={`/inner?id=${props.item.id}&page=${props.pageData.page}&sort=${props.sort}&size=${props.pageData.pageSize}`}>
+            <Link href={`/inner?id=${props.item.id}`}>
                 <div className={styles.item__in}>
                     
                     <div className={styles.item__uploaded}>

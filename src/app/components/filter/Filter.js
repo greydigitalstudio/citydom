@@ -1,7 +1,6 @@
 'use client';
 import MediaQuery from 'react-responsive'
 import React, { useEffect, useState, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
 import styles from './filter.module.css'
 
 import Image from 'next/image';
@@ -20,8 +19,6 @@ const Filter = (props) => {
     const [mounted, setMounted] = useState(false);
     const [filteredCount, setFilteredCount] = useState(false);
     const [updating, setUpdating] = useState(false);
-    const [queue, setQueue] = useState(0);
-    const nodeRef = useRef(null);
 
     
 

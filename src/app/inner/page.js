@@ -13,15 +13,9 @@ import styles from './page.module.css'
 const getData = async () => {
   // get parameters from url
   let id = window.location.href.split('?')[1].split('&')[0].split('=')[1]
-  let page = window.location.href.split('?')[1].split('&')[1].split('=')[1]
-  let sort = window.location.href.split('?')[1].split('&')[2].split('=')[1]
-  let limit = window.location.href.split('?')[1].split('&')[3].split('=')[1]
-  let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=1&limit=1000`);
+
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate/${id}/public`);
   res = await res.json();
-
-  console.log(res.items)
-
-  res = res.items.filter(item => item.id === parseInt(id))[0] || res.items[0]
 
   return res
 }
