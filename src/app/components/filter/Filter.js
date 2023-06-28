@@ -149,9 +149,6 @@ const Filter = (props) => {
         if(e)
             props.setFilters(e);
 
-        if(updating) return;
-        updating = true;
-        setTimeout( async () => {
             updating = false;
             let link = 'https://tyumen.citidom.com/housing-estate?';
             let keys = Object.keys(filters);
@@ -164,7 +161,6 @@ const Filter = (props) => {
             let res = await fetch(link);
             res = await res.json();
             setFilteredCount(res.count);
-        }, 500 )
         
     }
 

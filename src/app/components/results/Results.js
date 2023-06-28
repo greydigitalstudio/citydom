@@ -14,8 +14,12 @@ async function getHousing(options = {
     sort: 'fresh_at_asc',
     filters
 }) {
-    console.log(options.limit)
-    let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&limit=${options.limit}&sort=${options.sort}`);
+    // use filters
+    let filterstr = ''
+    Object.keys(options.filters).forEach(f => {
+        filterstr += `&${f}=${options.filters[f]}`
+    })
+    let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&limit=${options.limit}&sort=${options.sort}${filterstr}`);
     res = await res.json();
     return res
 }
@@ -44,6 +48,12 @@ class Results extends React.Component  {
             houseCount: 0,
             mounted: false,
             maps: false
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.filters != this.props.filters) {
+            this.componentDidMount()
         }
     }
 

@@ -20,12 +20,12 @@ export default function Home() {
   let [ filters, setFilter ] = useState({
     multilevel: true
   })
-
-  let usedFilters = filters;
+  
+  let [ usedFilters, setUsedFilters ] = useState({...filters})
 
   function useFilters() {
-    console.log(filters)
-    usedFilters = filters;
+    console.log('use')
+    setUsedFilters({...filters})
   }
 
   return (
