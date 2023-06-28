@@ -11,7 +11,8 @@ import MediaQuery from 'react-responsive'
 async function getHousing(options = {
     page: 1,
     limit: 6,
-    sort: 'fresh_at_asc'
+    sort: 'fresh_at_asc',
+    filters
 }) {
     console.log(options.limit)
     let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&limit=${options.limit}&sort=${options.sort}`);
@@ -22,7 +23,7 @@ async function getHousing(options = {
 async function getHousingForMap() {
     let res = await fetch(`https://tyumen.citidom.com/housing-estate/map`);
     res = await res.json();
-    return res
+    return res;
 }
 
 class Results extends React.Component  {
@@ -74,7 +75,8 @@ class Results extends React.Component  {
         getHousing({
             page: 1,
             limit: this.state.pageData.pageSize,
-            sort: this.state.sort
+            sort: this.state.sort,
+            filters: this.props.filters
         }).then(res => {
             res.items.forEach(item => {
                 item.endConstruction = item.endConstruction.trim()
@@ -293,7 +295,7 @@ class Results extends React.Component  {
     async changePage(e) {
         let page = e ? e.target.id.split('-')[1] : this.state.pageData.page;
         let res = await getHousing({
-            page, limit: this.state.pageData.pageSize, sort: this.state.sort
+            page, limit: this.state.pageData.pageSize, sort: this.state.sort, filters: this.props.filters
         })
         res.items.forEach(item => {
             item.endConstruction = item.endConstruction.trim()

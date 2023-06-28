@@ -7,11 +7,19 @@ import styles__filter from '../../filter.module.css'
 
 const Select = (props) => {
 
-    const [selected, setSelected] = useState(props.options[0].value);
+
+    const [selected, setSelected] = useState(props.value ?? props.options[0].value);
 
     const handleChange = ({ target }) => {
         setSelected(target.value);
+        if(props.onChange)
+            props.onChange({ target })
     }
+
+    useEffect(() => {
+        if(props.value == '') props.value = props.options[0].value;
+        setSelected(props.value);
+    }, [props.value])
 
     return (
         <label className={styles__filter.filter__field}>

@@ -16,7 +16,7 @@ const getData = async () => {
   let page = window.location.href.split('?')[1].split('&')[1].split('=')[1]
   let sort = window.location.href.split('?')[1].split('&')[2].split('=')[1]
   let limit = window.location.href.split('?')[1].split('&')[3].split('=')[1]
-  let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${page}&limit=${limit}&sort=${sort}`);
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=1&limit=1000`);
   res = await res.json();
 
   console.log(res.items)

@@ -12,10 +12,21 @@ const FromTo = (props) => {
 
     const handleInputFrom = (e) => {
         setFrom(e.target.value);
+        if(props.changeFrom)
+            props.changeFrom(e)
     }
     const handleInputTo = (e) => {
         setTo(e.target.value);
+        if(props.changeTo)
+            props.changeTo(e)
     }
+
+    useEffect(() => {
+        if(!props.from) setFrom('');
+        else setFrom(props.from);
+        if(!props.to) setTo('');
+        else setTo(props.to);
+    }, [props.from, props.to])
 
     return (
         <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed} ${styles__from_to.from_to}`}>

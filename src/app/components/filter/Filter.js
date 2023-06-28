@@ -18,7 +18,158 @@ const Filter = (props) => {
 
     const [isSectionOpened, setSectionOpened] = useState(true);
     const [mounted, setMounted] = useState(false);
+    const [filteredCount, setFilteredCount] = useState(false);
     const nodeRef = useRef(null);
+
+    
+
+    let filters = props.filters;
+
+    let filtersButtons = []
+
+    Object.keys(filters).forEach((key, index) => {
+        let title = '';
+        let func = () => {
+            let newFilters = { ...filters };
+            if(typeof newFilters[key] == 'string') {
+                newFilters[key] = ''
+            } else {
+                delete newFilters[key];
+            }
+            props.setFilters(newFilters);
+        }
+
+        if(filters[key]) {
+            switch(key) {
+                case 'city':
+                    title = 'Город';
+                    break;
+                case 'place':
+                    title = 'Местоположение';
+                    break;
+                case 'mortgagePayment':
+                    title = 'Ваш комфортный платеж по ипотеке';
+                    break;
+                case 'room':
+                    title = 'Комнатность';
+                    break;
+                case 'priceMin':
+                    title = `от ${filters[key]} ₽`;
+                    break;
+                case 'priceMax':
+                    title = `до ${filters[key]} ₽`;
+                    break;
+                case 'spaceTotalMin':
+                    title = `от ${filters[key]} м2`;
+                    break;
+                case 'spaceTotalMax':
+                    title = `от ${filters[key]} м2`;
+                    break;
+                case 'storeyMin':
+                    title = `от ${filters[key]} этажа`;
+                    break;
+                case 'storeyMax':
+                    title = `до ${filters[key]} этажа`;
+                    break;
+                case 'houseStoreyMin':
+                    title = `от ${filters[key]} этажей`;
+                    break;
+                case 'houseStoreyMax':
+                    title = `до ${filters[key]} этажей`;
+                    break;
+                case 'spaceKitchenMin':
+                    title = `кухня от ${filters[key]} м2`;
+                    break;
+                case 'spaceKitchenMax':
+                    title = `кухня до ${filters[key]} м2`;
+                    break;
+                case 'year_from':
+                    title = `Срок ввода дома от ${filters[key]}`;
+                    break;
+                case 'year_to':
+                    title = `Срок ввода дома до ${filters[key]}`;
+                    break;
+                case 'multilevel':
+                    title = 'Многоуровневая';
+                    break;
+                case 'not_first':
+                    title = 'Не первый';
+                    break;
+                case 'not_last':
+                    title = 'Не последний';
+                    break;
+                case 'has_kitchen':
+                    title = 'Кухня-гостинная';
+                    break;
+                case 'vitrage_windows':
+                    title = 'Витражные окна';
+                    break;
+                case 'hasCctv':
+                    title = 'Видеонаблюдение';
+                    break;
+                case 'without_bank':
+                    title = 'Без обременения банка';
+                    break;
+                case 'without_teenagers':
+                    title = 'Без несовершеннолетних собственников';
+                    break;
+                case 'highflet':
+                    title = 'Хайфлет';
+                    break;
+                case 'hasGroundParking':
+                    title = 'Паркинг';
+                    break;
+                case 'closed_territory':
+                    title = 'Закрытая территория';
+                    break;
+                case 'hasBesideSchool':
+                    title = 'Рядом школа';
+                    break;
+                case 'material':
+                    title = 'Материал дома';
+                    break;
+                case 'isClosedArea':
+                    title = 'Закрытая территория';
+                    break;
+                default:
+                    console.log(key)
+            }
+            filtersButtons.push({
+                title,
+                func
+            })
+        }
+    })
+
+
+    let updating = false;
+
+    async function setFilters(e) {
+        
+        if(e)
+            props.setFilters(e);
+
+        if(updating) return;
+        updating = true;
+        setTimeout( async () => {
+            updating = false;
+            let link = 'https://tyumen.citidom.com/housing-estate?';
+            let keys = Object.keys(filters);
+            for (let i = 0; i < keys.length; i++) {
+                if (filters[keys[i]] != '') {
+                    link += `${keys[i]}=${filters[keys[i]]}&`
+                }
+            }
+            link = link.slice(0, -1);
+            let res = await fetch(link);
+            res = await res.json();
+            setFilteredCount(res.count);
+        }, 500 )
+        
+    }
+
+    
+    setFilters()
 
     const toggleSectionHandler = () => {
         setSectionOpened(!isSectionOpened);
@@ -33,258 +184,284 @@ const Filter = (props) => {
 
     return (
 
+        
         <div className={styles.filter}>
-            {mounted &&
-                <MediaQuery minWidth={768}>
-                    <div className={styles.filter__in}>
-                        <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
-                        <div className={styles.filter__form}>
-                            <div className={styles.filter__form_section}>
-                                <div className={styles.filter__row}>
-                                    <Select
-                                        style={{ display: "none" }}
-                                        title="Город"
-                                        options={[
-                                            {
-                                                value: 'moscow',
-                                                label: 'Москва'
-                                            },
-                                            {
-                                                value: 'spb',
-                                                label: 'Санкт-Петербург'
-                                            },
-                                            {
-                                                value: 'tula',
-                                                label: 'Тула'
-                                            }
-                                        ]}
-                                    />
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        title="Местоположение"
-                                        placeholder="Введите район или ЖК"
-                                    />
-                                    <TextInput
-                                        value=""
-                                        type="number"
-                                        name="payment"
-                                        title="Ваш комфортный платеж по ипотеке"
-                                        placeholder="Введите сумму платежа"
-                                    />
-                                    <RadioGroup
-                                        title="Комнатность"
-                                        options={[
-                                            {
-                                                value: 'studio',
-                                                label: 'Студия'
-                                            },
-                                            {
-                                                value: '1',
-                                                label: '1'
-                                            },
-                                            {
-                                                value: '2',
-                                                label: '2'
-                                            },
-                                            {
-                                                value: '3',
-                                                label: '3'
-                                            },
-                                            {
-                                                value: '4+',
-                                                label: '4+'
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                                <div className={styles.filter__row} style={{ width: 660 }}>
-                                    <FromTo
-                                        title="Стоимость, ₽"
-                                        from_type="number"
-                                        from_name="price_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="price_to"
-                                        to_placeholder="До"
-                                    />
-                                    <FromTo
-                                        title="Площадь, м2"
-                                        from_type="number"
-                                        from_name="square_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="square_to"
-                                        to_placeholder="До"
-                                    />
-
-
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        title="Местоположение"
-                                        placeholder="Введите район или ЖК"
-                                    />
-                                    <TextInput
-                                        value=""
-                                        type="number"
-                                        name="payment"
-                                        title="Ваш комфортный платеж по ипотеке"
-                                        placeholder="Введите сумму платежа"
-                                    />
-                                    <FromTo
-                                        title="Этаж"
-                                        from_type="number"
-                                        from_name="level_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="level_to"
-                                        to_placeholder="До"
-                                    />
-                                    <FromTo
-                                        title="Этажей в доме"
-                                        from_type="number"
-                                        from_name="levelness_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="levelness_to"
-                                        to_placeholder="До"
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <FromTo
-                                        title="Площадь кухни, м2"
-                                        from_type="number"
-                                        from_name="kitchen_square_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="kitchen_square_to"
-                                        to_placeholder="До"
-                                    />
-                                    <FromTo
-                                        title="Срок ввода дома"
-                                        from_type="number"
-                                        from_name="price_from"
-                                        from_placeholder="1998"
-                                        to_type="number"
-                                        to_name="price_to"
-                                        to_placeholder="2020"
-                                    />
-                                    <Switch
-                                        title="Многоуровневая"
-                                        name="multilevel"
-                                        value="multilevel"
-                                        isChecked={true}
-                                    />
-                                    <Switch
-                                        title="Не первый"
-                                        name="not_first"
-                                        value="not_first"
-                                        isChecked={false}
-                                    />
-                                    <Switch
-                                        title="Не последний"
-                                        name="not_last"
-                                        value="not_last"
-                                        isChecked={false}
-                                    />
-                                </div>
+            { mounted && 
+            <MediaQuery minWidth={768}>
+            <div className={styles.filter__in}>
+                <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
+                <div className={styles.filter__form}>
+                    <div className={styles.filter__form_section}>
+                        <div className={styles.filter__row}>
+                            <Select
+                                onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+                                style={{ display: "none" }}
+                                title="Город"
+                                value={filters.city}
+                                options={[
+                                    {
+                                        value: 'moscow',
+                                        label: 'Москва'
+                                    },
+                                    {
+                                        value: 'spb',
+                                        label: 'Санкт-Петербург'
+                                    },
+                                    {
+                                        value: 'tula',
+                                        label: 'Тула'
+                                    }
+                                ]}
+                            />
+                            <TextInput
+                                onChange={(e) => setFilters({ ...filters, place: e.target.value })}
+                                value={filters.place}
+                                type="text"
+                                name="place"
+                                title="Местоположение"
+                                placeholder="Введите район или ЖК"
+                            />
+                            <TextInput
+                                onChange={(e) => setFilters({ ...filters, mortgagePayment: e.target.value })}
+                                value={filters.mortgagePayment}
+                                type="number"
+                                name="payment"
+                                title="Ваш комфортный платеж по ипотеке"
+                                placeholder="Введите сумму платежа"
+                            />
+                            <RadioGroup
+                                onChange={(e) => setFilters({ ...filters, room: e.target.value })}
+                                title="Комнатность"
+                                value={filters.room}
+                                options={[
+                                    {
+                                        value: '0',
+                                        label: 'Студия'
+                                    },
+                                    {
+                                        value: '1',
+                                        label: '1'
+                                    },
+                                    {
+                                        value: '2',
+                                        label: '2'
+                                    },
+                                    {
+                                        value: '3',
+                                        label: '3'
+                                    },
+                                    {
+                                        value: '4+',
+                                        label: '4+'
+                                    }
+                                ]}
+                            />
+                        </div>
+                        <div className={styles.filter__row} style={{ width: 700 }}>
+                            <div style={{ width: 580 }}>
+                            <FromTo
+                                title="Стоимость, ₽"
+                                from_type="number"
+                                from_name="priceMin"
+                                from_placeholder="1 000 000"
+                                to_type="number"
+                                to_name="priceMax"
+                                to_placeholder="10 000 000"
+                                from={filters.priceMin}
+                                to={filters.priceMax}
+                                changeFrom={(e) => setFilters({ ...filters, priceMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, priceMax: e.target.value })}
+                            />
                             </div>
-                            <div className={styles.filter__form_opener} onClick={toggleSectionHandler}>
-                                <div className={styles.filter__form_opener_left}>
-                                    <div className={styles.filter__form_opener_left_icon}>
-                                        <Image
-                                            src={'/opener_left_icon.svg'}
-                                            width={13}
-                                            height={14}
-                                            alt=""
-                                        />
-                                    </div>
-                                    <div className={styles.filter__form_opener_left_text}>Материалы и отделка</div>
-                                </div>
-                                <div className={styles.filter__form_opener_middle}></div>
-                                <div className={styles.filter__form_opener_right}>
-                                    <Image
-                                        src={'/opener_right_arrow.svg'}
-                                        width={8}
-                                        height={4}
-                                        alt=""
-                                    />
-                                </div>
+                            <FromTo
+                                title="Площадь, м2"
+                                from_type="number"
+                                from_name="square_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="square_to"
+                                to_placeholder="До"
+                                from={filters.spaceTotalMin}
+                                to={filters.spaceTotalMax}
+                                changeFrom={(e) => setFilters({ ...filters, spaceTotalMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, spaceTotalMax: e.target.value })}
+                            />
+
+                            <FromTo
+                                title="Этаж"
+                                from_type="number"
+                                from_name="level_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="level_to"
+                                to_placeholder="До"
+                                from={filters.storeyMin}
+                                to={filters.storeyMax}
+                                changeFrom={(e) => setFilters({ ...filters, storeyMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, storeyMax: e.target.value })}
+                            />
+                            <FromTo
+                                title="Этажей в доме"
+                                from_type="number"
+                                from_name="levelness_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="levelness_to"
+                                to_placeholder="До"
+                                from={filters.houseStoreyMin}
+                                to={filters.houseStoreyMax}
+                                changeFrom={(e) => setFilters({ ...filters, houseStoreyMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, houseStoreyMax: e.target.value })}
+                            />
+                        </div>
+                        <div className={styles.filter__row}>
+                            <FromTo
+                                title="Площадь кухни, м2"
+                                from_type="number"
+                                from_name="kitchen_square_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="kitchen_square_to"
+                                to_placeholder="До"
+                                from={filters.spaceKitchenMin}
+                                to={filters.spaceKitchenMax}
+                                changeFrom={(e) => setFilters({ ...filters, spaceKitchenMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, spaceKitchenMax: e.target.value })}
+                            />
+                            <FromTo
+                                title="Срок ввода дома"
+                                from_type="number"
+                                from_name="year_from"
+                                from_placeholder="1998"
+                                to_type="number"
+                                to_name="year_to"
+                                to_placeholder="2020"
+                                from={filters.year_from}
+                                to={filters.year_to}
+                                changeFrom={(e) => setFilters({ ...filters, year_from: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, year_to: e.target.value })}
+                            />
+                            <Switch
+                                title="Многоуровневая"
+                                name="multilevel"
+                                value="multilevel"
+                                isChecked={filters.multilevel}
+                                change={(checked) => setFilters({ ...filters, multilevel: checked })}
+                            />
+                            <Switch
+                                title="Не первый"
+                                name="not_first"
+                                value="not_first"
+                                isChecked={filters.not_first}
+                                change={(checked) => setFilters({ ...filters, not_first: checked })}
+                            />
+                            <Switch
+                                title="Не последний"
+                                name="not_last"
+                                value="not_last"
+                                isChecked={filters.not_last}
+                                change={(checked) => setFilters({ ...filters, not_last: checked })}
+                            />
+                        </div>
+                    </div>
+                    <div className={styles.filter__form_opener} onClick={toggleSectionHandler}>
+                        <div className={styles.filter__form_opener_left}>
+                            <div className={styles.filter__form_opener_left_icon}>
+                                <Image
+                                    src={'/opener_left_icon.svg'}
+                                    width={13}
+                                    height={14}
+                                    alt=""
+                                />
                             </div>
-                            <div className={`${styles.filter__form_section} ${!isSectionOpened ? styles.filter__form_section_closed : ''}`}>
-                                <div className={styles.filter__row}>
-                                    <Select
-                                        title="Материал дома"
-                                        options={[
-                                            {
-                                                value: 'moscow',
-                                                label: 'Москва'
-                                            },
-                                            {
-                                                value: 'spb',
-                                                label: 'Санкт-Петербург'
-                                            },
-                                            {
-                                                value: 'tula',
-                                                label: 'Тула'
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                                <div className={styles.filter__spacer}></div>
-                                <div className={styles.filter__columns}>
-                                    <div className={styles.filter__column}>
-                                        <Switch
-                                            title="Кухня-гостинная"
-                                            name="has_kitchen"
-                                            value="has_kitchen"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Витражные окна"
-                                            name="vitrage_windows"
-                                            value="vitrage_windows"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Видеонаблюдение"
-                                            name="video"
-                                            value="video"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
+                            <div className={styles.filter__form_opener_left_text}>Материалы и отделка</div>
+                        </div>
+                        <div className={styles.filter__form_opener_middle}></div>
+                        <div className={styles.filter__form_opener_right}>
+                            <Image
+                                src={'/opener_right_arrow.svg'}
+                                width={8}
+                                height={4}
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                    <div className={`${styles.filter__form_section} ${!isSectionOpened ? styles.filter__form_section_closed : ''}`}>
+                    <div className={styles.filter__row}>
+                            <Select
+                                title="Материал дома"
+                                value={filters.material}
+                                options={[
+                                    {
+                                        value: 'moscow',
+                                        label: 'Москва'
+                                    },
+                                    {
+                                        value: 'spb',
+                                        label: 'Санкт-Петербург'
+                                    },
+                                    {
+                                        value: 'tula',
+                                        label: 'Тула'
+                                    }
+                                ]}
+                            />
+                        </div>
+                        <div className={styles.filter__spacer}></div>
+                        <div className={styles.filter__columns}>
+                            <div className={styles.filter__column}>
+                                <Switch
+                                    title="Кухня-гостинная"
+                                    name="has_kitchen"
+                                    value="has_kitchen"
+                                    isChecked={filters.has_kitchen}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, has_kitchen: checked })}
+                                />
+                                <Switch
+                                    title="Витражные окна"
+                                    name="vitrage_windows"
+                                    value="vitrage_windows"
+                                    isChecked={filters.vitrage_windows}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, vitrage_windows: checked })}
+                                />
+                                <Switch
+                                    title="Видеонаблюдение"
+                                    name="video"
+                                    value="video"
+                                    isChecked={filters.hasCctv}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasCctv: checked })}
+                                />
 
 
-                                    </div>
-                                    <div className={styles.filter__column}>
-                                        <Switch
-                                            title="Без обременения банка"
-                                            name="without_bank"
-                                            value="without_bank"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Без несовершеннолетних собственников"
-                                            name="without_teenagers"
-                                            value="without_teenagers"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Хайфлет"
-                                            name="highflet"
-                                            value="highflet"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
+                            </div>
+                            <div className={styles.filter__column}>
+                                <Switch
+                                    title="Без обременения банка"
+                                    name="without_bank"
+                                    value="without_bank"
+                                    isChecked={filters.without_bank}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, without_bank: checked })}
+                                />
+                                <Switch
+                                    title="Без несовершеннолетних собственников"
+                                    name="without_teenagers"
+                                    value="without_teenagers"
+                                    isChecked={filters.without_teenagers}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, without_teenagers: checked })}
+                                />
+                                <Switch
+                                    title="Хайфлет"
+                                    name="highflet"
+                                    value="highflet"
+                                    isChecked={filters.highflet}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, highflet: checked })}
+                                />
 
                                     </div>
                                     <div className={styles.filter__column}>
@@ -312,302 +489,429 @@ const Filter = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className={styles.filter__form_buttons}>
-                                <div className={styles.filter__form_buttons_left}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="410" height="22" viewBox="0 0 410 22" fill="none"><rect width="45" height="22" rx="4" fill="#F3F3F3" /><path d="M4.96484 9.41748C4.96484 8.60498 5.23991 7.93636 5.79004 7.41162C6.3444 6.88688 7.04688 6.62451 7.89746 6.62451C8.71842 6.62451 9.40609 6.87207 9.96045 7.36719C10.519 7.85807 10.7983 8.46745 10.7983 9.19531C10.7983 9.6735 10.6629 10.1432 10.3921 10.6045C10.1213 11.0658 9.61133 11.6984 8.8623 12.5024L6.65967 14.8701V14.9717H10.9507V16H5.02197V15.2129L8.18945 11.7534C8.77767 11.1144 9.16911 10.6278 9.36377 10.2935C9.55843 9.95915 9.65576 9.60791 9.65576 9.23975C9.65576 8.78271 9.48226 8.39974 9.13525 8.09082C8.79248 7.77767 8.3693 7.62109 7.86572 7.62109C7.32829 7.62109 6.89453 7.78613 6.56445 8.11621C6.23438 8.44629 6.06934 8.88005 6.06934 9.41748V9.42383H4.96484V9.41748ZM15.245 13.4165H15.1434L13.5184 16H12.2806L14.6229 12.5786L12.2553 9.15723H13.5565L15.1815 11.7026H15.2831L16.889 9.15723H18.1268L15.8036 12.5342L18.1586 16H16.8637L15.245 13.4165Z" fill="#7C7C7C" /><path d="M34.0869 10.9996L35.8769 9.21362C35.9553 9.13522 35.9993 9.02889 35.9993 8.91803C35.9993 8.80716 35.9553 8.70083 35.8769 8.62244C35.7985 8.54404 35.6922 8.5 35.5813 8.5C35.4705 8.5 35.3642 8.54404 35.2858 8.62244L33.5 10.4126L31.7142 8.62244C31.6358 8.54404 31.5295 8.5 31.4187 8.5C31.3078 8.5 31.2015 8.54404 31.1231 8.62244C31.0447 8.70083 31.0007 8.80716 31.0007 8.91803C31.0007 9.02889 31.0447 9.13522 31.1231 9.21362L32.9131 10.9996L31.1231 12.7857C31.0841 12.8244 31.0531 12.8704 31.032 12.9212C31.0109 12.9719 31 13.0263 31 13.0813C31 13.1362 31.0109 13.1906 31.032 13.2414C31.0531 13.2921 31.0841 13.3381 31.1231 13.3769C31.1618 13.4159 31.2079 13.4468 31.2586 13.468C31.3093 13.4891 31.3637 13.5 31.4187 13.5C31.4736 13.5 31.528 13.4891 31.5788 13.468C31.6295 13.4468 31.6755 13.4159 31.7142 13.3769L33.5 11.5867L35.2858 13.3769C35.3245 13.4159 35.3705 13.4468 35.4212 13.468C35.472 13.4891 35.5264 13.5 35.5813 13.5C35.6363 13.5 35.6907 13.4891 35.7414 13.468C35.7921 13.4468 35.8382 13.4159 35.8769 13.3769C35.9159 13.3381 35.9469 13.2921 35.968 13.2414C35.9891 13.1906 36 13.1362 36 13.0813C36 13.0263 35.9891 12.9719 35.968 12.9212C35.9469 12.8704 35.9159 12.8244 35.8769 12.7857L34.0869 10.9996Z" fill="#7C7C7C" /><rect x="52" width="90" height="22" rx="4" fill="#F3F3F3" /><path d="M58.374 10.8647H58.6406L62.4873 6.84033H63.9219L59.6245 11.252L64.29 16H62.7793L58.6406 11.7788H58.374V16H57.2314V6.84033H58.374V10.8647ZM68.4384 10.0713H66.7689V12.001H68.2606C69.1197 12.001 69.5492 11.6751 69.5492 11.0234C69.5492 10.7272 69.4561 10.4945 69.2699 10.3252C69.0879 10.1559 68.8108 10.0713 68.4384 10.0713ZM68.3558 12.915H66.7689V15.0859H68.5653C68.9843 15.0859 69.3016 14.995 69.5175 14.813C69.7375 14.6268 69.8475 14.3602 69.8475 14.0132C69.8475 13.6366 69.7227 13.3594 69.473 13.1816C69.2276 13.0039 68.8552 12.915 68.3558 12.915ZM65.6771 16V9.15723H68.578C69.217 9.15723 69.7185 9.31592 70.0824 9.6333C70.4463 9.94645 70.6283 10.3717 70.6283 10.9092C70.6283 11.2477 70.5204 11.5566 70.3046 11.8359C70.093 12.111 69.8285 12.2824 69.5111 12.3501V12.4517C69.9428 12.5109 70.2876 12.6865 70.5458 12.9785C70.8039 13.2663 70.933 13.6175 70.933 14.0322C70.933 14.6331 70.7256 15.1113 70.3109 15.4668C69.8962 15.8223 69.3228 16 68.5907 16H65.6771ZM74.783 15.1621C75.3458 15.1621 75.8113 14.9992 76.1795 14.6733C76.5518 14.3475 76.738 13.9391 76.738 13.4482V12.8198L74.8972 12.9404C74.381 12.9743 74.0022 13.0822 73.761 13.2642C73.5198 13.4461 73.3992 13.7106 73.3992 14.0576C73.3992 14.4004 73.5282 14.6712 73.7864 14.8701C74.0445 15.0648 74.3767 15.1621 74.783 15.1621ZM74.5798 16.1206C73.907 16.1206 73.3526 15.9365 72.9168 15.5684C72.4851 15.196 72.2693 14.7008 72.2693 14.083C72.2693 13.4736 72.4851 12.9954 72.9168 12.6484C73.3484 12.3014 73.9641 12.1047 74.7639 12.0581L76.738 11.9375V11.3154C76.738 10.8923 76.6069 10.5685 76.3445 10.3442C76.0821 10.12 75.697 10.0078 75.1892 10.0078C74.7787 10.0078 74.4381 10.0819 74.1672 10.23C73.8964 10.3781 73.7229 10.5876 73.6467 10.8584H72.5422C72.6142 10.3125 72.8956 9.8724 73.3865 9.53809C73.8816 9.20378 74.4952 9.03662 75.2273 9.03662C76.0567 9.03662 76.6978 9.23763 77.1506 9.63965C77.6034 10.0417 77.8298 10.6003 77.8298 11.3154V16H76.7888V14.9907H76.6873C76.4672 15.3547 76.1752 15.634 75.8113 15.8286C75.4474 16.0233 75.0369 16.1206 74.5798 16.1206ZM83.1715 9.03662C84.0433 9.03662 84.7394 9.35824 85.2599 10.0015C85.7846 10.6447 86.047 11.5037 86.047 12.5786C86.047 13.6493 85.7846 14.5083 85.2599 15.1558C84.7352 15.799 84.039 16.1206 83.1715 16.1206C82.6849 16.1206 82.2532 16.0212 81.8766 15.8223C81.5 15.6191 81.2186 15.3356 81.0324 14.9717H80.9308V18.2852H79.839V9.15723H80.88V10.2998H80.9816C81.2016 9.90625 81.5042 9.59733 81.8893 9.37305C82.2786 9.14876 82.706 9.03662 83.1715 9.03662ZM82.9113 15.1367C83.5376 15.1367 84.0285 14.9103 84.3839 14.4575C84.7394 14.0047 84.9171 13.3784 84.9171 12.5786C84.9171 11.7788 84.7394 11.1525 84.3839 10.6997C84.0327 10.2469 83.5439 10.0205 82.9176 10.0205C82.2998 10.0205 81.8089 10.2511 81.445 10.7124C81.081 11.1694 80.8991 11.7915 80.8991 12.5786C80.8991 13.3615 81.0789 13.9836 81.4386 14.4448C81.8025 14.9061 82.2934 15.1367 82.9113 15.1367ZM92.4614 9.15723V10.0713H90.2398V16H89.148V10.0713H86.9263V9.15723H92.4614ZM95.0165 16H93.9247V9.15723H95.0165V14.2607H95.1181L98.5268 9.15723H99.6186V16H98.5268V10.8965H98.4252L95.0165 16ZM104.998 9.03662C105.87 9.03662 106.566 9.35824 107.087 10.0015C107.611 10.6447 107.874 11.5037 107.874 12.5786C107.874 13.6493 107.611 14.5083 107.087 15.1558C106.562 15.799 105.866 16.1206 104.998 16.1206C104.512 16.1206 104.08 16.0212 103.703 15.8223C103.327 15.6191 103.045 15.3356 102.859 14.9717H102.758V18.2852H101.666V9.15723H102.707V10.2998H102.808C103.028 9.90625 103.331 9.59733 103.716 9.37305C104.105 9.14876 104.533 9.03662 104.998 9.03662ZM104.738 15.1367C105.364 15.1367 105.855 14.9103 106.211 14.4575C106.566 14.0047 106.744 13.3784 106.744 12.5786C106.744 11.7788 106.566 11.1525 106.211 10.6997C105.859 10.2469 105.371 10.0205 104.744 10.0205C104.127 10.0205 103.636 10.2511 103.272 10.7124C102.908 11.1694 102.726 11.7915 102.726 12.5786C102.726 13.3615 102.906 13.9836 103.265 14.4448C103.629 14.9061 104.12 15.1367 104.738 15.1367ZM115.38 16V9.15723H116.472V16H115.38ZM111.965 12.2676H110.676V15.0859H111.965C112.414 15.0859 112.771 14.959 113.038 14.7051C113.309 14.4469 113.444 14.1042 113.444 13.6768C113.444 13.2493 113.309 12.9087 113.038 12.6548C112.771 12.3966 112.414 12.2676 111.965 12.2676ZM109.585 16V9.15723H110.676V11.3535H111.965C112.748 11.3535 113.372 11.563 113.838 11.9819C114.303 12.4009 114.536 12.9658 114.536 13.6768C114.536 14.3877 114.303 14.9526 113.838 15.3716C113.372 15.7905 112.748 16 111.965 16H109.585Z" fill="#7C7C7C" /><path d="M133.087 10.9996L134.877 9.21362C134.955 9.13522 134.999 9.02889 134.999 8.91803C134.999 8.80716 134.955 8.70083 134.877 8.62244C134.798 8.54404 134.692 8.5 134.581 8.5C134.47 8.5 134.364 8.54404 134.286 8.62244L132.5 10.4126L130.714 8.62244C130.636 8.54404 130.53 8.5 130.419 8.5C130.308 8.5 130.202 8.54404 130.123 8.62244C130.045 8.70083 130.001 8.80716 130.001 8.91803C130.001 9.02889 130.045 9.13522 130.123 9.21362L131.913 10.9996L130.123 12.7857C130.084 12.8244 130.053 12.8704 130.032 12.9212C130.011 12.9719 130 13.0263 130 13.0813C130 13.1362 130.011 13.1906 130.032 13.2414C130.053 13.2921 130.084 13.3381 130.123 13.3769C130.162 13.4159 130.208 13.4468 130.259 13.468C130.309 13.4891 130.364 13.5 130.419 13.5C130.474 13.5 130.528 13.4891 130.579 13.468C130.629 13.4468 130.676 13.4159 130.714 13.3769L132.5 11.5867L134.286 13.3769C134.324 13.4159 134.371 13.4468 134.421 13.468C134.472 13.4891 134.526 13.5 134.581 13.5C134.636 13.5 134.691 13.4891 134.741 13.468C134.792 13.4468 134.838 13.4159 134.877 13.3769C134.916 13.3381 134.947 13.2921 134.968 13.2414C134.989 13.1906 135 13.1362 135 13.0813C135 13.0263 134.989 12.9719 134.968 12.9212C134.947 12.8704 134.916 12.8244 134.877 12.7857L133.087 10.9996Z" fill="#7C7C7C" /><rect x="149" width="72" height="22" rx="4" fill="#F3F3F3" /><path d="M158.084 6.62451C159.384 6.62451 160.406 7.05615 161.15 7.91943C161.899 8.77848 162.274 9.94434 162.274 11.417C162.274 12.8896 161.899 14.0576 161.15 14.9209C160.406 15.7842 159.384 16.2158 158.084 16.2158C156.777 16.2158 155.749 15.7842 155 14.9209C154.25 14.0576 153.876 12.8896 153.876 11.417C153.876 9.94434 154.253 8.77848 155.006 7.91943C155.763 7.05615 156.79 6.62451 158.084 6.62451ZM158.084 7.67822C157.153 7.67822 156.415 8.01465 155.869 8.6875C155.323 9.36035 155.05 10.2702 155.05 11.417C155.05 12.5638 155.319 13.4757 155.856 14.1528C156.398 14.8257 157.141 15.1621 158.084 15.1621C159.02 15.1621 159.756 14.8236 160.293 14.1465C160.831 13.4694 161.1 12.5596 161.1 11.417C161.1 10.266 160.831 9.35612 160.293 8.6875C159.756 8.01465 159.02 7.67822 158.084 7.67822ZM169.069 9.15723V10.0713H166.848V16H165.756V10.0713H163.534V9.15723H169.069ZM176.198 16V8.10986H176.096L173.767 9.79834V8.59229L176.204 6.84033H177.34V16H176.198ZM179.889 9.41748C179.889 8.60498 180.164 7.93636 180.714 7.41162C181.269 6.88688 181.971 6.62451 182.822 6.62451C183.643 6.62451 184.33 6.87207 184.885 7.36719C185.443 7.85807 185.723 8.46745 185.723 9.19531C185.723 9.6735 185.587 10.1432 185.316 10.6045C185.046 11.0658 184.536 11.6984 183.787 12.5024L181.584 14.8701V14.9717H185.875V16H179.946V15.2129L183.114 11.7534C183.702 11.1144 184.093 10.6278 184.288 10.2935C184.483 9.95915 184.58 9.60791 184.58 9.23975C184.58 8.78271 184.407 8.39974 184.06 8.09082C183.717 7.77767 183.294 7.62109 182.79 7.62109C182.253 7.62109 181.819 7.78613 181.489 8.11621C181.159 8.44629 180.994 8.88005 180.994 9.41748V9.42383H179.889V9.41748ZM188.83 16H187.738V9.15723H189.065L191.515 14.4639H191.617L194.073 9.15723H195.349V16H194.251V11.1313H194.13L191.966 15.8096H191.115L188.951 11.1313H188.83V16Z" fill="#7C7C7C" /><path d="M212.087 10.9996L213.877 9.21362C213.955 9.13522 213.999 9.02889 213.999 8.91803C213.999 8.80716 213.955 8.70083 213.877 8.62244C213.798 8.54404 213.692 8.5 213.581 8.5C213.47 8.5 213.364 8.54404 213.286 8.62244L211.5 10.4126L209.714 8.62244C209.636 8.54404 209.53 8.5 209.419 8.5C209.308 8.5 209.202 8.54404 209.123 8.62244C209.045 8.70083 209.001 8.80716 209.001 8.91803C209.001 9.02889 209.045 9.13522 209.123 9.21362L210.913 10.9996L209.123 12.7857C209.084 12.8244 209.053 12.8704 209.032 12.9212C209.011 12.9719 209 13.0263 209 13.0813C209 13.1362 209.011 13.1906 209.032 13.2414C209.053 13.2921 209.084 13.3381 209.123 13.3769C209.162 13.4159 209.208 13.4468 209.259 13.468C209.309 13.4891 209.364 13.5 209.419 13.5C209.474 13.5 209.528 13.4891 209.579 13.468C209.629 13.4468 209.676 13.4159 209.714 13.3769L211.5 11.5867L213.286 13.3769C213.324 13.4159 213.371 13.4468 213.421 13.468C213.472 13.4891 213.526 13.5 213.581 13.5C213.636 13.5 213.691 13.4891 213.741 13.468C213.792 13.4468 213.838 13.4159 213.877 13.3769C213.916 13.3381 213.947 13.2921 213.968 13.2414C213.989 13.1906 214 13.1362 214 13.0813C214 13.0263 213.989 12.9719 213.968 12.9212C213.947 12.8704 213.916 12.8244 213.877 12.7857L212.087 10.9996Z" fill="#7C7C7C" /><path d="M196.445 5.96191C196.445 5.58691 196.572 5.27832 196.826 5.03613C197.082 4.79395 197.406 4.67285 197.799 4.67285C198.178 4.67285 198.495 4.78711 198.751 5.01562C199.009 5.24219 199.138 5.52344 199.138 5.85938C199.138 6.08008 199.075 6.29688 198.95 6.50977C198.825 6.72266 198.59 7.01465 198.244 7.38574L197.228 8.47852V8.52539H199.208V9H196.472V8.63672L197.934 7.04004C198.205 6.74512 198.386 6.52051 198.476 6.36621C198.565 6.21191 198.61 6.0498 198.61 5.87988C198.61 5.66895 198.53 5.49219 198.37 5.34961C198.212 5.20508 198.017 5.13281 197.784 5.13281C197.536 5.13281 197.336 5.20898 197.184 5.36133C197.031 5.51367 196.955 5.71387 196.955 5.96191V5.96484H196.445V5.96191Z" fill="#7C7C7C" /><rect x="228" width="72" height="22" rx="4" fill="#F3F3F3" /><path d="M234.99 12.6294C234.956 13.1922 234.892 13.6471 234.799 13.9941C234.71 14.3411 234.56 14.6416 234.349 14.8955V14.9717H238.792V7.86865H235.288L234.99 12.6294ZM233.314 16V17.8091H232.254V14.9717H232.933C233.25 14.8024 233.483 14.5252 233.631 14.1401C233.784 13.7508 233.879 13.2388 233.917 12.604L234.266 6.84033H239.935V14.9717H241.077V17.8091H240.017V16H233.314ZM243.797 14.4702C244.148 14.9146 244.648 15.1367 245.295 15.1367C245.943 15.1367 246.442 14.9146 246.793 14.4702C247.145 14.0216 247.32 13.3911 247.32 12.5786C247.32 11.7661 247.145 11.1377 246.793 10.6934C246.442 10.2448 245.943 10.0205 245.295 10.0205C244.648 10.0205 244.148 10.2448 243.797 10.6934C243.446 11.1377 243.27 11.7661 243.27 12.5786C243.27 13.3911 243.446 14.0216 243.797 14.4702ZM247.599 15.1748C247.037 15.8053 246.269 16.1206 245.295 16.1206C244.322 16.1206 243.552 15.8053 242.985 15.1748C242.422 14.54 242.141 13.6746 242.141 12.5786C242.141 11.4784 242.422 10.613 242.985 9.98242C243.548 9.35189 244.318 9.03662 245.295 9.03662C246.273 9.03662 247.043 9.35189 247.606 9.98242C248.169 10.613 248.45 11.4784 248.45 12.5786C248.45 13.6746 248.167 14.54 247.599 15.1748ZM255.82 16V8.10986H255.718L253.389 9.79834V8.59229L255.826 6.84033H256.963V16H255.82ZM261.758 16V8.10986H261.657L259.327 9.79834V8.59229L261.765 6.84033H262.901V16H261.758ZM266.662 16H265.57V9.15723H266.897L269.347 14.4639H269.449L271.905 9.15723H273.181V16H272.083V11.1313H271.962L269.798 15.8096H268.947L266.783 11.1313H266.662V16Z" fill="#7C7C7C" /><path d="M290.087 10.9996L291.877 9.21362C291.955 9.13522 291.999 9.02889 291.999 8.91803C291.999 8.80716 291.955 8.70083 291.877 8.62244C291.798 8.54404 291.692 8.5 291.581 8.5C291.47 8.5 291.364 8.54404 291.286 8.62244L289.5 10.4126L287.714 8.62244C287.636 8.54404 287.53 8.5 287.419 8.5C287.308 8.5 287.202 8.54404 287.123 8.62244C287.045 8.70083 287.001 8.80716 287.001 8.91803C287.001 9.02889 287.045 9.13522 287.123 9.21362L288.913 10.9996L287.123 12.7857C287.084 12.8244 287.053 12.8704 287.032 12.9212C287.011 12.9719 287 13.0263 287 13.0813C287 13.1362 287.011 13.1906 287.032 13.2414C287.053 13.2921 287.084 13.3381 287.123 13.3769C287.162 13.4159 287.208 13.4468 287.259 13.468C287.309 13.4891 287.364 13.5 287.419 13.5C287.474 13.5 287.528 13.4891 287.579 13.468C287.629 13.4468 287.676 13.4159 287.714 13.3769L289.5 11.5867L291.286 13.3769C291.324 13.4159 291.371 13.4468 291.421 13.468C291.472 13.4891 291.526 13.5 291.581 13.5C291.636 13.5 291.691 13.4891 291.741 13.468C291.792 13.4468 291.838 13.4159 291.877 13.3769C291.916 13.3381 291.947 13.2921 291.968 13.2414C291.989 13.1906 292 13.1362 292 13.0813C292 13.0263 291.989 12.9719 291.968 12.9212C291.947 12.8704 291.916 12.8244 291.877 12.7857L290.087 10.9996Z" fill="#7C7C7C" /><path d="M274.445 5.96191C274.445 5.58691 274.572 5.27832 274.826 5.03613C275.082 4.79395 275.406 4.67285 275.799 4.67285C276.178 4.67285 276.495 4.78711 276.751 5.01562C277.009 5.24219 277.138 5.52344 277.138 5.85938C277.138 6.08008 277.075 6.29688 276.95 6.50977C276.825 6.72266 276.59 7.01465 276.244 7.38574L275.228 8.47852V8.52539H277.208V9H274.472V8.63672L275.934 7.04004C276.205 6.74512 276.386 6.52051 276.476 6.36621C276.565 6.21191 276.61 6.0498 276.61 5.87988C276.61 5.66895 276.53 5.49219 276.37 5.34961C276.212 5.20508 276.017 5.13281 275.784 5.13281C275.536 5.13281 275.336 5.20898 275.184 5.36133C275.031 5.51367 274.955 5.71387 274.955 5.96191V5.96484H274.445V5.96191Z" fill="#7C7C7C" /><rect x="307" width="103" height="22" rx="4" fill="#848484" /><path d="M316.084 6.62451C317.384 6.62451 318.406 7.05615 319.15 7.91943C319.899 8.77848 320.274 9.94434 320.274 11.417C320.274 12.8896 319.899 14.0576 319.15 14.9209C318.406 15.7842 317.384 16.2158 316.084 16.2158C314.777 16.2158 313.749 15.7842 313 14.9209C312.25 14.0576 311.876 12.8896 311.876 11.417C311.876 9.94434 312.253 8.77848 313.006 7.91943C313.763 7.05615 314.79 6.62451 316.084 6.62451ZM316.084 7.67822C315.153 7.67822 314.415 8.01465 313.869 8.6875C313.323 9.36035 313.05 10.2702 313.05 11.417C313.05 12.5638 313.319 13.4757 313.856 14.1528C314.398 14.8257 315.141 15.1621 316.084 15.1621C317.02 15.1621 317.756 14.8236 318.293 14.1465C318.831 13.4694 319.1 12.5596 319.1 11.417C319.1 10.266 318.831 9.35612 318.293 8.6875C317.756 8.01465 317.02 7.67822 316.084 7.67822ZM327.329 16H326.238V12.915H326.136C325.616 13.3467 325.019 13.5625 324.346 13.5625C323.606 13.5625 323.026 13.3403 322.607 12.896C322.192 12.4474 321.985 11.8529 321.985 11.1123V9.15723H323.077V11.1123C323.077 11.5693 323.195 11.9312 323.432 12.1978C323.669 12.4601 324.001 12.5913 324.429 12.5913C324.682 12.5913 324.919 12.5596 325.14 12.4961C325.364 12.4326 325.548 12.3501 325.692 12.2485C325.836 12.1427 325.948 12.0496 326.028 11.9692C326.113 11.8888 326.183 11.8084 326.238 11.728V9.15723H327.329V16ZM330.462 16H329.37V9.15723H330.462V14.2607H330.564L333.972 9.15723H335.064V16H333.972V10.8965H333.871L330.462 16ZM342.78 11.252H341.675C341.582 10.8923 341.381 10.5981 341.072 10.3696C340.768 10.1369 340.381 10.0205 339.911 10.0205C339.297 10.0205 338.808 10.249 338.444 10.7061C338.085 11.1631 337.905 11.7788 337.905 12.5532C337.905 13.3403 338.087 13.9688 338.451 14.4385C338.815 14.904 339.301 15.1367 339.911 15.1367C340.372 15.1367 340.755 15.033 341.06 14.8257C341.369 14.6183 341.574 14.3221 341.675 13.937H342.78C342.678 14.5845 342.376 15.1113 341.872 15.5176C341.369 15.9196 340.717 16.1206 339.917 16.1206C338.957 16.1206 338.193 15.799 337.626 15.1558C337.059 14.5083 336.775 13.6408 336.775 12.5532C336.775 11.4868 337.059 10.6341 337.626 9.99512C338.193 9.35612 338.954 9.03662 339.911 9.03662C340.711 9.03662 341.362 9.24609 341.866 9.66504C342.374 10.084 342.678 10.613 342.78 11.252ZM349.023 9.15723V10.0713H346.801V16H345.709V10.0713H343.488V9.15723H349.023ZM351.578 16H350.486V9.15723H351.578V14.2607H351.68L355.088 9.15723H356.18V16H355.088V10.8965H354.987L351.578 16ZM363.185 9.15723V10.0713H360.963V16H359.871V10.0713H357.65V9.15723H363.185ZM367.028 12.2676H365.74V15.0859H367.028C367.477 15.0859 367.835 14.959 368.101 14.7051C368.372 14.4469 368.507 14.1042 368.507 13.6768C368.507 13.2493 368.372 12.9087 368.101 12.6548C367.835 12.3966 367.477 12.2676 367.028 12.2676ZM364.648 16V9.15723H365.74V11.3535H367.028C367.811 11.3535 368.436 11.563 368.901 11.9819C369.367 12.4009 369.599 12.9658 369.599 13.6768C369.599 14.3877 369.367 14.9526 368.901 15.3716C368.436 15.7905 367.811 16 367.028 16H364.648ZM377.471 10.0713H375.801V12.001H377.293C378.152 12.001 378.581 11.6751 378.581 11.0234C378.581 10.7272 378.488 10.4945 378.302 10.3252C378.12 10.1559 377.843 10.0713 377.471 10.0713ZM377.388 12.915H375.801V15.0859H377.598C378.017 15.0859 378.334 14.995 378.55 14.813C378.77 14.6268 378.88 14.3602 378.88 14.0132C378.88 13.6366 378.755 13.3594 378.505 13.1816C378.26 13.0039 377.887 12.915 377.388 12.915ZM374.709 16V9.15723H377.61C378.249 9.15723 378.751 9.31592 379.115 9.6333C379.479 9.94645 379.661 10.3717 379.661 10.9092C379.661 11.2477 379.553 11.5566 379.337 11.8359C379.125 12.111 378.861 12.2824 378.543 12.3501V12.4517C378.975 12.5109 379.32 12.6865 379.578 12.9785C379.836 13.2663 379.965 13.6175 379.965 14.0322C379.965 14.6331 379.758 15.1113 379.343 15.4668C378.928 15.8223 378.355 16 377.623 16H374.709ZM387.306 11.252H386.202C386.109 10.8923 385.908 10.5981 385.599 10.3696C385.294 10.1369 384.907 10.0205 384.437 10.0205C383.824 10.0205 383.335 10.249 382.971 10.7061C382.611 11.1631 382.431 11.7788 382.431 12.5532C382.431 13.3403 382.613 13.9688 382.977 14.4385C383.341 14.904 383.828 15.1367 384.437 15.1367C384.899 15.1367 385.282 15.033 385.586 14.8257C385.895 14.6183 386.1 14.3221 386.202 13.937H387.306C387.205 14.5845 386.902 15.1113 386.399 15.5176C385.895 15.9196 385.243 16.1206 384.444 16.1206C383.483 16.1206 382.719 15.799 382.152 15.1558C381.585 14.5083 381.302 13.6408 381.302 12.5532C381.302 11.4868 381.585 10.6341 382.152 9.99512C382.719 9.35612 383.481 9.03662 384.437 9.03662C385.237 9.03662 385.889 9.24609 386.392 9.66504C386.9 10.084 387.205 10.613 387.306 11.252ZM391.645 10.0015C391.099 10.0015 390.651 10.1855 390.299 10.5537C389.948 10.9219 389.751 11.4085 389.709 12.0137H393.48C393.467 11.4085 393.293 10.9219 392.959 10.5537C392.625 10.1855 392.187 10.0015 391.645 10.0015ZM393.448 14.229H394.54C394.375 14.8215 394.038 15.2848 393.53 15.6191C393.027 15.9535 392.403 16.1206 391.658 16.1206C390.71 16.1206 389.959 15.8032 389.404 15.1685C388.85 14.5295 388.573 13.6683 388.573 12.585C388.573 11.5059 388.852 10.6447 389.411 10.0015C389.969 9.35824 390.718 9.03662 391.658 9.03662C392.58 9.03662 393.306 9.34342 393.835 9.95703C394.364 10.5706 394.629 11.4106 394.629 12.4771V12.896H389.709V12.9468C389.739 13.6239 389.929 14.1613 390.28 14.5591C390.636 14.9569 391.104 15.1558 391.683 15.1558C392.568 15.1558 393.156 14.8468 393.448 14.229Z" fill="white" /><path d="M405 8.04842V8.39844C405 8.53841 404.906 8.64348 404.781 8.64348L400.219 8.64339C400.094 8.64339 400 8.5267 400 8.39836V8.04834C400 7.90837 400.094 7.8033 400.219 7.8033H401.365V7.66333C401.365 7.56998 401.427 7.5 401.51 7.5H403.49C403.573 7.5 403.635 7.56999 403.635 7.66333V7.8033H404.781C404.906 7.79174 405 7.90844 405 8.04842ZM400.25 8.77172H404.74L404.49 14.4067C404.49 14.4533 404.448 14.5 404.406 14.5H400.583C400.542 14.5 400.5 14.465 400.5 14.4067L400.25 8.77172ZM403.615 13.9283C403.615 14.045 403.698 14.1383 403.802 14.1383C403.906 14.1383 403.979 14.0449 403.99 13.94L404.125 9.34335C404.125 9.22665 404.042 9.1334 403.938 9.1334C403.833 9.1334 403.76 9.22674 403.75 9.33172L403.615 13.9283ZM402.313 13.9283C402.313 14.045 402.396 14.1383 402.5 14.1383C402.604 14.1383 402.687 14.0449 402.687 13.9283V9.34338C402.687 9.22669 402.604 9.13343 402.5 9.13343C402.396 9.13343 402.313 9.22677 402.313 9.34338V13.9283ZM400.885 9.34338L401.021 13.94C401.021 14.0567 401.104 14.1383 401.208 14.1383C401.313 14.1383 401.396 14.045 401.396 13.9284L401.25 9.33175C401.25 9.21505 401.167 9.13343 401.063 9.13343C400.958 9.13335 400.875 9.22669 400.885 9.34338Z" fill="white" /></svg>
-                                </div>
-                                <div className={styles.filter__form_buttons_right}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="220" height="44" viewBox="0 0 220 44" fill="none">
-                                        <rect width="220" height="44" rx="22" fill="#F7C026" /><path d="M32.571 17.5455V27H32.2756V17.8409H26.5327V27H26.2372V17.5455H32.571ZM36.8753 27.1477C36.3182 27.1477 35.8181 26.9877 35.3749 26.6676C34.9318 26.3445 34.5809 25.9059 34.3224 25.3519C34.0669 24.7949 33.9392 24.1686 33.9392 23.473C33.9392 22.7744 34.0669 22.1481 34.3224 21.5941C34.5809 21.0401 34.9318 20.6031 35.3749 20.283C35.8181 19.9599 36.3182 19.7983 36.8753 19.7983C37.4323 19.7983 37.9309 19.9599 38.371 20.283C38.8142 20.6062 39.1651 21.0447 39.4236 21.5987C39.6821 22.1527 39.8114 22.7775 39.8114 23.473C39.8114 24.1686 39.6821 24.7949 39.4236 25.3519C39.1681 25.9059 38.8188 26.3445 38.3756 26.6676C37.9325 26.9877 37.4323 27.1477 36.8753 27.1477ZM36.8753 26.8523C37.3769 26.8523 37.8263 26.7045 38.2233 26.4091C38.6234 26.1136 38.9389 25.7105 39.1697 25.1996C39.4005 24.6887 39.5159 24.1132 39.5159 23.473C39.5159 22.8329 39.399 22.2589 39.1651 21.7511C38.9342 21.2402 38.6203 20.837 38.2233 20.5415C37.8263 20.243 37.3769 20.0938 36.8753 20.0938C36.3767 20.0938 35.9274 20.243 35.5273 20.5415C35.1303 20.837 34.8148 21.2402 34.5809 21.7511C34.3501 22.2589 34.2347 22.8329 34.2347 23.473C34.2347 24.1132 34.3501 24.6887 34.5809 25.1996C34.8117 25.7105 35.1256 26.1136 35.5227 26.4091C35.9228 26.7045 36.3736 26.8523 36.8753 26.8523ZM41.1772 27V19.9091H41.4727V23.3068H42.3406L45.1474 19.9091H45.5352L42.7284 23.3068L45.646 27H45.2674L42.5899 23.6023H41.4727V27H41.1772ZM48.4049 27.1477C48.0171 27.1477 47.6586 27.0677 47.3293 26.9077C47.003 26.7476 46.7399 26.5137 46.5398 26.206C46.3429 25.8982 46.2444 25.5227 46.2444 25.0795C46.2444 24.8395 46.2829 24.6148 46.3598 24.4055C46.4367 24.1932 46.5722 24.0008 46.766 23.8285C46.9599 23.6561 47.2308 23.5084 47.5785 23.3853C47.9294 23.2622 48.3772 23.1683 48.9219 23.1037C49.2482 23.0668 49.5559 23.0237 49.8452 22.9744C50.1345 22.9252 50.37 22.8513 50.5516 22.7528C50.7331 22.6544 50.8239 22.5128 50.8239 22.3281V21.9034C50.8239 21.3587 50.6408 20.9216 50.2746 20.5923C49.9083 20.2599 49.4205 20.0938 48.8111 20.0938C48.3126 20.0938 47.8771 20.2045 47.5047 20.4261C47.1323 20.6446 46.8722 20.9524 46.7245 21.3494L46.4475 21.2386C46.5583 20.9432 46.7291 20.6877 46.9599 20.4723C47.1908 20.2569 47.4647 20.0907 47.7817 19.9737C48.0987 19.8568 48.4418 19.7983 48.8111 19.7983C49.1712 19.7983 49.4928 19.8522 49.776 19.9599C50.0622 20.0645 50.3053 20.2122 50.5054 20.4031C50.7054 20.5908 50.8578 20.8124 50.9624 21.0678C51.0671 21.3233 51.1194 21.6018 51.1194 21.9034V27H50.8239V25.5597H50.787C50.6393 25.8797 50.4469 26.1598 50.2099 26.3999C49.976 26.6368 49.7052 26.8215 49.3974 26.9538C49.0927 27.0831 48.7619 27.1477 48.4049 27.1477ZM48.4049 26.8523C48.8542 26.8523 49.262 26.7322 49.6283 26.4922C49.9945 26.2491 50.2853 25.9121 50.5008 25.4812C50.7162 25.0472 50.8239 24.544 50.8239 23.9716V22.9006C50.7378 22.9652 50.6331 23.0221 50.51 23.0714C50.39 23.1206 50.253 23.1652 50.0991 23.2053C49.9483 23.2422 49.7837 23.2745 49.6052 23.3022C49.4267 23.3299 49.2359 23.3561 49.0327 23.3807C48.3987 23.4545 47.9002 23.5669 47.537 23.7177C47.1738 23.8685 46.9168 24.0578 46.766 24.2855C46.6152 24.5133 46.5398 24.7779 46.5398 25.0795C46.5398 25.6151 46.7183 26.0444 47.0753 26.3675C47.4354 26.6907 47.8786 26.8523 48.4049 26.8523ZM52.4703 25.1903H52.7657C52.7903 25.6828 52.9888 26.0829 53.3612 26.3906C53.7336 26.6984 54.2307 26.8523 54.8524 26.8523C55.5048 26.8523 56.0188 26.6876 56.3943 26.3583C56.7697 26.029 56.9575 25.6058 56.9575 25.0888C56.9575 24.7656 56.8882 24.484 56.7497 24.244C56.6143 24.0039 56.4373 23.8162 56.2188 23.6808C56.0034 23.5423 55.7757 23.4669 55.5356 23.4545H54.2614V23.1591H55.4987C55.8957 23.0852 56.2127 22.9375 56.4497 22.7159C56.6897 22.4943 56.8097 22.1804 56.8097 21.7741C56.8097 21.2694 56.6343 20.8662 56.2835 20.5646C55.9326 20.263 55.4802 20.1122 54.9262 20.1122C54.3599 20.1122 53.8921 20.2676 53.5228 20.5785C53.1566 20.8862 52.9596 21.2848 52.9319 21.7741H52.6364C52.6549 21.3833 52.7657 21.0417 52.9688 20.7493C53.175 20.4538 53.4474 20.2245 53.786 20.0614C54.1245 19.8983 54.5046 19.8168 54.9262 19.8168C55.3663 19.8168 55.7495 19.9014 56.0757 20.0707C56.402 20.2399 56.6543 20.4723 56.8328 20.7678C57.0144 21.0632 57.1052 21.3987 57.1052 21.7741C57.1052 22.1465 57.0083 22.4635 56.8144 22.7251C56.6205 22.9837 56.3635 23.1622 56.0434 23.2607V23.3253C56.265 23.3714 56.4666 23.4776 56.6482 23.6438C56.8328 23.8069 56.979 24.0131 57.0867 24.2624C57.1975 24.5117 57.2529 24.7872 57.2529 25.0888C57.2529 25.4827 57.1544 25.8351 56.9575 26.146C56.7636 26.4568 56.4866 26.7015 56.1265 26.88C55.7695 27.0585 55.3448 27.1477 54.8524 27.1477C54.3876 27.1477 53.9783 27.0662 53.6244 26.9031C53.2735 26.7399 52.9965 26.5122 52.7934 26.2198C52.5934 25.9244 52.4856 25.5812 52.4703 25.1903ZM60.305 27.1477C59.9172 27.1477 59.5586 27.0677 59.2293 26.9077C58.9031 26.7476 58.64 26.5137 58.4399 26.206C58.2429 25.8982 58.1445 25.5227 58.1445 25.0795C58.1445 24.8395 58.1829 24.6148 58.2599 24.4055C58.3368 24.1932 58.4722 24.0008 58.6661 23.8285C58.86 23.6561 59.1308 23.5084 59.4786 23.3853C59.8295 23.2622 60.2773 23.1683 60.822 23.1037C61.1482 23.0668 61.456 23.0237 61.7453 22.9744C62.0346 22.9252 62.2701 22.8513 62.4516 22.7528C62.6332 22.6544 62.724 22.5128 62.724 22.3281V21.9034C62.724 21.3587 62.5409 20.9216 62.1746 20.5923C61.8084 20.2599 61.3206 20.0938 60.7112 20.0938C60.2126 20.0938 59.7772 20.2045 59.4048 20.4261C59.0324 20.6446 58.7723 20.9524 58.6246 21.3494L58.3476 21.2386C58.4584 20.9432 58.6292 20.6877 58.86 20.4723C59.0908 20.2569 59.3647 20.0907 59.6817 19.9737C59.9987 19.8568 60.3419 19.7983 60.7112 19.7983C61.0713 19.7983 61.3929 19.8522 61.6761 19.9599C61.9623 20.0645 62.2054 20.2122 62.4055 20.4031C62.6055 20.5908 62.7579 20.8124 62.8625 21.0678C62.9671 21.3233 63.0195 21.6018 63.0195 21.9034V27H62.724V25.5597H62.6871C62.5393 25.8797 62.347 26.1598 62.11 26.3999C61.8761 26.6368 61.6053 26.8215 61.2975 26.9538C60.9928 27.0831 60.662 27.1477 60.305 27.1477ZM60.305 26.8523C60.7543 26.8523 61.1621 26.7322 61.5283 26.4922C61.8946 26.2491 62.1854 25.9121 62.4009 25.4812C62.6163 25.0472 62.724 24.544 62.724 23.9716V22.9006C62.6378 22.9652 62.5332 23.0221 62.4101 23.0714C62.2901 23.1206 62.1531 23.1652 61.9992 23.2053C61.8484 23.2422 61.6838 23.2745 61.5053 23.3022C61.3268 23.3299 61.1359 23.3561 60.9328 23.3807C60.2988 23.4545 59.8002 23.5669 59.4371 23.7177C59.0739 23.8685 58.8169 24.0578 58.6661 24.2855C58.5153 24.5133 58.4399 24.7779 58.4399 25.0795C58.4399 25.6151 58.6184 26.0444 58.9754 26.3675C59.3355 26.6907 59.7787 26.8523 60.305 26.8523ZM63.8117 20.2045V19.9091H68.9083V20.2045H66.5262V27H66.2308V20.2045H63.8117ZM70.3827 22.9929H72.5432C73.2757 22.9929 73.8527 23.1514 74.2744 23.4684C74.696 23.7854 74.9068 24.2917 74.9068 24.9872C74.9068 25.455 74.8114 25.8382 74.6206 26.1367C74.4298 26.4322 74.1574 26.6507 73.8035 26.7923C73.4496 26.9308 73.0295 27 72.5432 27H70.2165V19.9091H70.512V26.7045H72.5432C73.1864 26.7045 73.6912 26.5737 74.0574 26.3121C74.4267 26.0475 74.6114 25.6058 74.6114 24.9872C74.6114 24.3809 74.4267 23.947 74.0574 23.6854C73.6912 23.4207 73.1864 23.2884 72.5432 23.2884H70.3827V22.9929ZM81.2718 17.5455V27H80.9763V17.8594H80.9209L78.8897 19.2074V18.8565L80.8655 17.5455H81.2718ZM83.7456 27V26.7599L86.774 23.1776C87.248 22.6174 87.6173 22.1496 87.882 21.7741C88.1466 21.3956 88.3328 21.0601 88.4406 20.7678C88.5483 20.4723 88.6021 20.1676 88.6021 19.8537C88.6021 19.4413 88.5067 19.0735 88.3159 18.7504C88.1282 18.4272 87.8696 18.1733 87.5403 17.9886C87.2141 17.804 86.8417 17.7116 86.4232 17.7116C85.9861 17.7116 85.6014 17.8117 85.269 18.0117C84.9366 18.2087 84.6766 18.4734 84.4888 18.8058C84.3011 19.1381 84.2072 19.5059 84.2072 19.9091H83.9118C83.9118 19.4505 84.018 19.0335 84.2303 18.658C84.4458 18.2795 84.7412 17.9779 85.1167 17.7532C85.4952 17.5285 85.9307 17.4162 86.4232 17.4162C86.8971 17.4162 87.3203 17.5224 87.6927 17.7347C88.0651 17.944 88.359 18.2333 88.5744 18.6026C88.7899 18.9689 88.8976 19.3859 88.8976 19.8537C88.8976 20.2015 88.8391 20.5339 88.7222 20.8509C88.6083 21.1679 88.4129 21.5218 88.1359 21.9126C87.862 22.3035 87.4819 22.7867 86.9956 23.3622L84.2072 26.6676V26.7045H89.4516V27H83.7456ZM96.6867 27.1293C96.0865 27.1293 95.5695 26.9338 95.1356 26.543C94.7047 26.1521 94.3723 25.5935 94.1384 24.8672C93.9045 24.1409 93.7875 23.276 93.7875 22.2727C93.7875 21.2694 93.9045 20.4046 94.1384 19.6783C94.3723 18.9519 94.7047 18.3933 95.1356 18.0025C95.5695 17.6116 96.0865 17.4162 96.6867 17.4162C97.2868 17.4162 97.8023 17.6116 98.2332 18.0025C98.6672 18.3933 99.0011 18.9519 99.235 19.6783C99.4689 20.4046 99.5858 21.2694 99.5858 22.2727C99.5858 23.276 99.4689 24.1409 99.235 24.8672C99.0011 25.5935 98.6672 26.1521 98.2332 26.543C97.8023 26.9338 97.2868 27.1293 96.6867 27.1293ZM96.6867 26.8338C97.493 26.8338 98.1286 26.4291 98.5933 25.6197C99.058 24.8103 99.2904 23.6946 99.2904 22.2727C99.2904 21.3248 99.1842 20.5108 98.9718 19.8306C98.7626 19.1474 98.464 18.6242 98.0762 18.261C97.6885 17.8948 97.2253 17.7116 96.6867 17.7116C95.8803 17.7116 95.2448 18.1164 94.7801 18.9258C94.3154 19.7352 94.083 20.8509 94.083 22.2727C94.083 23.2206 94.1876 24.0362 94.3969 24.7195C94.6093 25.3996 94.9093 25.9228 95.2971 26.2891C95.688 26.6522 96.1512 26.8338 96.6867 26.8338ZM103.652 27.1293C103.052 27.1293 102.535 26.9338 102.101 26.543C101.67 26.1521 101.338 25.5935 101.104 24.8672C100.87 24.1409 100.753 23.276 100.753 22.2727C100.753 21.2694 100.87 20.4046 101.104 19.6783C101.338 18.9519 101.67 18.3933 102.101 18.0025C102.535 17.6116 103.052 17.4162 103.652 17.4162C104.252 17.4162 104.768 17.6116 105.199 18.0025C105.633 18.3933 105.967 18.9519 106.201 19.6783C106.435 20.4046 106.552 21.2694 106.552 22.2727C106.552 23.276 106.435 24.1409 106.201 24.8672C105.967 25.5935 105.633 26.1521 105.199 26.543C104.768 26.9338 104.252 27.1293 103.652 27.1293ZM103.652 26.8338C104.459 26.8338 105.094 26.4291 105.559 25.6197C106.024 24.8103 106.256 23.6946 106.256 22.2727C106.256 21.3248 106.15 20.5108 105.938 19.8306C105.728 19.1474 105.43 18.6242 105.042 18.261C104.654 17.8948 104.191 17.7116 103.652 17.7116C102.846 17.7116 102.21 18.1164 101.746 18.9258C101.281 19.7352 101.049 20.8509 101.049 22.2727C101.049 23.2206 101.153 24.0362 101.363 24.7195C101.575 25.3996 101.875 25.9228 102.263 26.2891C102.654 26.6522 103.117 26.8338 103.652 26.8338ZM110.618 27.1293C110.018 27.1293 109.501 26.9338 109.067 26.543C108.636 26.1521 108.304 25.5935 108.07 24.8672C107.836 24.1409 107.719 23.276 107.719 22.2727C107.719 21.2694 107.836 20.4046 108.07 19.6783C108.304 18.9519 108.636 18.3933 109.067 18.0025C109.501 17.6116 110.018 17.4162 110.618 17.4162C111.218 17.4162 111.734 17.6116 112.165 18.0025C112.598 18.3933 112.932 18.9519 113.166 19.6783C113.4 20.4046 113.517 21.2694 113.517 22.2727C113.517 23.276 113.4 24.1409 113.166 24.8672C112.932 25.5935 112.598 26.1521 112.165 26.543C111.734 26.9338 111.218 27.1293 110.618 27.1293ZM110.618 26.8338C111.424 26.8338 112.06 26.4291 112.525 25.6197C112.989 24.8103 113.222 23.6946 113.222 22.2727C113.222 21.3248 113.116 20.5108 112.903 19.8306C112.694 19.1474 112.395 18.6242 112.008 18.261C111.62 17.8948 111.157 17.7116 110.618 17.7116C109.812 17.7116 109.176 18.1164 108.711 18.9258C108.247 19.7352 108.014 20.8509 108.014 22.2727C108.014 23.2206 108.119 24.0362 108.328 24.7195C108.541 25.3996 108.841 25.9228 109.228 26.2891C109.619 26.6522 110.083 26.8338 110.618 26.8338ZM117.977 27V19.9091H122.925V27H122.63V20.2045H118.272V27H117.977ZM124.753 29.6591V19.9091H125.048V21.7188H125.085C125.215 21.3248 125.395 20.9847 125.626 20.6985C125.856 20.4123 126.129 20.1907 126.443 20.0337C126.76 19.8768 127.107 19.7983 127.486 19.7983C128.046 19.7983 128.529 19.9599 128.936 20.283C129.345 20.6031 129.66 21.0401 129.882 21.5941C130.107 22.1481 130.219 22.7744 130.219 23.473C130.219 24.1686 130.107 24.7933 129.882 25.3473C129.657 25.9013 129.34 26.3398 128.931 26.663C128.522 26.9862 128.04 27.1477 127.486 27.1477C127.111 27.1477 126.764 27.0708 126.447 26.9169C126.13 26.7599 125.855 26.5384 125.621 26.2521C125.387 25.9628 125.209 25.6212 125.085 25.2273H125.048V29.6591H124.753ZM125.048 23.473C125.048 24.1132 125.147 24.6887 125.344 25.1996C125.544 25.7074 125.826 26.1106 126.189 26.4091C126.555 26.7045 126.987 26.8523 127.486 26.8523C127.985 26.8523 128.415 26.7045 128.779 26.4091C129.145 26.1106 129.426 25.7074 129.623 25.1996C129.823 24.6887 129.923 24.1132 129.923 23.473C129.923 22.8329 129.825 22.2589 129.628 21.7511C129.431 21.2402 129.149 20.837 128.783 20.5415C128.42 20.243 127.988 20.0938 127.486 20.0938C126.984 20.0938 126.55 20.243 126.184 20.5415C125.821 20.837 125.541 21.2402 125.344 21.7511C125.147 22.2589 125.048 22.8329 125.048 23.473ZM134.251 27.1477C133.632 27.1477 133.091 26.9862 132.626 26.663C132.164 26.3398 131.806 25.9013 131.55 25.3473C131.295 24.7933 131.167 24.1686 131.167 23.473C131.167 22.7775 131.295 22.1527 131.55 21.5987C131.809 21.0447 132.16 20.6062 132.603 20.283C133.046 19.9599 133.546 19.7983 134.103 19.7983C134.516 19.7983 134.897 19.886 135.248 20.0614C135.602 20.2369 135.91 20.48 136.171 20.7908C136.433 21.1017 136.636 21.4602 136.781 21.8665C136.928 22.2696 137.002 22.7005 137.002 23.1591V23.4545H131.315V23.1591H136.707C136.707 22.5897 136.59 22.0742 136.356 21.6126C136.122 21.1478 135.808 20.7785 135.414 20.5046C135.02 20.2307 134.583 20.0938 134.103 20.0938C133.617 20.0938 133.177 20.2384 132.783 20.5277C132.389 20.817 132.073 21.2109 131.836 21.7095C131.599 22.2081 131.475 22.7713 131.462 23.3991V23.4361C131.462 24.0547 131.57 24.6241 131.786 25.1442C132.004 25.6612 132.321 26.0752 132.737 26.386C133.152 26.6969 133.657 26.8523 134.251 26.8523C134.688 26.8523 135.054 26.7753 135.35 26.6214C135.648 26.4676 135.887 26.2906 136.065 26.0906C136.247 25.8905 136.381 25.7197 136.467 25.5781L136.707 25.7443C136.602 25.9228 136.445 26.1213 136.236 26.3398C136.027 26.5584 135.759 26.7476 135.433 26.9077C135.106 27.0677 134.712 27.1477 134.251 27.1477ZM137.383 28.9943V26.7045H138.038C138.207 26.4891 138.358 26.2583 138.49 26.0121C138.623 25.7628 138.737 25.495 138.832 25.2088C138.931 24.9195 139.012 24.6087 139.077 24.2763C139.144 23.9408 139.195 23.5807 139.229 23.196L139.525 19.9091H143.107V26.7045H144.086V28.9943H143.79V27H137.678V28.9943H137.383ZM138.407 26.7045H142.811V20.2045H139.792L139.525 23.196C139.457 23.947 139.334 24.601 139.155 25.158C138.977 25.7151 138.727 26.2306 138.407 26.7045ZM144.337 27V26.7045H144.484C144.817 26.7045 145.074 26.6491 145.255 26.5384C145.44 26.4245 145.574 26.246 145.657 26.0028C145.74 25.7566 145.797 25.435 145.828 25.038C145.862 24.641 145.894 24.1562 145.925 23.5838L146.128 19.9091H150.19V27H149.895V20.2045H146.405L146.22 23.6023C146.189 24.1686 146.156 24.6656 146.119 25.0934C146.085 25.5181 146.017 25.872 145.915 26.1552C145.817 26.4353 145.655 26.6461 145.431 26.7876C145.209 26.9292 144.894 27 144.484 27H144.337ZM154.53 27.1477C153.973 27.1477 153.473 26.9877 153.03 26.6676C152.587 26.3445 152.236 25.9059 151.977 25.3519C151.722 24.7949 151.594 24.1686 151.594 23.473C151.594 22.7744 151.722 22.1481 151.977 21.5941C152.236 21.0401 152.587 20.6031 153.03 20.283C153.473 19.9599 153.973 19.7983 154.53 19.7983C155.087 19.7983 155.586 19.9599 156.026 20.283C156.469 20.6062 156.82 21.0447 157.079 21.5987C157.337 22.1527 157.466 22.7775 157.466 23.473C157.466 24.1686 157.337 24.7949 157.079 25.3519C156.823 25.9059 156.474 26.3445 156.031 26.6676C155.588 26.9877 155.087 27.1477 154.53 27.1477ZM154.53 26.8523C155.032 26.8523 155.481 26.7045 155.878 26.4091C156.278 26.1136 156.594 25.7105 156.825 25.1996C157.056 24.6887 157.171 24.1132 157.171 23.473C157.171 22.8329 157.054 22.2589 156.82 21.7511C156.589 21.2402 156.275 20.837 155.878 20.5415C155.481 20.243 155.032 20.0938 154.53 20.0938C154.032 20.0938 153.582 20.243 153.182 20.5415C152.785 20.837 152.47 21.2402 152.236 21.7511C152.005 22.2589 151.89 22.8329 151.89 23.473C151.89 24.1132 152.005 24.6887 152.236 25.1996C152.467 25.7105 152.781 26.1136 153.178 26.4091C153.578 26.7045 154.029 26.8523 154.53 26.8523ZM158.097 27L161.735 23.4545L158.153 19.9091H158.568L162.003 23.3068H162.252V19.9091H162.547V23.3068H162.797L166.231 19.9091H166.647L163.064 23.4545L166.702 27H166.278L162.797 23.6023H162.547V27H162.252V23.6023H162.003L158.522 27H158.097ZM170.425 27.1477C169.806 27.1477 169.265 26.9862 168.8 26.663C168.338 26.3398 167.98 25.9013 167.724 25.3473C167.469 24.7933 167.341 24.1686 167.341 23.473C167.341 22.7775 167.469 22.1527 167.724 21.5987C167.983 21.0447 168.334 20.6062 168.777 20.283C169.22 19.9599 169.72 19.7983 170.277 19.7983C170.69 19.7983 171.071 19.886 171.422 20.0614C171.776 20.2369 172.084 20.48 172.345 20.7908C172.607 21.1017 172.81 21.4602 172.955 21.8665C173.102 22.2696 173.176 22.7005 173.176 23.1591V23.4545H167.489V23.1591H172.881C172.881 22.5897 172.764 22.0742 172.53 21.6126C172.296 21.1478 171.982 20.7785 171.588 20.5046C171.194 20.2307 170.757 20.0938 170.277 20.0938C169.791 20.0938 169.351 20.2384 168.957 20.5277C168.563 20.817 168.247 21.2109 168.01 21.7095C167.773 22.2081 167.649 22.7713 167.637 23.3991V23.4361C167.637 24.0547 167.744 24.6241 167.96 25.1442C168.178 25.6612 168.495 26.0752 168.911 26.386C169.326 26.6969 169.831 26.8523 170.425 26.8523C170.862 26.8523 171.228 26.7753 171.524 26.6214C171.822 26.4676 172.061 26.2906 172.239 26.0906C172.421 25.8905 172.555 25.7197 172.641 25.5781L172.881 25.7443C172.776 25.9228 172.619 26.1213 172.41 26.3398C172.201 26.5584 171.933 26.7476 171.607 26.9077C171.28 27.0677 170.887 27.1477 170.425 27.1477ZM179.429 23.3068V23.6023H174.748V23.3068H179.429ZM174.849 19.9091V27H174.554V19.9091H174.849ZM179.586 19.9091V27H179.29V19.9091H179.586ZM181.713 26.7045L186.108 19.9091H186.551V27H186.256V20.2045L181.861 27H181.418V19.9091H181.713V26.7045ZM188.641 26.7045L193.036 19.9091H193.479V27H193.183V20.2045L188.789 27H188.345V19.9091H188.641V26.7045ZM191.651 17.5455H191.946C191.946 17.8717 191.854 18.1287 191.669 18.3164C191.488 18.5041 191.235 18.598 190.912 18.598C190.589 18.598 190.335 18.5041 190.15 18.3164C189.969 18.1287 189.878 17.8717 189.878 17.5455H190.173C190.173 17.7886 190.237 17.9763 190.363 18.1087C190.489 18.2379 190.672 18.3026 190.912 18.3026C191.152 18.3026 191.335 18.2379 191.461 18.1087C191.588 17.9763 191.651 17.7886 191.651 17.5455Z" fill="#2C2C2E" />
-                                    </svg>
-                                </div>
+                            <div className={styles.filter__column}>
+                                <Switch
+                                    title="Паркинг"
+                                    name="has_parking"
+                                    value="has_parking"
+                                    isChecked={filters.hasGroundParking}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasGroundParking: checked })}
+                                />
+                                <Switch
+                                    title="Закрытая территория"
+                                    name="closed_territory"
+                                    value="closed_territory"
+                                    isChecked={filters.isClosedArea}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, isClosedArea: checked })}
+                                />
+                                <Switch
+                                    title="Рядом школа"
+                                    name="school_around"
+                                    value="school_around"
+                                    isChecked={filters.hasBesideSchool}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasBesideSchool: checked })}
+                                />
                             </div>
 
                         </div>
                     </div>
-                </MediaQuery>
+                    <div className={styles.filter__form_buttons}>
+                        <div className={styles.filter__form_buttons_left}>
+                            {
+                                filtersButtons.map( btn => {
+                                    return (
+                                        <div className={styles.filter__form_filter_button} >
+                                            <div>
+                                                {btn.title} 
+                                            </div>
+                                            <svg onClick={btn.func} width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.08693 2.99964L4.87687 1.21362C4.95525 1.13522 4.99929 1.02889 4.99929 0.918027C4.99929 0.807159 4.95525 0.700833 4.87687 0.622437C4.79849 0.544042 4.69217 0.5 4.58132 0.5C4.47047 0.5 4.36416 0.544042 4.28577 0.622437L2.5 2.41263L0.714226 0.622437C0.635842 0.544042 0.52953 0.5 0.418678 0.5C0.307826 0.5 0.201514 0.544042 0.12313 0.622437C0.0447462 0.700833 0.000710398 0.807159 0.000710397 0.918027C0.000710396 1.02889 0.0447462 1.13522 0.12313 1.21362L1.91307 2.99964L0.12313 4.78567C0.0841145 4.82438 0.0531469 4.87042 0.0320137 4.92115C0.0108805 4.97189 0 5.0263 0 5.08126C0 5.13622 0.0108805 5.19064 0.0320137 5.24137C0.0531469 5.2921 0.0841145 5.33815 0.12313 5.37685C0.161827 5.41587 0.207867 5.44685 0.258592 5.46798C0.309318 5.48912 0.363726 5.5 0.418678 5.5C0.47363 5.5 0.528038 5.48912 0.578764 5.46798C0.629489 5.44685 0.675529 5.41587 0.714226 5.37685L2.5 3.58666L4.28577 5.37685C4.32447 5.41587 4.37051 5.44685 4.42124 5.46798C4.47196 5.48912 4.52637 5.5 4.58132 5.5C4.63627 5.5 4.69068 5.48912 4.74141 5.46798C4.79213 5.44685 4.83817 5.41587 4.87687 5.37685C4.91589 5.33815 4.94685 5.2921 4.96799 5.24137C4.98912 5.19064 5 5.13622 5 5.08126C5 5.0263 4.98912 4.97189 4.96799 4.92115C4.94685 4.87042 4.91589 4.82438 4.87687 4.78567L3.08693 2.99964Z" fill="#7C7C7C"/>
+                                            </svg>
+
+                                        </div>
+                                    )
+                                } )
+                            }
+                            {
+                                filtersButtons.length > 0 && 
+                                <div className={styles.filter__form_filter_button_clear} >
+                                    <div>
+                                        Очистить все
+                                    </div>
+                                    <svg onClick={() => {
+                                        props.setFilters({})
+                                    }} width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5 1.04842V1.39844C5 1.53841 4.90627 1.64348 4.78122 1.64348L0.218784 1.64339C0.0938083 1.64339 0 1.5267 0 1.39836V1.04834C0 0.908366 0.093732 0.803301 0.218784 0.803301H1.36464V0.663327C1.36464 0.569985 1.42713 0.5 1.51047 0.5H3.4896C3.57294 0.5 3.63543 0.569987 3.63543 0.663327V0.803301H4.78128C4.90626 0.791745 5 0.908441 5 1.04842ZM0.250071 1.77172H4.73959L4.48957 7.40666C4.48957 7.45329 4.44794 7.5 4.40623 7.5H0.583371C0.541737 7.5 0.50003 7.46501 0.50003 7.40666L0.250071 1.77172ZM3.6146 6.92833C3.6146 7.04503 3.69795 7.13829 3.80206 7.13829C3.90626 7.13829 3.97914 7.04494 3.98952 6.93996L4.12496 2.34335C4.12496 2.22665 4.04162 2.1334 3.9375 2.1334C3.83331 2.1334 3.76043 2.22674 3.75004 2.33172L3.6146 6.92833ZM2.31254 6.92833C2.31254 7.04503 2.39588 7.13829 2.5 7.13829C2.60419 7.13829 2.68746 7.04494 2.68746 6.92833V2.34338C2.68746 2.22669 2.60412 2.13343 2.5 2.13343C2.3958 2.13343 2.31254 2.22677 2.31254 2.34338V6.92833ZM0.885422 2.34338L1.02086 6.94C1.02086 7.05669 1.1042 7.13832 1.20832 7.13832C1.31251 7.13832 1.39578 7.04497 1.39578 6.92836L1.25002 2.33175C1.25002 2.21505 1.16668 2.13343 1.06256 2.13343C0.958369 2.13335 0.875032 2.22669 0.885422 2.34338Z" fill="white"/>
+                                    </svg>
+
+                                </div>
+                            }
+                        </div>
+                        <div className={styles.filter__form_buttons_right}>
+                            <div className={styles.filter__form_button} onClick={props.useFilters}>
+                                Показать {filteredCount} {
+                        filteredCount % 100 < 20 && filteredCount % 100 > 10 ? 'предложений' : 
+                        filteredCount % 10 === 1 ? 'предложение' :
+                        filteredCount % 10 < 5 && filteredCount % 10 > 0 ? 'предложения' :
+                        'предложений'
+                        }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </MediaQuery>
             }
-            {mounted &&
-                <MediaQuery maxWidth={767}>
-                    <div className={styles.filter__in}>
-                        <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
-                        <div className={styles.filter__form}>
-                            <div className={styles.filter__form_section}>
-                                <div className={styles.filter__row}>
-                                    <RadioGroup
-                                        options={[
-                                            {
-                                                value: 'studio',
-                                                label: 'Студия'
-                                            },
-                                            {
-                                                value: '1',
-                                                label: '1'
-                                            },
-                                            {
-                                                value: '2',
-                                                label: '2'
-                                            },
-                                            {
-                                                value: '3',
-                                                label: '3'
-                                            },
-                                            {
-                                                value: '4+',
-                                                label: '4+'
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        title="Местоположение"
-                                        placeholder="Введите район или ЖК"
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
+            { mounted &&
+            <MediaQuery maxWidth={767}>
+            <div className={styles.filter__in}>
+                <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
+                <div className={styles.filter__form}>
+                    <div className={styles.filter__form_section}>
+                    <div className={styles.filter__row}>
+                    <RadioGroup
+                                onChange={(e) => setFilters({ ...filters, room: e.target.value })}
+                                value={filters.room}
+                                options={[
+                                    {
+                                        value: '0',
+                                        label: 'Студия'
+                                    },
+                                    {
+                                        value: '1',
+                                        label: '1'
+                                    },
+                                    {
+                                        value: '2',
+                                        label: '2'
+                                    },
+                                    {
+                                        value: '3',
+                                        label: '3'
+                                    },
+                                    {
+                                        value: '4+',
+                                        label: '4+'
+                                    }
+                                ]}
+                            />
+                    </div>
+                    <div className={styles.filter__row}>
+                    <TextInput
+                                onChange={(e) => setFilters({ ...filters, place: e.target.value })}
+                                value={filters.place}
+                                type="text"
+                                name="place"
+                                title="Местоположение"
+                                placeholder="Введите район или ЖК"
+                            />
+                    </div>
+                    <div className={styles.filter__row}>
+                        <TextInput
+                                onChange={(e) => setFilters({ ...filters, priceMin : e.target.value })}
+                                value={filters.priceMin}
+                                type="text"
+                                name="priceMin"
+                                placeholder="Цена от"
+                            />
+                        <TextInput
+                            onChange={(e) => setFilters({ ...filters, priceMax: e.target.value })}
+                            value={filters.priceMin}
+                            type="text"
+                            name="priceMax"
+                            placeholder="Цена до"
+                        />
 
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        placeholder="Цена от"
-                                    />
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        placeholder="Цена до"
-                                    />
-
-
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <TextInput
-                                        value=""
-                                        type="number"
-                                        name="payment"
-                                        title="Ваш комфортный платеж по ипотеке"
-                                        placeholder="Введите сумму платежа"
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        placeholder="Срок ввода от"
-                                    />
-                                    <TextInput
-                                        value=""
-                                        type="text"
-                                        name="place"
-                                        placeholder="до"
-                                    />
-                                </div>
-
+                            
                             </div>
-                            <div className={styles.filter__form_opener} onClick={toggleSectionHandler}>
-                                <div className={styles.filter__form_opener_left}>
-                                    <div className={styles.filter__form_opener_left_text}>Расширенный поиск</div>
-                                </div>
-                                <div className={styles.filter__form_opener_middle}></div>
-                                <div className={styles.filter__form_opener_right}>
-                                    <Image
-                                        src={'/opener_right_arrow.svg'}
-                                        width={8}
-                                        height={4}
-                                        alt=""
-                                    />
-                                </div>
+                            <div className={styles.filter__row}>
+                            <TextInput
+                                onChange={(e) => setFilters({ ...filters, payment: e.target.value })}
+                                value={filters.payment}
+                                type="number"
+                                name="payment"
+                                title="Ваш комфортный платеж по ипотеке"
+                                placeholder="Введите сумму платежа"
+                            />
                             </div>
-                            <div className={`${styles.filter__form_section} ${!isSectionOpened ? styles.filter__form_section_closed : ''}`}>
+                            <div className={styles.filter__row}>
+                            <TextInput
+                                onChange={(e) => setFilters({ ...filters, year_from: e.target.value })}
+                                value={filters.year_from}
+                                type="text"
+                                name="year_from"
+                                placeholder="Срок ввода от"
+                            />
+                            <TextInput
+                                onChange={(e) => setFilters({ ...filters, year_to: e.target.value })}
+                                value={filters.year_to}
+                                type="text"
+                                name="year_to"
+                                placeholder="до"
+                            />
+                            </div>
+                        
+                    </div>
+                    <div className={styles.filter__form_opener} onClick={toggleSectionHandler}>
+                        <div className={styles.filter__form_opener_left}>
+                            <div className={styles.filter__form_opener_left_text}>Расширенный поиск</div>
+                        </div>
+                        <div className={styles.filter__form_opener_middle}></div>
+                        <div className={styles.filter__form_opener_right}>
+                            <Image
+                                src={'/opener_right_arrow.svg'}
+                                width={8}
+                                height={4}
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                    <div className={`${styles.filter__form_section} ${!isSectionOpened ? styles.filter__form_section_closed : ''}`}>
+                        
+                    <div className={styles.filter__row}>
+                        <FromTo
+                                title="Площадь, м2"
+                                from_type="number"
+                                from_name="square_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="square_to"
+                                to_placeholder="До"
+                                from={filters.spaceTotalMin}
+                                to={filters.spaceTotalMax}
+                                changeFrom={(e) => setFilters({ ...filters, spaceTotalMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, spaceTotalMax: e.target.value })}
+                            />
+                        </div>
+                        <div className={styles.filter__row}>
+                            <FromTo
+                                    title="Площадь кухни, м2"
+                                    from_type="number"
+                                    from_name="kitchen_square_from"
+                                    from_placeholder="От"
+                                    to_type="number"
+                                    to_name="kitchen_square_to"
+                                    to_placeholder="До"
+                                    from={filters.spaceKitchenMin}
+                                    to={filters.spaceKitchenMax}
+                                    changeFrom={(e) => setFilters({ ...filters, spaceKitchenMin: e.target.value })}
+                                    changeTo={(e) => setFilters({ ...filters, spaceKitchenMax: e.target.value })}
+                                />
+                        </div>
+                        <div className={styles.filter__row}>
+                        <FromTo
+                                title="Этаж"
+                                from_type="number"
+                                from_name="level_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="level_to"
+                                to_placeholder="До"
+                                from={filters.storeyMin}
+                                to={filters.storeyMax}
+                                changeFrom={(e) => setFilters({ ...filters, storeyMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, storeyMax: e.target.value })}
+                            />
+                            
+                        </div>
+                        <div className={styles.filter__row}>
+                        <FromTo
+                                title="Этажей в доме"
+                                from_type="number"
+                                from_name="levelness_from"
+                                from_placeholder="От"
+                                to_type="number"
+                                to_name="levelness_to"
+                                to_placeholder="До"
+                                from={filters.houseStoreyMin}
+                                to={filters.houseStoreyMax}
+                                changeFrom={(e) => setFilters({ ...filters, houseStoreyMin: e.target.value })}
+                                changeTo={(e) => setFilters({ ...filters, houseStoreyMax: e.target.value })}
+                            />
+                        </div>
 
-                                <div className={styles.filter__row}>
-                                    <FromTo
-                                        title="Площадь, м2"
-                                        from_type="number"
-                                        from_name="square_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="square_to"
-                                        to_placeholder="До"
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <FromTo
-                                        title="Площадь кухни, м2"
-                                        from_type="number"
-                                        from_name="kitchen_square_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="kitchen_square_to"
-                                        to_placeholder="До"
-                                    />
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <FromTo
-                                        title="Этаж"
-                                        from_type="number"
-                                        from_name="level_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="level_to"
-                                        to_placeholder="До"
-                                    />
+                        <div className={styles.filter__row}>
+                        <Switch
+                                title="Многоуровневая"
+                                name="multilevel"
+                                value="multilevel"
+                                isChecked={filters.multilevel}
+                                change={(checked) => setFilters({ ...filters, multilevel: checked })}
+                            />
+                            
+                        </div>
 
-                                </div>
-                                <div className={styles.filter__row}>
-                                    <FromTo
-                                        title="Этажей в доме"
-                                        from_type="number"
-                                        from_name="levelness_from"
-                                        from_placeholder="От"
-                                        to_type="number"
-                                        to_name="levelness_to"
-                                        to_placeholder="До"
-                                    />
-                                </div>
+                        <div className={styles.filter__row}>
+                        <Switch
+                                title="Не первый"
+                                name="not_first"
+                                value="not_first"
+                                isChecked={filters.not_first}
+                                change={(checked) => setFilters({ ...filters, not_first: checked })}
+                            />
+                            <Switch
+                                title="Не последний"
+                                name="not_last"
+                                value="not_last"
+                                isChecked={filters.not_last}
+                                change={(checked) => setFilters({ ...filters, not_last: checked })}
+                            />
+                        </div>
 
-                                <div className={styles.filter__row}>
-                                    <Switch
-                                        title="Многоуровневая"
-                                        name="multilevel"
-                                        value="multilevel"
-                                        isChecked={true}
-                                    />
+                        <div className={styles.filter__row}>
+                            <div className={styles.filter__field_subtitle}>
+                                Материал дома
+                            </div>
+                        <Select
+                                value={filters.material}
+                                options={[
+                                    {
+                                        value: 'moscow',
+                                        label: 'Москва'
+                                    },
+                                    {
+                                        value: 'spb',
+                                        label: 'Санкт-Петербург'
+                                    },
+                                    {
+                                        value: 'tula',
+                                        label: 'Тула'
+                                    }
+                                ]}
+                            />
+                            
+                           
+                            
+                        </div>
+                        <div className={styles.filter__row}>
+                            
+                            
+                        </div>
+                        
+                        <div className={styles.filter__columns}>
+                            <div className={styles.filter__column}>
+                                <Switch
+                                    title="Кухня-гостинная"
+                                    name="has_kitchen"
+                                    value="has_kitchen"
+                                    isChecked={filters.has_kitchen}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, has_kitchen: checked })}
+                                />
+                                <Switch
+                                    title="Витражные окна"
+                                    name="vitrage_windows"
+                                    value="vitrage_windows"
+                                    isChecked={filters.vitrage_windows}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, vitrage_windows: checked })}
+                                />
+                                <Switch
+                                    title="Видеонаблюдение"
+                                    name="video"
+                                    value="video"
+                                    isChecked={filters.hasCctv}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasCctv: checked })}
+                                />
+                                 <Switch
+                                    title="Без обременения банка"
+                                    name="without_bank"
+                                    value="without_bank"
+                                    isChecked={filters.without_bank}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, without_bank: checked })}
+                                />
+                                <Switch
+                                    title="Без несовершеннолетних собственников"
+                                    name="without_teenagers"
+                                    value="without_teenagers"
+                                    isChecked={filters.without_teenagers}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, without_teenagers: checked })}
+                                />
+                                <Switch
+                                    title="Хайфлет"
+                                    name="highflet"
+                                    value="highflet"
+                                    isChecked={filters.highflet}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, highflet: checked })}
+                                />
+                                <Switch
+                                    title="Паркинг"
+                                    name="has_parking"
+                                    value="has_parking"
+                                    isChecked={filters.hasGroundParking}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasGroundParking: checked })}
+                                />
+                                <Switch
+                                    title="Закрытая территория"
+                                    name="closed_territory"
+                                    value="closed_territory"
+                                    isChecked={filters.isClosedArea}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, isClosedArea: checked })}
+                                />
+                                <Switch
+                                    title="Рядом школа"
+                                    name="school_around"
+                                    value="school_around"
+                                    isChecked={filters.hasBesideSchool}
+                                    className={styles.filter__switch_mb}
+                                    change={(checked) => setFilters({ ...filters, hasBesideSchool: checked })}
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-                                </div>
+                        <div className={styles.filter__form_buttons_left}>
+                            {
+                                filtersButtons.map( btn => {
+                                    return (
+                                        <div className={styles.filter__form_filter_button} >
+                                            <div>
+                                                {btn.title} 
+                                            </div>
+                                            <svg onClick={btn.func} width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.08693 2.99964L4.87687 1.21362C4.95525 1.13522 4.99929 1.02889 4.99929 0.918027C4.99929 0.807159 4.95525 0.700833 4.87687 0.622437C4.79849 0.544042 4.69217 0.5 4.58132 0.5C4.47047 0.5 4.36416 0.544042 4.28577 0.622437L2.5 2.41263L0.714226 0.622437C0.635842 0.544042 0.52953 0.5 0.418678 0.5C0.307826 0.5 0.201514 0.544042 0.12313 0.622437C0.0447462 0.700833 0.000710398 0.807159 0.000710397 0.918027C0.000710396 1.02889 0.0447462 1.13522 0.12313 1.21362L1.91307 2.99964L0.12313 4.78567C0.0841145 4.82438 0.0531469 4.87042 0.0320137 4.92115C0.0108805 4.97189 0 5.0263 0 5.08126C0 5.13622 0.0108805 5.19064 0.0320137 5.24137C0.0531469 5.2921 0.0841145 5.33815 0.12313 5.37685C0.161827 5.41587 0.207867 5.44685 0.258592 5.46798C0.309318 5.48912 0.363726 5.5 0.418678 5.5C0.47363 5.5 0.528038 5.48912 0.578764 5.46798C0.629489 5.44685 0.675529 5.41587 0.714226 5.37685L2.5 3.58666L4.28577 5.37685C4.32447 5.41587 4.37051 5.44685 4.42124 5.46798C4.47196 5.48912 4.52637 5.5 4.58132 5.5C4.63627 5.5 4.69068 5.48912 4.74141 5.46798C4.79213 5.44685 4.83817 5.41587 4.87687 5.37685C4.91589 5.33815 4.94685 5.2921 4.96799 5.24137C4.98912 5.19064 5 5.13622 5 5.08126C5 5.0263 4.98912 4.97189 4.96799 4.92115C4.94685 4.87042 4.91589 4.82438 4.87687 4.78567L3.08693 2.99964Z" fill="#7C7C7C"/>
+                                            </svg>
 
-                                <div className={styles.filter__row}>
-                                    <Switch
-                                        title="Не первый"
-                                        name="not_first"
-                                        value="not_first"
-                                        isChecked={false}
-                                    />
-                                    <Switch
-                                        title="Не последний"
-                                        name="not_last"
-                                        value="not_last"
-                                        isChecked={false}
-                                    />
-                                </div>
-
-                                <div className={styles.filter__row}>
-                                    <div className={styles.filter__field_subtitle}>
-                                        Материал дома
+                                        </div>
+                                    )
+                                } )
+                            }
+                            {
+                                filtersButtons.length > 0 && 
+                                <div className={styles.filter__form_filter_button_clear} >
+                                    <div>
+                                        Очистить все
                                     </div>
-                                    <Select
-
-                                        options={[
-                                            {
-                                                value: 'moscow',
-                                                label: 'Москва'
-                                            },
-                                            {
-                                                value: 'spb',
-                                                label: 'Санкт-Петербург'
-                                            },
-                                            {
-                                                value: 'tula',
-                                                label: 'Тула'
-                                            }
-                                        ]}
-                                    />
-
-
+                                    <svg onClick={() => {
+                                        props.setFilters({})
+                                    }} width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5 1.04842V1.39844C5 1.53841 4.90627 1.64348 4.78122 1.64348L0.218784 1.64339C0.0938083 1.64339 0 1.5267 0 1.39836V1.04834C0 0.908366 0.093732 0.803301 0.218784 0.803301H1.36464V0.663327C1.36464 0.569985 1.42713 0.5 1.51047 0.5H3.4896C3.57294 0.5 3.63543 0.569987 3.63543 0.663327V0.803301H4.78128C4.90626 0.791745 5 0.908441 5 1.04842ZM0.250071 1.77172H4.73959L4.48957 7.40666C4.48957 7.45329 4.44794 7.5 4.40623 7.5H0.583371C0.541737 7.5 0.50003 7.46501 0.50003 7.40666L0.250071 1.77172ZM3.6146 6.92833C3.6146 7.04503 3.69795 7.13829 3.80206 7.13829C3.90626 7.13829 3.97914 7.04494 3.98952 6.93996L4.12496 2.34335C4.12496 2.22665 4.04162 2.1334 3.9375 2.1334C3.83331 2.1334 3.76043 2.22674 3.75004 2.33172L3.6146 6.92833ZM2.31254 6.92833C2.31254 7.04503 2.39588 7.13829 2.5 7.13829C2.60419 7.13829 2.68746 7.04494 2.68746 6.92833V2.34338C2.68746 2.22669 2.60412 2.13343 2.5 2.13343C2.3958 2.13343 2.31254 2.22677 2.31254 2.34338V6.92833ZM0.885422 2.34338L1.02086 6.94C1.02086 7.05669 1.1042 7.13832 1.20832 7.13832C1.31251 7.13832 1.39578 7.04497 1.39578 6.92836L1.25002 2.33175C1.25002 2.21505 1.16668 2.13343 1.06256 2.13343C0.958369 2.13335 0.875032 2.22669 0.885422 2.34338Z" fill="white"/>
+                                    </svg>
 
                                 </div>
-                                <div className={styles.filter__row}>
+                            }
+                        </div>
 
-
-                                </div>
-
-                                <div className={styles.filter__columns}>
-                                    <div className={styles.filter__column}>
-                                        <Switch
-                                            title="Кухня-гостинная"
-                                            name="has_kitchen"
-                                            value="has_kitchen"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Витражные окна"
-                                            name="vitrage_windows"
-                                            value="vitrage_windows"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Видеонаблюдение"
-                                            name="video"
-                                            value="video"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Без обременения банка"
-                                            name="without_bank"
-                                            value="without_bank"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Без несовершеннолетних собственников"
-                                            name="without_teenagers"
-                                            value="without_teenagers"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Хайфлет"
-                                            name="highflet"
-                                            value="highflet"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Паркинг"
-                                            name="has_parking"
-                                            value="has_parking"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Закрытая территория"
-                                            name="closed_territory"
-                                            value="closed_territory"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                        <Switch
-                                            title="Рядом школа"
-                                            name="school_around"
-                                            value="school_around"
-                                            isChecked={false}
-                                            className={styles.filter__switch_mb}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div className={styles.filter__form_button_wrapper}>
-                                <div className={styles.filter__form_button_primary}>
-                                    Показать 12 000 предложений
-                                </div>
-                            </div>
-
-                            {/* <div className={styles.filter__form_button_wrapper}>
-                                <div className={styles.filter__form_button_secondary}>
-                                    Показать на карте
-                                </div>
-                            </div> */}
+                    <div className={styles.filter__form_button_wrapper}>
+                        <div className={styles.filter__form_button_primary} onClick={props.useFilters}>
+                        Показать {filteredCount} {
+                        filteredCount % 100 < 20 && filteredCount % 100 > 10 ? 'предложений' : 
+                        filteredCount % 10 === 1 ? 'предложение' :
+                        filteredCount % 10 < 5 && filteredCount % 10 > 0 ? 'предложения' :
+                        'предложений'
+                        }
+                        </div>
+                    </div>
 
                         </div>
                     </div>

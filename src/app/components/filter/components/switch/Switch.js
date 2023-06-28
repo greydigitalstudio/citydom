@@ -10,9 +10,18 @@ const Switch = (props) => {
     const [checked, setChecked] = useState(props.isChecked);
 
     const handleChange = (e) => {
-        console.log(e.target.value);
+        
+        if(props.change)
+            props.change(!checked)
         setChecked(!checked);
     }
+
+    useEffect(() => {
+        let checked = props.isChecked
+        if(props.isChecked == '' || props.isChecked == undefined)
+        checked = false;
+        setChecked(checked);
+    }, [props.isChecked])
 
     return (
         <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed} ${props.className}`}>

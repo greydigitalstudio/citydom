@@ -6,10 +6,18 @@ import styles__filter from '../../filter.module.css'
 
 const TextInput = (props) => {
 
+
     const [value, setValue] = useState(props.value);
+  
+    useEffect(() => {
+        if(!props.value) setValue('')
+        else setValue(props.value);
+    }, [props.value])
 
     const handleInput = (e) => {
         setValue(e.target.value);
+        if(props.onChange)
+            props.onChange(e)
     }
 
     return (
