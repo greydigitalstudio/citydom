@@ -19,6 +19,8 @@ const Filter = (props) => {
     const [isSectionOpened, setSectionOpened] = useState(true);
     const [mounted, setMounted] = useState(false);
     const [filteredCount, setFilteredCount] = useState(false);
+    const [updating, setUpdating] = useState(false);
+    const [queue, setQueue] = useState(0);
     const nodeRef = useRef(null);
 
     
@@ -142,30 +144,34 @@ const Filter = (props) => {
     })
 
 
-    let updating = false;
 
-    async function setFilters(e) {
-        
-        if(e)
-            props.setFilters(e);
-
-            updating = false;
-            let link = 'https://tyumen.citidom.com/housing-estate?';
-            let keys = Object.keys(filters);
-            for (let i = 0; i < keys.length; i++) {
-                if (filters[keys[i]] != '') {
-                    link += `${keys[i]}=${filters[keys[i]]}&`
-                }
+    async function setFilters(e, first = false) {
+        if(!e && first) e = filters
+            if(!e) return;
+            await props.setFilters(e);
+            if(!updating) {
+                setUpdating(true);
+                    let link = 'https://tyumen.citidom.com/housing-estate?page=1&limit=1&';
+                    let keys = Object.keys(e);
+                    for (let i = 0; i < keys.length; i++) {
+                        if (e[keys[i]] != '') {
+                            link += `${keys[i]}=${e[keys[i]]}&`
+                        }
+                    }
+                    link = link.slice(0, -1);
+                    let res = await fetch(link);
+                    res = await res.json();
+                    setFilteredCount(res.count);
+                    setUpdating(false);
+                
+            } else {
+                //setFilters(e)
             }
-            link = link.slice(0, -1);
-            let res = await fetch(link);
-            res = await res.json();
-            setFilteredCount(res.count);
-        
     }
 
-    
-    setFilters()
+    useEffect(() => {
+        setFilters(undefined, true)
+    },[])
 
     const toggleSectionHandler = () => {
         setSectionOpened(!isSectionOpened);
