@@ -13,6 +13,7 @@ import Vk from './icons/Vk'
 import Instagram from './icons/Instagram'
 import Whatsup from './icons/Whatsup';
 import Telegram from './icons/Telegram';
+import Ok from './icons/Ok';
 
 const Footer = () => {
 
@@ -39,6 +40,7 @@ const Footer = () => {
                             {/* <Instagram /> */}
                             <Whatsup />
                             <Telegram />
+                            <Ok/>
                         </div>
                     </div>
                     <div className={styles.footer__column}
@@ -78,9 +80,10 @@ const Footer = () => {
                     </div>
                     <div className={styles.footer__icons}> 
                             <Vk />
-                            <Instagram />
+                            <Instagram style="display: none;" />
                             <Whatsup />
                             <Telegram />
+                            <Ok/>
                         </div>
                         
                 </div>
