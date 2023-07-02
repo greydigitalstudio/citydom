@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './item.module.css'
 
 import Link from 'next/link'
+import MediaQuery from 'react-responsive'
 
 // Icons
 import Star from '../../icons/star'
@@ -30,18 +31,29 @@ function getDate(date) {
 
 const Item = (props) => {
     let image = `https://files.citidom.com/${props.item.photos[0]?.name}`;
-    if (!image)
-        image = 'https://i.ibb.co/xqjdTP8/754678181959064.jpg';
+
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    })
 
     return (
         <div className={styles.item}>
             <Link href={`/inner?id=${props.item.id}`}>
+                { mounted && <MediaQuery minWidth={768}>
                 <div className={styles.item__in}>
                     
-                    <div className={styles.item__uploaded}>
-                        Внесён {getDate(new Date(props.item.createdAt))}
-                    </div>
 
+
+                    <div className={styles.item__dates} >
+                        <div className={styles.item__updated}>
+                            Обновлён {getDate(new Date(props.item.updatedAt))}
+                        </div>
+                        <div className={styles.item__uploaded}>
+                            Внесён {getDate(new Date(props.item.createdAt))}
+                        </div>
+                    </div>
                     <img className={styles.item__img} src={image} alt="" />
 
                     <div className={styles.item__star}
@@ -57,17 +69,6 @@ const Item = (props) => {
                             C
                         </div>
                         <img className={styles.item__img} src={image} alt="" />
-                        <div className={styles.item__star}>
-                            <Star />
-                        </div>
-                        <div className={styles.item__someinfo}>
-                            <div className={styles.item__someleter}>
-                                C
-                            </div>
-                            <div className={styles.item__somenumber}>
-                                6,6
-                            </div>
-                        </div>
                     </div>
                         <div className={styles.item__cost}>
                             <div className={styles.item__angleLeft}>
@@ -81,25 +82,28 @@ const Item = (props) => {
                         </div>
                         <div className={styles.item__row}>
                             <div></div>
-                            <div className={styles.item__flatscount}>
-                                {props.item.flatsCount} {
-                                    props.item.flatsCount % 100 < 20 && props.item.flatsCount % 100 > 10 ? ' квартир' :
-                                        props.item.flatsCount % 10 === 1 ? ' квартира' :
-                                            props.item.flatsCount % 10 < 5 && props.item.flatsCount % 10 > 0 ? ' квартиры' :
-                                                ' квартир'
-                                }
-
-                            </div>
-                        </div>
-
-                        <div className={styles.item__address}>
-                            <Pin />
-                            <div className={styles.item__address_text}>
-                                {props.item.title}
-                            </div>
                         </div>
 
                         <div className={styles.item__row}>
+                            <div className={styles.item__address}>
+                                <Pin />
+                                <div className={styles.item__address_text}>
+                                    {props.item.title}
+                                </div>
+                            </div>
+                            {  props.item.mortgage &&
+                                <div className={styles.item__mortgage}>
+                                    ипотека {props.item.mortgage}%*
+                                </div>
+                            }
+                            
+                        </div>
+
+                        <div className={styles.item__row}>
+                            
+                            <div className={styles.item__quarter}>
+                                {props.item.endConstruction}
+                            </div>
                             <div className={styles.item__icons}>
                                 {props.item.isProtectedArea && <ProtectedArea />}
                                 {props.item.hasBesideSchool && <BesideSchool />}
@@ -109,15 +113,129 @@ const Item = (props) => {
                                 {props.item.hasBesidePreSchool && <BesidePreSchool />}
 
                             </div>
-                            <div className={styles.item__quarter}>
-                                {props.item.endConstruction}
+                        </div>
+
+                        <div className={styles.item__row}>
+                            <div className={styles.item__phone}>
+                                    <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.07272 0.500008C2.4338 0.500008 2.79019 0.495321 3.15127 0.500008C3.70461 0.509383 4.1032 0.907821 4.12196 1.46095C4.1454 2.15001 4.22512 2.8297 4.43614 3.48595C4.57213 3.90313 4.50648 4.27345 4.21574 4.61563C3.90156 4.98595 3.62489 5.3797 3.34353 5.77345C3.30132 5.83438 3.29195 5.96563 3.32946 6.03595C4.04693 7.4047 5.09265 8.44532 6.45724 9.16251C6.52758 9.20001 6.65889 9.19532 6.71985 9.14845C7.13251 8.85313 7.54048 8.54845 7.93438 8.23438C8.22512 8.00001 8.544 7.9297 8.8957 8.03751C9.60379 8.24845 10.3213 8.36563 11.0622 8.3797C11.5968 8.38907 11.9953 8.81095 12 9.35001C12.0047 10.0672 12.0047 10.7891 12 11.5063C11.9953 12.0969 11.5827 12.5 10.9871 12.4953C8.91914 12.4813 6.98714 11.9469 5.24271 10.8453C2.55572 9.14845 0.862872 6.73907 0.225122 3.62188C0.0844425 2.93282 0.0469278 2.21563 0.00941313 1.50782C-0.0327909 0.917196 0.403317 0.509383 0.994173 0.500008C1.35056 0.500008 1.71164 0.500008 2.07272 0.500008Z" fill="black"/>
+                                    </svg>
+                                    {phone(props.item.publicPhone)}
                             </div>
                         </div>
                         
                 </div>
+                </MediaQuery> }
+                {
+                    mounted && <MediaQuery maxWidth={767}>
+
+                         <div className={styles.item__in}>
+                            <div className={styles.item__dates} >
+                                <div className={styles.item__updated}>
+                                    Обновлён {getDate(new Date(props.item.updatedAt))}
+                                </div>
+                                <div className={styles.item__uploaded}>
+                                    Внесён {getDate(new Date(props.item.createdAt))}
+                                </div>
+                            </div>
+                            <img className={styles.item__img} src={image} alt="" />
+
+                            <div className={styles.item__star}
+                                style={{ display: "none" }}
+                            >
+                                <Star />
+                            </div>
+
+                            <div
+                                style={{ display: "none" }}
+                            className={styles.item__someinfo}>
+                                <div className={styles.item__someleter}>
+                                    C
+                                </div>
+                                <img className={styles.item__img} src={image} alt="" />
+                            </div>
+                                <div className={styles.item__cost}>
+                                    <div className={styles.item__angleLeft}>
+                                        <Angle />
+                                    </div>
+                                    <div className={styles.item__angleRight}>
+                                        <Angle />
+                                    </div>
+                                    от {props.item.minFlatPrice} ₽ &nbsp;
+                                    <CostIcon />
+                                </div>
+                                <div className={styles.item__row}>
+                                    <div></div>
+                                </div>
+
+                                <div className={styles.item__row}>
+                                    <div className={styles.item__address}>
+                                        <Pin />
+                                        <div className={styles.item__address_text}>
+                                            {props.item.title}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={styles.item__flatscount}>
+                                        {props.item.flatsCount} {
+                                            props.item.flatsCount % 100 < 20 && props.item.flatsCount % 100 > 10 ? ' квартир' :
+                                                props.item.flatsCount % 10 === 1 ? ' квартира' :
+                                                    props.item.flatsCount % 10 < 5 && props.item.flatsCount % 10 > 0 ? ' квартиры' :
+                                                        ' квартир'
+                                        }
+
+                                    </div>
+                                    
+                                </div>
+
+                                <div className={styles.item__row}>
+                                    
+                                    <div className={styles.item__quarter}>
+                                        {props.item.endConstruction}
+                                    </div>
+                                    {  props.item.mortgage &&
+                                        <div className={styles.item__mortgage}>
+                                            ипотека {props.item.mortgage}%*
+                                        </div>
+                                    }
+                                    
+                                </div>
+                                <div className={styles.item__row}>
+                                <div className={styles.item__icons}>
+                                        {props.item.isProtectedArea && <ProtectedArea />}
+                                        {props.item.hasBesideSchool && <BesideSchool />}
+                                        {props.item.isClosedArea && <ClosedArea />}
+                                        {(props.item.hasGroundParking || props.item.hasUndergroundParking || props.item.hasBesidePark) && <Parking />}
+                                        {props.item.hasCctv && <CCTV />}
+                                        {props.item.hasBesidePreSchool && <BesidePreSchool />}
+
+                                    </div>
+                                </div>
+
+                                <div className={styles.item__row}>
+                                    <div className={styles.item__phone}>
+                                            <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2.07272 0.500008C2.4338 0.500008 2.79019 0.495321 3.15127 0.500008C3.70461 0.509383 4.1032 0.907821 4.12196 1.46095C4.1454 2.15001 4.22512 2.8297 4.43614 3.48595C4.57213 3.90313 4.50648 4.27345 4.21574 4.61563C3.90156 4.98595 3.62489 5.3797 3.34353 5.77345C3.30132 5.83438 3.29195 5.96563 3.32946 6.03595C4.04693 7.4047 5.09265 8.44532 6.45724 9.16251C6.52758 9.20001 6.65889 9.19532 6.71985 9.14845C7.13251 8.85313 7.54048 8.54845 7.93438 8.23438C8.22512 8.00001 8.544 7.9297 8.8957 8.03751C9.60379 8.24845 10.3213 8.36563 11.0622 8.3797C11.5968 8.38907 11.9953 8.81095 12 9.35001C12.0047 10.0672 12.0047 10.7891 12 11.5063C11.9953 12.0969 11.5827 12.5 10.9871 12.4953C8.91914 12.4813 6.98714 11.9469 5.24271 10.8453C2.55572 9.14845 0.862872 6.73907 0.225122 3.62188C0.0844425 2.93282 0.0469278 2.21563 0.00941313 1.50782C-0.0327909 0.917196 0.403317 0.509383 0.994173 0.500008C1.35056 0.500008 1.71164 0.500008 2.07272 0.500008Z" fill="black"/>
+                                            </svg>
+                                            {phone(props.item.publicPhone)}
+                                    </div>
+                                </div>
+                                
+                        </div>
+                    </MediaQuery>
+                }
             </Link>
         </div>
     );
+}
+
+function phone(number) {
+    let phone = "+7 (";
+    phone += number.slice(0, 3) + ") ";
+    phone += number.slice(3, 6) + "-";
+    phone += number.slice(6, 8) + "-";
+    phone += number.slice(8, 10);
+    return phone;
 }
 
 export default Item;

@@ -14,6 +14,7 @@ import Instagram from './icons/Instagram'
 import Whatsup from './icons/Whatsup';
 import Telegram from './icons/Telegram';
 import Ok from './icons/Ok';
+import Viber from './icons/Viber';
 
 const Footer = () => {
 
@@ -26,20 +27,27 @@ const Footer = () => {
     return (
         <div className={styles.footer}>
             <div className={styles.footer__in}>
-                <div className={styles.footer__logo}><Logo /></div>
+                <div className={styles.footer__logo}><Logo 
+                width={212}
+                height={66}
+                /></div>
                 { mounted && <MediaQuery minWidth={768}>
                 <div className={styles.footer__section}>
                     <div className={styles.footer__column}>
                         <div className={styles.footer__title}> Контакты </div>
 
-                        <div className={styles.footer__text}> Тюмень, ул. Николая Гондатти 3/2 </div>
-                        <a href="tel:+73452967078" className={styles.footer__text}> +7 3452 967-078 </a>
-                        {/* <div className={styles.footer__text}> email@email.ru </div> */}
+                        <div className={styles.footer__info}>
+                            <a href="tel:+73452967078" className={styles.footer__text}> +7 3452 967-078 </a>
+                            <div className={styles.footer__text}> email@email.ru </div> 
+                            <div className={styles.footer__text}> Тюмень, ул. Николая Гондатти 3/2 </div>
+                        </div>
+
                         <div className={styles.footer__icons}>
                             <Vk />
-                            {/* <Instagram /> */}
-                            <Whatsup />
                             <Telegram />
+                            <Instagram style="display: none;" />
+                            <Whatsup />
+                            <Viber />
                             <Ok/>
                         </div>
                     </div>
@@ -80,16 +88,15 @@ const Footer = () => {
                     </div>
                     <div className={styles.footer__icons}> 
                             <Vk />
+                            <Telegram />
                             <Instagram style="display: none;" />
                             <Whatsup />
-                            <Telegram />
+                            <Viber />
                             <Ok/>
                         </div>
                         
                 </div>
                     </MediaQuery>}
-                <div className={styles.footer__line} />
-                <div className={styles.footer__copyrigth}> © Copyright 2022 </div>
             </div>
         </div>
     );

@@ -6,7 +6,7 @@ import styles from './filter.module.css'
 import Image from 'next/image';
 
 
-
+import Checkbox from './components/checkbox/Checkbox';
 import Select from './components/select/Select';
 import TextInput from './components/text_input/TextInput';
 import RadioGroup from './components/radio_group/RadioGroup';
@@ -540,8 +540,8 @@ const Filter = (props) => {
             }
             { mounted &&
             <MediaQuery maxWidth={767}>
+            <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
             <div className={styles.filter__in}>
-                <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
                 <div className={styles.filter__form}>
                     <div className={styles.filter__form_section}>
                     <div className={styles.filter__row}>
@@ -718,14 +718,14 @@ const Filter = (props) => {
                         </div>
 
                         <div className={styles.filter__row}>
-                        <Switch
+                            <Checkbox
                                 title="Не первый"
                                 name="not_first"
                                 value="not_first"
                                 isChecked={filters.not_first}
                                 change={(checked) => setFilters({ ...filters, not_first: checked })}
                             />
-                            <Switch
+                            <Checkbox
                                 title="Не последний"
                                 name="not_last"
                                 value="not_last"

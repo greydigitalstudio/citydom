@@ -63,16 +63,6 @@ class Results extends React.Component  {
             mounted: true
         })
         let width = window.innerWidth;
-        // если ширина окна меньше 768px
-        if(width < 768) {
-            await this.setState({
-                pageData: {
-                    page: 1,
-                    last: 10,
-                    pageSize: 3
-                }
-            })
-        }
 
         setTimeout(() => {
             this.setState({
@@ -227,24 +217,18 @@ class Results extends React.Component  {
                         </div>
                     </MediaQuery>
                      }
-                     { this.state.mounted && 
+
+                    { this.state.mounted && 
                     <MediaQuery maxDeviceWidth={767}>
                         <div className={styles.results__content}>
                             <div className={styles.results__box}>
                             {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
                             </div>
-                        </div>
-                        <div className={styles.results__pagination}>
-                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
-                                первая
-                            </div>
-                                { this.getPagesMobile() }
-                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
-                                последняя
-                            </div>
+                            
                         </div>
                     </MediaQuery>
-                    }
+                     }
+
                 </div>
             </div>
         );
@@ -255,14 +239,14 @@ class Results extends React.Component  {
         let firstdots = false;
         let lastdots = false;
         for(let i = 0; i < this.state.pageData.last; i++) {
-            if(i < parseInt(this.state.pageData.page) - 2){
+            if(i < parseInt(this.state.pageData.page) - 4){
                 if(!firstdots) {
                     pages.push(<div id="page-1" className={styles.results__pagination_item}>...</div>)
                     firstdots = true;
                 }
                 continue;
             }
-            if(i >= parseInt(this.state.pageData.page) + 2){
+            if(i >= parseInt(this.state.pageData.page) + 3){
                 if(!lastdots) {
                     pages.push(<div id={`page-${this.state.pageData.last}`} className={styles.results__pagination_item}>...</div>)
                     lastdots = true;

@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 
 
-export default function Logo() {
+export default function Logo(props) {
 
   let [size, setSize] = useState('desktop')
 
@@ -30,8 +30,8 @@ export default function Logo() {
         <Image className={styles_logo.logo__img}
         src={'/logo.png'}
         alt='Logo'
-        width={174}
-        height={53}
+        width={props.width || 174}
+        height={props.height || 53}
       />
       }
       { 
