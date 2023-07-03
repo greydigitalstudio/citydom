@@ -29,14 +29,59 @@ function getDate(date) {
     return `${day}.${month}.${year}`;
 }
 
+const getChess = async (id) => {
+  let res = await fetch(`https://tyumen.citidom.com/housing-estate/${id}/chess`);
+  res = await res.json();
+  return res
+}
+
 const Item = (props) => {
     let image = `https://files.citidom.com/${props.item.photos[0]?.name}`;
 
     const [mounted, setMounted] = useState(false);
+    const [chess, setChess] = useState({ houses: [] });
 
     useEffect(() => {
         setMounted(true);
+        getChess(props.item.id).then(res => {
+            setChess(res)
+        })
+    }, [])
+
+    let flatsInfo = {
+        1: {
+            minCost: "0",
+            minArea: 0
+        },
+        2: {
+            minCost: "0",
+            minArea: 0
+        },
+        3: {
+            minCost: "0",
+            minArea: 0
+        },
+    }
+
+    if(chess.houses)
+    chess.houses.forEach( (house, i) => {
+        house.porches.forEach( (porche, j) => {
+            porche.storeys.forEach( (storey, k) => {
+                storey.flats.forEach( (flat, l) => {
+                    if(flat.price && flat.price != '0' && flatsInfo[flat.rooms]) {
+                        if(flatsInfo[flat.rooms].minCost == "0" || parseInt(flatsInfo[flat.rooms].minCost) > flat.price) {
+                            flatsInfo[flat.rooms].minCost = flat.price;
+                        }
+                        if(flatsInfo[flat.rooms].minArea == 0 || parseFloat(flatsInfo[flat.rooms].minArea) > flat.spaceTotal) {
+                            flatsInfo[flat.rooms].minArea = flat.spaceTotal;
+                        }
+                    }
+                })
+            })
+        })
     })
+
+    console.log(flatsInfo);
 
     return (
         <div className={styles.item}>
@@ -77,7 +122,7 @@ const Item = (props) => {
                             <div className={styles.item__angleRight}>
                                 <Angle />
                             </div>
-                            от {props.item.minFlatPrice} ₽ &nbsp;
+                            от {money(props.item.minFlatPrice)} ₽ &nbsp;
                             <CostIcon />
                         </div>
                         <div className={styles.item__row}>
@@ -114,6 +159,27 @@ const Item = (props) => {
 
                             </div>
                         </div>
+
+                            {
+                                flatsInfo[1].minCost != "0" &&
+                                <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                    1к от {flatsInfo[1].minArea} от {money(flatsInfo[1].minCost)} ₽
+                                </div>
+                            }
+                            {
+                                flatsInfo[2].minCost != "0" &&
+                                <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                    2к от {flatsInfo[2].minArea} от {money(flatsInfo[2].minCost)} ₽
+                                </div>
+                            }
+                            {
+                                flatsInfo[3].minCost != "0" &&
+                                <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                    3к от {flatsInfo[3].minArea} от {money(flatsInfo[3].minCost)} ₽
+                                </div>
+                            }
+                            
+                        
 
                         <div className={styles.item__row}>
                             <div className={styles.item__phone}>
@@ -212,6 +278,25 @@ const Item = (props) => {
                                     </div>
                                 </div>
 
+                                {
+                                flatsInfo[1].minCost != "0" &&
+                                    <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                        1к от {flatsInfo[1].minArea} от {money(flatsInfo[1].minCost)} ₽
+                                    </div>
+                                }
+                                {
+                                    flatsInfo[2].minCost != "0" &&
+                                    <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                        2к от {flatsInfo[2].minArea} от {money(flatsInfo[2].minCost)} ₽
+                                    </div>
+                                }
+                                {
+                                    flatsInfo[3].minCost != "0" &&
+                                    <div className={styles.item__row + " " + styles.item__flatsinfo}>
+                                        3к от {flatsInfo[3].minArea} от {money(flatsInfo[3].minCost)} ₽
+                                    </div>
+                                }
+
                                 <div className={styles.item__row}>
                                     <div className={styles.item__phone}>
                                             <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -236,6 +321,11 @@ function phone(number) {
     phone += number.slice(6, 8) + "-";
     phone += number.slice(8, 10);
     return phone;
+}
+
+function money(money) {
+    if(!money) return money;
+    return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export default Item;

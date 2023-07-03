@@ -1,7 +1,7 @@
 .item {
     width: 347px;
     position: relative;
-    max-height: 325px;
+    max-height: 425px;
 }
 
 .item__img {
@@ -108,12 +108,12 @@
     padding: 5px 10px;
     border-radius: 18.5px;
     position: absolute;
-    bottom: 95px;
+    top: 204px;
     right: 30px;
 }
-.item__cost > svg {
+/* .item__cost > svg {
     display: none;
-}
+} */
 
 .item__angleLeft {
     position: absolute;
@@ -203,6 +203,14 @@
 
     gap: 5px;
     align-items: center;
+}
+
+.item__flatsinfo {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
 @media only screen and (max-width: 767px) {

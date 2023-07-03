@@ -32,7 +32,6 @@ const getChess = async () => {
   let id = window.location.href.split('?')[1].split('&')[0].split('=')[1]
   let res = await fetch(`https://tyumen.citidom.com/housing-estate/${id}/chess`);
   res = await res.json();
-  console.log(res)
   return res.houses
 }
 
