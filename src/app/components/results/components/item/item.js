@@ -220,6 +220,7 @@ const Item = (props) => {
                                 </div>
                                 <img className={styles.item__img} src={image} alt="" />
                             </div>
+                            {   props.item.minFlatPrice &&
                                 <div className={styles.item__cost}>
                                     <div className={styles.item__angleLeft}>
                                         <Angle />
@@ -230,6 +231,8 @@ const Item = (props) => {
                                     от {props.item.minFlatPrice} ₽ &nbsp;
                                     <CostIcon />
                                 </div>
+                            }
+                                
                                 <div className={styles.item__row}>
                                     <div></div>
                                 </div>

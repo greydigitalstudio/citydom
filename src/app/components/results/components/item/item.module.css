@@ -217,7 +217,17 @@
 
     .item {
         margin-bottom: 30px;
+        width: 333px;
     }
+    .item__img {
+        width: 333px;
+        height: 161px;
+    }
+
+    .item__cost {
+        top: 156px;
+    }
+
     .item__mortgage {
         font-size: 14px;
         font-weight: 450;
