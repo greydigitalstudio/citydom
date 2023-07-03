@@ -115,16 +115,18 @@ const Item = (props) => {
                         </div>
                         <img className={styles.item__img} src={image} alt="" />
                     </div>
-                        <div className={styles.item__cost}>
-                            <div className={styles.item__angleLeft}>
-                                <Angle />
-                            </div>
-                            <div className={styles.item__angleRight}>
-                                <Angle />
-                            </div>
-                            от {money(props.item.minFlatPrice)} ₽ &nbsp;
-                            <CostIcon />
-                        </div>
+                            {   props.item.minFlatPrice &&
+                                <div className={styles.item__cost}>
+                                    <div className={styles.item__angleLeft}>
+                                        <Angle />
+                                    </div>
+                                    <div className={styles.item__angleRight}>
+                                        <Angle />
+                                    </div>
+                                    от {props.item.minFlatPrice} ₽ &nbsp;
+                                    <CostIcon />
+                                </div>
+                            }
                         <div className={styles.item__row}>
                             <div></div>
                         </div>
