@@ -885,6 +885,12 @@ const Filter = (props) => {
                         </div>
                     </div>
 
+                    <div className={styles.filter__form_button_wrapper}>
+                        <div className={styles.filter__form_button_secondary}>
+                        Показать на карте
+                        </div>
+                    </div>
+
                         </div>
                     </div>
                 </MediaQuery>
