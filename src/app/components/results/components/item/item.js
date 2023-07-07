@@ -265,7 +265,7 @@ const Item = (props) => {
                                         </div>
                                         {  props.item.mortgage &&
                                             <div className={styles.item__mortgage}>
-                                                ипотека {props.item.mortgage}%*
+                                                ипотека от {props.item.mortgage}%*
                                             </div>
                                         }
                                         
