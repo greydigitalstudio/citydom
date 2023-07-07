@@ -251,4 +251,29 @@
         color: #FFFFFF;
     }
     
+    .item__callbtn {
+        background: #F7C026;
+        width: 304px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        border-radius: 20px;
+        margin-top: 15px;
+        margin-right: 0;
+    }
+
+    .item__callbtn_text {
+        color: #000;
+        text-align: center;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+
+    .item__rows {
+        margin-left: 28px;
+    }
 }
