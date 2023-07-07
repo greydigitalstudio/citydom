@@ -81,8 +81,6 @@ const Item = (props) => {
         })
     })
 
-    console.log(flatsInfo);
-
     return (
         <div className={styles.item}>
                 { mounted && <MediaQuery minWidth={768}>

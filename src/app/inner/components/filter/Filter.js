@@ -23,14 +23,12 @@ const Filter = (props) => {
     let data = props.data
     let house = props.house
     let porche = props.porche;
-    let layouts = props.layouts.filter(item => item.house.title === house.title)
+    let layouts = props.filteredLayouts.filter(item => item.house.title === house.title)
 
     let photo = 'https://files.citidom.com/' + data.photos[0].name
 
     let photos = data.photos.map(item => { return 'https://files.citidom.com/' + item.name })
     let photoIndex = props.photoIndex
-    console.log(photoIndex)
-    console.log(photos[photoIndex])
     const [modalLayout, setModalLayout] = useState(null)
     let [modal, setModal] = useState(false)
 

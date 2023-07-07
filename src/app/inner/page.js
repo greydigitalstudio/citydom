@@ -136,7 +136,8 @@ export default class Test extends React.Component {
         <div className={styles.left}>
             <Filter
               change={this.changeSection}
-              layouts={this.state.layouts}
+              layouts={this.state.filteredLayouts}
+              filteredLayouts={this.state.filteredLayouts}
               filter={this.filterLayouts}
               chess={this.state.chess}
               section={this.state.section}
@@ -175,6 +176,7 @@ export default class Test extends React.Component {
             <Filter
               change={this.changeSection}
               layouts={this.state.layouts}
+              filteredLayouts={this.state.filteredLayouts}
               filter={this.filterLayouts}
               chess={this.state.chess}
               section={this.state.section}
