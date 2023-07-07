@@ -630,6 +630,11 @@
         z-index: -100;
       }
 
+      .filter__background img{
+        height: 400px;
+        width: 100%;
+      }
+
       .filter__background_back {
         position: absolute;
         top: 75px;
