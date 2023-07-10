@@ -64,14 +64,6 @@ class Results extends React.Component  {
         })
         let width = window.innerWidth;
 
-        setTimeout(() => {
-            this.setState({
-                maps: true
-            })
-        }, 2000)
-
-
-        console.log(this.state.pageData.pageSize)
         getHousing({
             page: 1,
             limit: this.state.pageData.pageSize,
@@ -96,7 +88,7 @@ class Results extends React.Component  {
                 houseCount: res.count
             })
         })
-        getHousingForMap().then(res => {
+        await getHousingForMap().then(res => {
             let center = [0, 0]
             res.forEach(item => {
                 center[0] += parseFloat(item.latitude);
@@ -128,6 +120,11 @@ class Results extends React.Component  {
                 mapsData: data
             })
         })
+        setTimeout(() => {
+            this.setState({
+                maps: true
+            })
+        }, 1000)
     }
 
     onChange = (e) => {
@@ -224,7 +221,6 @@ class Results extends React.Component  {
                             <div className={styles.results__box}>
                             {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
                             </div>
-                            
                         </div>
                     </MediaQuery>
                      }

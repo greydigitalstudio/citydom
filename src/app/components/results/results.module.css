@@ -24,6 +24,7 @@
 
 .results__map {
     margin-top: 33px;
+    width: 700px !important;
 }
 
 .results__map ymaps {
