@@ -239,18 +239,14 @@
     .content__flats_item {
         font-style: normal;
         font-weight: 400;
-        font-size: 13.7251px;
+        font-size: 13px;
         line-height: 16px;
-        /* identical to box height */
-    
         letter-spacing: -0.055em;
-    
         color: #595757;
-    
         background: #F9F9F9;
         border-radius: 5.30202px;
-        padding: 10px 5px;
-        width: 66.21px;
+        padding: 5px;
+        width: 60px;
         display: flex;
         justify-content: center;
       }
@@ -268,13 +264,12 @@
       .content__flats_index {
         font-style: normal;
         font-weight: 600;
-        font-size: 13.7251px;
+        font-size: 13px;
         line-height: 16px;
         text-align: center;
         letter-spacing: -0.055em;
-    
         color: #000000;
-        margin-top: 9px;
+        margin-top: 5px;
       }
     
       .content__flats_index_first {
