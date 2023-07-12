@@ -172,6 +172,7 @@
         height: 100%;
         display: flex;
         gap: 11px;
+        width: 200px;
         align-items: center;
     }
 
@@ -257,7 +258,7 @@
     
       .content__flats_wrapper {
         display: -webkit-inline-box;
-        gap: 10px;
+        gap: 8px;
         margin-top: 7px;
       }
     

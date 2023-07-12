@@ -222,6 +222,15 @@ class Results extends React.Component  {
                             {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
                             </div>
                         </div>
+                        <div className={styles.results__pagination}>
+                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
+                                первая
+                            </div>
+                                { this.getPagesMobile() }
+                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
+                                последняя
+                            </div>
+                        </div>
                     </MediaQuery>
                      }
 
