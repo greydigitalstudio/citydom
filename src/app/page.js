@@ -18,7 +18,7 @@ export default function Home() {
   }
 
   let [ filters, setFilter ] = useState({
-    multilevel: true
+    multilevel: false
   })
   
   let [ usedFilters, setUsedFilters ] = useState({...filters})
