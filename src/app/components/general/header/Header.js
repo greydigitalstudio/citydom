@@ -14,7 +14,7 @@ export default function Header() {
     <header className={`${header_styles.header} ${styles.center}`}>
       <div className={header_styles.header__left}>
         <Logo />
-        <Phone tel="+ 8 (800) 888 - 88 - 88" />
+        <Phone tel="+7 (3452) 967-048" />
       </div>
       <div className={header_styles.header__right}>
         {/* <Link href="/inner">Внутренняя страница</Link> */}

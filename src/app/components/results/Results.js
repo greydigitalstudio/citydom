@@ -30,7 +30,7 @@ async function getHousingForMap() {
     return res;
 }
 
-class Results extends React.Component  {
+class Results extends React.Component {
 
     constructor(props) {
         super(props);
@@ -41,7 +41,7 @@ class Results extends React.Component  {
             },
             pageData: {
                 page: 1,
-                pageSize: 6,
+                pageSize: 10,
                 last: 10
             },
             sort: 'fresh_at_asc',
@@ -52,7 +52,7 @@ class Results extends React.Component  {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.filters != this.props.filters) {
+        if (prevProps.filters != this.props.filters) {
             this.componentDidMount()
         }
     }
@@ -73,14 +73,14 @@ class Results extends React.Component  {
             res.items.forEach(item => {
                 item.endConstruction = item.endConstruction.trim()
                 let regexp = new RegExp(/(1|2|3|4) кв\. \d\d\d\d$/g)
-                if(!regexp.test(item.endConstruction)) {
+                if (!regexp.test(item.endConstruction)) {
                     item.endConstruction = '-'
                 } else {
                     item.endConstruction = item.endConstruction.match(regexp)[0];
                     item.endConstruction = item.endConstruction.replace('1 ', 'I ')
-                    .replace('2 ', 'II ')
-                    .replace('3 ', 'III ')
-                    .replace('4 ', 'IV ')
+                        .replace('2 ', 'II ')
+                        .replace('3 ', 'III ')
+                        .replace('4 ', 'IV ')
                 }
             })
             this.setState({
@@ -143,96 +143,96 @@ class Results extends React.Component  {
                 <div className={styles.results__in}>
                     <div className={styles.results__header}>
                         <div className={styles.results__title}>
-                            <div> 
+                            <div>
                                 Продажа новостроек в Тюмени
                             </div>
                             <div id="sort-select">
-                            <Select
-                                change = {this.onChange}
-                                options={[
-                                    {
-                                        value: "fresh_at_asc",
-                                        label: 'В начале новые'
-                                    },
-                                    {
-                                        value: "fresh_at_desc",
-                                        label: 'В начале старые'
-                                    },
-                                    {
-                                        value: "popularity_asc",
-                                        label: 'В начале популярные'
-                                    },
-                                    {
-                                        value: "popularity_desc",
-                                        label: 'В начале не популярные'
-                                    }
-                                ]}
-                            />
+                                <Select
+                                    change={this.onChange}
+                                    options={[
+                                        {
+                                            value: "fresh_at_asc",
+                                            label: 'В начале новые'
+                                        },
+                                        {
+                                            value: "fresh_at_desc",
+                                            label: 'В начале старые'
+                                        },
+                                        {
+                                            value: "popularity_asc",
+                                            label: 'В начале популярные'
+                                        },
+                                        {
+                                            value: "popularity_desc",
+                                            label: 'В начале не популярные'
+                                        }
+                                    ]}
+                                />
                             </div>
-                            
-                            </div>
-    
+
+                        </div>
+
                         <div className={styles.results__select}></div>
-                        <div className={styles.results__lighttext}>Найдено {this.state.houseCount} 
-                        {
-                        this.state.houseCount % 100 < 20 && this.state.houseCount % 100 > 10 ? ' предложений' : 
-                        this.state.houseCount % 10 === 1 ? ' предложение' :
-                        this.state.houseCount % 10 < 5 && this.state.houseCount % 10 > 0 ? ' предложения' :
-                        ' предложений'
-                        }</div>
+                        <div className={styles.results__lighttext}>Найдено {this.state.houseCount}
+                            {
+                                this.state.houseCount % 100 < 20 && this.state.houseCount % 100 > 10 ? ' предложений' :
+                                    this.state.houseCount % 10 === 1 ? ' предложение' :
+                                        this.state.houseCount % 10 < 5 && this.state.houseCount % 10 > 0 ? ' предложения' :
+                                            ' предложений'
+                            }</div>
                         <div className={styles.results__subtitle}>Услуги компании бесплатны</div>
                     </div>
-                    { this.state.mounted && 
-                    <MediaQuery minDeviceWidth={768}>
-                        <div className={styles.results__content}>
-                            <div className={styles.results__box}>
-                            {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
+                    {this.state.mounted &&
+                        <MediaQuery minDeviceWidth={768}>
+                            <div className={styles.results__content}>
+                                <div className={styles.results__box}>
+                                    {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />)}
+                                </div>
+                                {this.state.maps &&
+                                    <YMaps>
+                                        <Map width='100%' className={styles.results__map} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
+                                            <Clusterer
+                                                options={{
+                                                    preset: "islands#greenClusterIcons",
+                                                    groupByCoordinates: false,
+                                                }}
+                                            >
+                                                {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
+                                            </Clusterer>
+                                        </Map>
+                                    </YMaps>
+                                }
                             </div>
-                            { this.state.maps &&
-                            <YMaps>
-                                <Map width='100%' className={styles.results__map} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
-                                    <Clusterer
-                                        options={{
-                                            preset: "islands#greenClusterIcons",
-                                            groupByCoordinates: false,
-                                        }}
-                                    >
-                                        {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
-                                    </Clusterer>
-                                </Map>
-                            </YMaps>
-                            }
-                        </div>
-                        <div className={styles.results__pagination}>
-                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
-                                первая
+                            <div className={styles.results__pagination}>
+                                <div className={styles.results__pagination_item} onClick={this.firstPage}>
+                                    первая
+                                </div>
+                                {this.getPages()}
+                                <div className={styles.results__pagination_item} onClick={this.lastPage}>
+                                    последняя
+                                </div>
                             </div>
-                                { this.getPages() }
-                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
-                                последняя
-                            </div>
-                        </div>
-                    </MediaQuery>
-                     }
+                        </MediaQuery>
+                    }
 
-                    { this.state.mounted && 
-                    <MediaQuery maxDeviceWidth={767}>
-                        <div className={styles.results__content}>
-                            <div className={styles.results__box}>
-                            {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />) }
+                    {this.state.mounted &&
+                        <MediaQuery maxDeviceWidth={767}>
+                            <div className={styles.results__content}>
+                                <div className={styles.results__box}>
+                                    {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />)}
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.results__pagination}>
-                            <div className={styles.results__pagination_item} onClick={this.firstPage}>
-                                первая
+                            <div className={styles.results__pagination}>
+                                <div className={styles.results__pagination_item} onClick={this.firstPage}>
+                                    первая
+                                </div>
+                                {this.getPagesMobile()}
+                                <div className={styles.results__pagination_item} onClick={this.lastPage}>
+                                    последняя
+                                </div>
                             </div>
-                                { this.getPagesMobile() }
-                            <div className={styles.results__pagination_item} onClick={this.lastPage}>
-                                последняя
-                            </div>
-                        </div>
-                    </MediaQuery>
-                     }
+                        </MediaQuery>
+                    }
 
                 </div>
             </div>
@@ -243,16 +243,16 @@ class Results extends React.Component  {
         let pages = [];
         let firstdots = false;
         let lastdots = false;
-        for(let i = 0; i < this.state.pageData.last; i++) {
-            if(i < parseInt(this.state.pageData.page) - 4){
-                if(!firstdots) {
+        for (let i = 0; i < this.state.pageData.last; i++) {
+            if (i < parseInt(this.state.pageData.page) - 4) {
+                if (!firstdots) {
                     pages.push(<div id="page-1" className={styles.results__pagination_item}>...</div>)
                     firstdots = true;
                 }
                 continue;
             }
-            if(i >= parseInt(this.state.pageData.page) + 3){
-                if(!lastdots) {
+            if (i >= parseInt(this.state.pageData.page) + 3) {
+                if (!lastdots) {
                     pages.push(<div id={`page-${this.state.pageData.last}`} className={styles.results__pagination_item}>...</div>)
                     lastdots = true;
                 }
@@ -260,7 +260,7 @@ class Results extends React.Component  {
             }
             pages.push(<div onClick={(e) => {
                 this.changePage(e)
-            }} id={`page-${i+1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i+1 ? (' ' + styles.results__pagination_primary) : '' }`}>{i + 1}</div>)
+            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)
         }
         return pages;
     }
@@ -268,17 +268,17 @@ class Results extends React.Component  {
     getPagesMobile() {
         let pages = [];
         let pagesSize = 0
-        for(let i = 0; i < this.state.pageData.last; i++) {
-            if(i < parseInt(this.state.pageData.page) - 2){
+        for (let i = 0; i < this.state.pageData.last; i++) {
+            if (i < parseInt(this.state.pageData.page) - 2) {
                 continue;
             }
-            if( (i >= parseInt(this.state.pageData.page) + 1) && pagesSize >= 3){
+            if ((i >= parseInt(this.state.pageData.page) + 1) && pagesSize >= 3) {
                 continue;
             }
             pagesSize++;
             pages.push(<div onClick={(e) => {
                 this.changePage(e)
-            }} id={`page-${i+1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i+1 ? (' ' + styles.results__pagination_primary) : '' }`}>{i + 1}</div>)
+            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)
         }
         return pages;
     }
@@ -290,7 +290,7 @@ class Results extends React.Component  {
     lastPage = async () => {
         this.changePage({ target: { id: `page-${this.state.pageData.last}` } })
     }
-    
+
     async changePage(e) {
         let page = e ? e.target.id.split('-')[1] : this.state.pageData.page;
         let res = await getHousing({
@@ -299,14 +299,14 @@ class Results extends React.Component  {
         res.items.forEach(item => {
             item.endConstruction = item.endConstruction.trim()
             let regexp = new RegExp(/(1|2|3|4) кв\. \d\d\d\d$/g)
-            if(!regexp.test(item.endConstruction)) {
+            if (!regexp.test(item.endConstruction)) {
                 item.endConstruction = '-'
             } else {
                 item.endConstruction = item.endConstruction.match(regexp)[0];
                 item.endConstruction = item.endConstruction.replace('1 ', 'I ')
-                .replace('2 ', 'II ')
-                .replace('3 ', 'III ')
-                .replace('4 ', 'IV ')
+                    .replace('2 ', 'II ')
+                    .replace('3 ', 'III ')
+                    .replace('4 ', 'IV ')
             }
         })
         this.setState({
