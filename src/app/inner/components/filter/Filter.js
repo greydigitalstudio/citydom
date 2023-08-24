@@ -176,10 +176,11 @@ const Filter = (props) => {
         <div className={styles.filter}>
             {mounted && <MediaQuery minWidth={768}>
                 <div className={styles.filter__row}>
+
                     <button className={styles.filter__row_button} onClick={setFloats}>
                         <Checkerboard
                             selected={section == 'floats'}
-                        /> Шахматка
+                        /> Шахматка {console.log(props)}
                     </button>
                     <div className={styles.filter__row_vertical_divider}></div>
                     <button className={styles.filter__row_button} onClick={setLayouts}>
@@ -200,21 +201,24 @@ const Filter = (props) => {
 
 
                 <div className={styles.filter__horizontal_divider}></div>
-
-                <div className={styles.filter__radio_row}>
-                    <RadioGroup
-                        name="entrance"
-                        change={setPorche}
-                        options={[
-                            { value: 'all', label: 'Подъезд' },
-                            { value: '1', label: '1' },
-                            { value: '2', label: '2' },
-                            { value: '3', label: '3' },
-                            { value: '4', label: '4' },
-                            { value: '5', label: '5' }
-                        ]}
-                    />
-                </div>
+                {
+                    props.section == 'floats' ? (
+                        <div className={styles.filter__radio_row}>
+                            <RadioGroup
+                                name="entrance"
+                                change={setPorche}
+                                options={[
+                                    { value: 'all', label: 'Подъезд' },
+                                    { value: '1', label: '1' },
+                                    { value: '2', label: '2' },
+                                    { value: '3', label: '3' },
+                                    { value: '4', label: '4' },
+                                    { value: '5', label: '5' }
+                                ]}
+                            />
+                        </div>
+                    ) : (false)
+                }
                 <div id="floor-radio" className={styles.filter__radio_row}>
                     <RadioGroup
                         name="floor"
