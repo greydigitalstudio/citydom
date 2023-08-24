@@ -131,7 +131,7 @@
   .content__flats_row {
     display: inline-block;
     gap: 10px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 
   .content__flats_wrapper {
