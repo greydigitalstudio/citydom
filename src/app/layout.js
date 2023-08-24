@@ -24,12 +24,12 @@ export default function RootLayout({ children }) {
   let [device, setDevice] = useState('desktop')
 
   useEffect(() => {
-    if(window.innerWidth < 768) {
+    if (window.innerWidth < 768) {
       setDevice('mobile')
     }
     setPath(window.location.pathname)
     window.addEventListener('resize', () => {
-      if(window.innerWidth < 768) {
+      if (window.innerWidth < 768) {
         setDevice('mobile')
       }
       else {
@@ -44,26 +44,26 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      
-        {
-          <Head>
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" />
-          </Head>
-        }
+
+      {
+        <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" />
+        </Head>
+      }
       <body className={inter.className}>
         <div className={styles.wrapper}>
           {
             (device !== 'mobile' || path === '/' || path === '/citydom/') && <Header />
           }
-          
+
           {children}
           {
-            (device !== 'mobile' || path === '/' || path === '/citydom/') && <Footer />
+            ((device !== 'mobile' || path === '/') && path !== '/inner') && <Footer />
           }
-          
-        </div>        
+
+        </div>
       </body>
     </html>
   )

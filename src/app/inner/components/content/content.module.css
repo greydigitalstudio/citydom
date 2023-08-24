@@ -111,7 +111,7 @@
 
 .content__flats_item {
     font-style: normal;
-    font-weight: 100;
+    font-weight: 400;
     font-size: 13.7251px;
     line-height: 17px;
     /* identical to box height */
@@ -138,7 +138,7 @@
     display: grid;
     grid-gap: 10px;
     width: 100%;
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 
   .content__flats_index {
@@ -281,8 +281,7 @@
 
     .content__modal_wrapper {
         position: relative;
-        width: 600px;
-        height: 600px;
+        width: 60vw;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -290,6 +289,7 @@
         border: 1px solid #F5F5F5;
         box-shadow: 3px 3px 20px rgba(44, 44, 44, 0.25);
         border-radius: 16px;
+        box-sizing: border-box;
     }
 
     .content__modal_close {
@@ -320,16 +320,18 @@
         grid-template-columns: 1fr 1fr;
         gap: 100px;
         padding: 30px;
+        width: 100%;
+        align-items: center;
     }
 
     .content__modal_image img {
-        width: 230px;
+        width: 100%;
     }
 
     .content__modal_title {
         font-style: normal;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 18px;
         line-height: 21px;
 
         color: #2B2F36;
@@ -339,7 +341,7 @@
     .content__modal_text {
         font-style: normal;
         font-weight: 500;
-        font-size: 10px;
+        font-size: 14px;
         line-height: 16px;
         /* identical to box height */
         margin-bottom: 13px;

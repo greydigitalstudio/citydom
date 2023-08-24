@@ -1,6 +1,6 @@
 const Viber = () => {
     return (
-        <a href="viber://chat?number=%2B73452967048" target="_blank">
+        <a href="viber://chat?number=%2B79526766440" target="_blank">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="32" height="32" rx="16" fill="black" />
                 <g clipPath="url(#clip0_20_13533)">

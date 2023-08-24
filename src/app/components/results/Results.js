@@ -71,6 +71,7 @@ class Results extends React.Component {
             filters: this.props.filters
         }).then(res => {
             res.items.forEach(item => {
+
                 item.endConstruction = item.endConstruction.trim()
                 let regexp = new RegExp(/(1|2|3|4) кв\. \d\d\d\d$/g)
                 if (!regexp.test(item.endConstruction)) {
@@ -186,7 +187,7 @@ class Results extends React.Component {
                         <MediaQuery minDeviceWidth={768}>
                             <div className={styles.results__content}>
                                 <div className={styles.results__box}>
-                                    {this.state.housing.length > 0 && this.state.housing.map(item => <Item item={item} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />)}
+                                    {this.state.housing.length > 0 && this.state.housing.map((item, key) => <Item item={item} key={key} pageData={this.state.pageData} sort={this.state.sort} key={item.id} />)}
                                 </div>
                                 {this.state.maps &&
                                     <YMaps>

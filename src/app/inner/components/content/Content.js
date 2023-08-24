@@ -67,12 +67,12 @@ const Content = (props) => {
 
     return (
         <div className={styles.content}>
-             { mounted && <MediaQuery minWidth={768}>
-             </MediaQuery>
+            {mounted && <MediaQuery minWidth={768}>
+            </MediaQuery>
             }
             <div className={styles.content__wrapper}>
                 <div className={styles.content__title}>
-                    <Pin />
+                    {/* <Pin /> */}
                     {data.title}
                     <div className={styles.item__flatscount}>
                         {data.flatsCount} {
