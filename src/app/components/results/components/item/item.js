@@ -239,7 +239,7 @@ const Item = (props) => {
 
                         <div className={styles.item__row}>
                             <div className={styles.item__address}>
-                                <Pin />
+                                {/* <Pin /> */}
                                 <div className={styles.item__address_text}>
                                     {props.item.title}
                                 </div>

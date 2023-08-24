@@ -300,7 +300,7 @@ const Filter = (props) => {
                 </div>
                 <div className={styles.content__title}>
                     <div className={styles.content__title_title}>
-                        <Pin />
+                        {/* <Pin /> */}
                         {data.title}
                     </div>
                     <div className={styles.item__flatscount}>
