@@ -124,7 +124,7 @@ const Content = (props) => {
                                         {
                                             row.flats.map((item, index) => {
                                                 return (
-                                                    <div className={styles.content__flats_item} key={index}>
+                                                    <div className={styles.content__flats_item} key={index} id={"layout-19193"} onClick={showModal}>
                                                         {item}
                                                     </div>
                                                 )
