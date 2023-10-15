@@ -1,0 +1,25 @@
+/* header */
+
+.header {
+  padding-top: 25px;
+  padding-bottom: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header__left {
+  display: flex;
+  align-items: center;
+}
+.header__right {}
+
+
+@media only screen and (max-width: 767px) {
+  .header__left {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+
+}

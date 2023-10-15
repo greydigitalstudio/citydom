@@ -1,0 +1,21 @@
+
+/* phone */
+
+.phone {
+  display: flex;
+  align-items: center;
+  margin-left: 53px;
+}
+
+.phone__logo {
+  margin-right: 9px;
+}
+.phone__text {
+  /* font-family: 'SF UI  Text'; */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.055em;
+  color: #2C2C2E;
+}

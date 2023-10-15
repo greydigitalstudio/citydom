@@ -1,0 +1,33 @@
+/* banner */
+
+.banner {
+  margin-bottom: 0;
+  transition: all .7s ease;
+}
+.banner__in {
+  height: 566px;
+  border-radius: 30px;
+  overflow: hidden;
+  transition: all .7s ease;
+}
+.banner__small {
+  margin-bottom: -313px !important;
+}
+.banner__small .banner__in {
+  height: 384px;
+  border-radius: 55px;
+}
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+@media only screen and (max-width: 767px) {
+  .banner {
+    display: none;
+  }
+
+  
+}

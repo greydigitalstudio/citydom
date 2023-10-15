@@ -1,0 +1,279 @@
+.item {
+    width: 347px;
+    position: relative;
+    max-height: 425px;
+}
+
+.item__img {
+    width: 347px;
+    height: 209px;
+    left: 0px;
+    top: 18px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius: 15px;
+}
+.item__top_dates {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 5px; 
+}
+
+.item__dates {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 15px;
+
+    font-style: normal;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 13px;
+    letter-spacing: -0.025em;
+
+    color: #A8A9AF;
+    margin-bottom: 4px;
+}
+/* .item__uploaded {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 13px;
+    letter-spacing: -0.025em;
+
+    color: #A8A9AF;
+} */
+
+.item__star {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 10px;
+    top: 30px;
+}
+
+.item__someinfo {
+    position: absolute;
+    left: 10px;
+    top: 30px;
+    display: flex;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 14.0585px;
+    line-height: 10px;
+    letter-spacing: -0.025em;
+    align-items: center;
+    color: #FFFFFF;
+    gap: 4px;
+    display: none;
+}
+
+.item__someleter {
+    background: #8698AC;
+    border-radius: 50%;
+    color: white;
+    width: 21.25px;
+    height: 21.25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item__mortgage {
+    background: #78B345;
+    border-radius: 3px;
+    color: white;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 10px;
+    letter-spacing: -0.025em;
+    text-align: left;
+
+    padding: 5px;
+    margin-right: 30px;
+}
+
+.item__cost {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14.0585px;
+    line-height: 17px;
+    letter-spacing: -0.025em;
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 18.5px;
+    position: absolute;
+    top: 204px;
+    right: 30px;
+}
+/* .item__cost > svg {
+    display: none;
+} */
+
+.item__angleLeft {
+    position: absolute;
+    left: -8.2px;
+    bottom: -1.5px;
+    fill: white;
+}
+.item__angleLeft svg {
+    fill: white;
+}
+
+.item__angleRight {
+    position: absolute;
+    fill: white;
+    transform: scaleX(-1);
+    right: -8.2px;
+    bottom: -1.5px;
+}
+
+.item__angleRight svg {
+    fill: white;
+}
+
+.item__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.item__updated {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    /* identical to box height */
+    letter-spacing: -0.025em;
+}
+
+
+
+.item__address {
+    display: flex;
+    align-items: center;
+    gap: 11px;  
+}
+
+.item__address_text {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+
+    /* Filter text */
+
+    color: #2C2C2E;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 150px;
+}
+
+.item__quarter {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 16px;
+    /* identical to box height */
+    color: #B1BAC1;
+    letter-spacing: -0.01em;
+}
+
+.item__icons {
+    display: flex;
+    gap: 7px;
+}
+
+.item__phone {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+    cursor: default;
+    display: flex;
+
+    gap: 5px;
+    align-items: center;
+}
+
+.item__flatsinfo {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+@media only screen and (max-width: 767px) {
+
+    .item {
+        margin-bottom: 30px;
+        width: 333px;
+    }
+    .item__img {
+        width: 333px;
+        height: 161px;
+    }
+
+    .item__cost {
+        top: 156px;
+    }
+
+    .item__mortgage {
+        font-size: 14px;
+        font-weight: 450;
+        line-height: 10px;
+        letter-spacing: -0.025em;
+        text-align: left;
+
+        margin-right: 0px;
+    }
+    .item__flatscount {
+        display: inline;
+        background: #848484;
+        padding: 8px 11px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 14px;
+        letter-spacing: -0.01em;
+        text-align: left;
+        letter-spacing: -0.025em;
+        color: #FFFFFF;
+    }
+    
+    .item__callbtn {
+        background: #F7C026;
+        width: 304px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        border-radius: 20px;
+        margin-top: 15px;
+        margin-right: 0;
+    }
+
+    .item__callbtn_text {
+        color: #000;
+        text-align: center;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+
+    .item__rows {
+        margin-left: 28px;
+    }
+}

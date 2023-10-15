@@ -1,0 +1,29 @@
+{
+  "name": "citydom",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://greydigitalstudio.github.io/citydom",
+  "scripts": {
+    "predeploy": "",
+    "deploy": "gh-pages -d out",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@pbe/react-yandex-maps": "^1.2.4",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.3",
+    "next": "^13.4.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-media-breakpoints": "^0.4.3",
+    "react-responsive": "^9.0.2",
+    "react-transition-group": "^4.4.5"
+  },
+  "devDependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "gh-pages": "^5.0.0"
+  }
+}
