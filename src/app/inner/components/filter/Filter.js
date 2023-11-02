@@ -48,7 +48,6 @@ const Filter = (props) => {
   const porsh4 = porshes.filter(r => r === '4')
   const porsh5 = porshes.filter(r => r === '5')
 
-
   const rooms0 = rooms.filter(r => r === 0)
   const rooms1 = rooms.filter(r => r === 1)
   const rooms2 = rooms.filter(r => r === 2)
@@ -209,6 +208,13 @@ const Filter = (props) => {
   function filterLayouts(rooms) {
     if (rooms === "all") {
       props.filter(props.layouts);
+      return;
+    }
+    if (rooms === "1") {
+      let filtered = props.layouts.filter((layout) => {
+        return layout.rooms === 1;
+      });
+      props.filter(filtered);
       return;
     }
     if (rooms === "4") {

@@ -19,7 +19,7 @@ const Consultation = ({ data }) => {
                     Проконсультирую и помогу купить с выгодой  и без комиссии
                 </div>
                 <div className={styles.consultation__text_bold}>
-                    <Phone /> {data.data.owner.phone}
+                    <Phone /> {`+7${data.data.owner.phone}`}
                 </div>
                 <div className={styles.consultation__text}>
                     или оставьте номер я позвоню вам через 2 мминуты

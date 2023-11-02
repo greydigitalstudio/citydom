@@ -200,7 +200,6 @@
     text-align: left;
     cursor: default;
     display: flex;
-
     gap: 5px;
     align-items: center;
 }
