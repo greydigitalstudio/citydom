@@ -119,8 +119,7 @@ const Item = (props) => {
                                 <div className={styles.item__angleRight}>
                                     <Angle />
                                 </div>
-                                от {String(props.item.minFlatPrice).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, "$1 ")} ₽ &nbsp;                              
-                                <CostIcon />
+                                от {String(props.item.minFlatPrice).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, "$1 ")} ₽ &nbsp;
                             </div>
                         }
                         <div className={styles.item__row}>

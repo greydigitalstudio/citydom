@@ -18,7 +18,7 @@ async function getHousing(options = {
     Object.keys(options.filters).forEach(f => {
         filterstr += `&${f}=${options.filters[f]}`
     })
-    let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&sort=${options.sort}${filterstr}`);
+    let res = await fetch(`https://tyumen.citidom.com/housing-estate?page=${options.page}&limit=20&withFlats=1&sort=${options.sort}${filterstr}`);
     res = await res.json();
     return res
 }
@@ -39,8 +39,8 @@ class Results extends React.Component {
             },
             pageData: {
                 page: 1,
-                pageSize: 10,
-                last: 10
+                pageSize: 20,
+                last: 20
             },
             sort: 'fresh_at_asc',
             houseCount: 0,
@@ -68,6 +68,7 @@ class Results extends React.Component {
             sort: this.state.sort,
             filters: this.props.filters
         }).then(res => {
+console.log('res', res);
             res.items.map(i => i).forEach(item => {
                 item.endConstruction = item.endConstruction.trim()
                 let regexp = new RegExp(/(1|2|3|4) кв\. \d\d\d\d$/g)
@@ -122,6 +123,10 @@ class Results extends React.Component {
             this.setState({
                 maps: true
             })
+        if (window) {
+                window.dispatchEvent(new Event('resize'));
+                window.addEventListener('resize', () => {console.log('page resized')});
+        }
         }, 1000)
     }
 
@@ -189,8 +194,9 @@ class Results extends React.Component {
                                     ))}
                                 </div>
                                 {this.state.maps &&
+                                <div className={styles.results__map}>
                                     <YMaps>
-                                        <Map width='100%' className={styles.results__map} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
+                                        <Map width='100%' className={styles.results__map_in} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
                                             <Clusterer
                                                 options={{
                                                     preset: "islands#greenClusterIcons",
@@ -199,8 +205,10 @@ class Results extends React.Component {
                                             >
                                                 {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
                                             </Clusterer>
+                                                <div className={styles.results__map_scroller}></div>
                                         </Map>
                                     </YMaps>
+                                </div>
                                 }
                             </div>
                             <div className={styles.results__pagination}>
@@ -260,7 +268,7 @@ class Results extends React.Component {
             }
             pages.push(<div onClick={(e) => {
                 this.changePage(e)
-            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)
+            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)        
         }
         return pages;
     }
@@ -278,7 +286,7 @@ class Results extends React.Component {
             pagesSize++;
             pages.push(<div onClick={(e) => {
                 this.changePage(e)
-            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)
+            }} id={`page-${i + 1}`} className={`${styles.results__pagination_item}${this.state.pageData.page == i + 1 ? (' ' + styles.results__pagination_primary) : ''}`}>{i + 1}</div>)        
         }
         return pages;
     }

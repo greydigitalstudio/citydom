@@ -10,6 +10,7 @@ import Checkbox from './components/checkbox/Checkbox';
 import Select from './components/select/Select';
 import TextInput from './components/text_input/TextInput';
 import RadioGroup from './components/radio_group/RadioGroup';
+import CheckboxGroup from './components/checkbox_group/CheckboxGroup';
 import FromTo from './components/fromto/FromTo';
 import Switch from './components/switch/Switch';
 
@@ -189,46 +190,10 @@ const Filter = (props) => {
                         <div className={styles.filter__form}>
                             <div className={styles.filter__form_section}>
                                 <div className={styles.filter__row}>
-                                    <Select
-                                        onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-                                        style={{ display: "none" }}
-                                        title="Город"
-                                        value={filters.city}
-                                        options={[
-                                            {
-                                                value: 'moscow',
-                                                label: 'Москва'
-                                            },
-                                            {
-                                                value: 'spb',
-                                                label: 'Санкт-Петербург'
-                                            },
-                                            {
-                                                value: 'tula',
-                                                label: 'Тула'
-                                            }
-                                        ]}
-                                    />
-                                    <TextInput
-                                        onChange={(e) => setFilters({ ...filters, place: e.target.value })}
-                                        value={filters.place}
-                                        type="text"
-                                        name="place"
-                                        title="Местоположение"
-                                        placeholder="Введите район или ЖК"
-                                    />
-                                    <TextInput
-                                        onChange={(e) => setFilters({ ...filters, mortgagePayment: e.target.value })}
-                                        value={filters.mortgagePayment}
-                                        type="number"
-                                        name="payment"
-                                        title="Ваш комфортный платеж по ипотеке"
-                                        placeholder="Введите сумму платежа"
-                                    />
                                     <RadioGroup
                                         onChange={(e) => setFilters({ ...filters, room: e.target.value })}
                                         title="Комнатность"
-                                        value={filters.room}
+                                        value={filters.rooms}
                                         options={[
                                             {
                                                 value: '0',
@@ -252,24 +217,19 @@ const Filter = (props) => {
                                             }
                                         ]}
                                     />
-                                </div>
-
-                                <div className={styles.filter__row} style={{ width: 700 }} >
-                                    <div style={{ width: 580 }}>
-                                        <FromTo
-                                            title="Стоимость, ₽"
-                                            from_type="number"
-                                            from_name="priceMin"
-                                            from_placeholder="1 000 000"
-                                            to_type="number"
-                                            to_name="priceMax"
-                                            to_placeholder="10 000 000"
-                                            from={filters.priceMin}
-                                            to={filters.priceMax}
-                                            changeFrom={(e) => setFilters({ ...filters, priceMin: e.target.value })}
-                                            changeTo={(e) => setFilters({ ...filters, priceMax: e.target.value })}
-                                        />
-                                    </div>
+                                    <FromTo
+                                        title="Стоимость, ₽"
+                                        from_type="number"
+                                        from_name="priceMin"
+                                        from_placeholder="1 000 000"
+                                        to_type="number"
+                                        to_name="priceMax"
+                                        to_placeholder="10 000 000"
+                                        from={filters.priceMin}
+                                        to={filters.priceMax}
+                                        changeFrom={(e) => setFilters({ ...filters, priceMin: e.target.value })}
+                                        changeTo={(e) => setFilters({ ...filters, priceMax: e.target.value })}
+                                    />
                                     <FromTo
                                         title="Площадь, м2"
                                         from_type="number"
@@ -283,7 +243,31 @@ const Filter = (props) => {
                                         changeFrom={(e) => setFilters({ ...filters, spaceTotalMin: e.target.value })}
                                         changeTo={(e) => setFilters({ ...filters, spaceTotalMax: e.target.value })}
                                     />
+                                    
+                                    
+                                </div>
 
+                                <div className={styles.filter__row} >
+                                    <div style={{ width: 600 }} >
+                                        <TextInput
+                                            onChange={(e) => setFilters({ ...filters, place: e.target.value })}
+                                            value={filters.place}
+                                            type="text"
+                                            name="place"
+                                            title="Местоположение"
+                                            placeholder="Введите район или ЖК"
+                                        />
+                                    </div>
+                                    <div style={{ width: 600 }} >
+                                        <TextInput
+                                            onChange={(e) => setFilters({ ...filters, mortgagePayment: e.target.value })}
+                                            value={filters.mortgagePayment}
+                                            type="number"
+                                            name="payment"
+                                            title="Ваш комфортный платеж по ипотеке"
+                                            placeholder="Введите сумму платежа"
+                                        />
+                                    </div>
                                     <FromTo
                                         title="Этаж"
                                         from_type="number"
@@ -384,26 +368,7 @@ const Filter = (props) => {
                                 </div>
                             </div>
                             <div className={`${styles.filter__form_section} ${!isSectionOpened ? styles.filter__form_section_closed : ''}`}>
-                                <div className={styles.filter__row}>
-                                    <Select
-                                        title="Материал дома"
-                                        value={filters.material}
-                                        options={[
-                                            {
-                                                value: 'moscow',
-                                                label: 'Москва'
-                                            },
-                                            {
-                                                value: 'spb',
-                                                label: 'Санкт-Петербург'
-                                            },
-                                            {
-                                                value: 'tula',
-                                                label: 'Тула'
-                                            }
-                                        ]}
-                                    />
-                                </div>
+                                
                                 <div className={styles.filter__spacer}></div>
                                 <div className={styles.filter__columns}>
                                     <div className={styles.filter__column}>
