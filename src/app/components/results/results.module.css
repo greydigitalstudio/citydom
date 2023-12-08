@@ -8,14 +8,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    width:708px;
+    width: 100%;
 }
 
 .results__box {
     margin-top: 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px 15px;
+    grid-template-columns: repeat(2, calc(50% - 8px));
+    grid-gap: 30px 16px;
 }
 
 .results__result {
@@ -24,7 +24,13 @@
 
 .results__map {
     margin-top: 33px;
-    width: 700px !important;
+    width: 100%;
+}
+.results__map_in {
+    position: sticky;
+    top: 10px;
+    height: calc(100vh - 20px);
+    width: 100%;
 }
 
 .results__map ymaps {
@@ -143,12 +149,11 @@
     }
 
     .results__box {
-        overflow-x: scroll;
-        height: 100%;
-        overflow-y: clip;
+        grid-template-columns: 1fr;
     }
 
     .results__content {
+        display: block;
     }
 
     .results {

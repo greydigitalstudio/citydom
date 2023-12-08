@@ -195,7 +195,7 @@ console.log('res', res);
                                 </div>
                                 {this.state.maps &&
                                 <div className={styles.results__map}>
-                                    <YMaps>
+                                    <YMaps className={styles.results__map_in}>
                                         <Map width='100%' className={styles.results__map_in} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
                                             <Clusterer
                                                 options={{

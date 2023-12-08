@@ -1,17 +1,20 @@
 .item {
-    width: 347px;
     position: relative;
-    max-height: 425px;
+    width: 100%;
 }
 
+.item__img_wrap {
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    border-radius: 15px;
+    position: relative;
+}
 .item__img {
-    width: 347px;
-    height: 209px;
-    left: 0px;
-    top: 18px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: 50% 50%;
-    border-radius: 15px;
 }
 .item__top_dates {
     display: flex;
@@ -108,7 +111,7 @@
     padding: 5px 10px;
     border-radius: 18.5px;
     position: absolute;
-    top: 204px;
+    bottom: -4px;
     right: 30px;
 }
 /* .item__cost > svg {
@@ -216,15 +219,10 @@
 
     .item {
         margin-bottom: 30px;
-        width: 333px;
     }
-    .item__img {
-        width: 333px;
-        height: 161px;
-    }
-
-    .item__cost {
-        top: 156px;
+    .item__img_wrap {
+        width: 100%;
+        aspect-ratio: 3/2;
     }
 
     .item__mortgage {
@@ -252,7 +250,7 @@
     
     .item__callbtn {
         background: #F7C026;
-        width: 304px;
+        /* width: 304px; */
         height: 40px;
         display: flex;
         justify-content: center;
@@ -272,7 +270,7 @@
         line-height: normal;
     }
 
-    .item__rows {
+    /* .item__rows {
         margin-left: 28px;
-    }
+    } */
 }
