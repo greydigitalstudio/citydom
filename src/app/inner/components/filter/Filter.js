@@ -8,7 +8,6 @@ import MediaQuery from "react-responsive";
 import { useEffect, useState } from "react";
 import Privilege from "../privilege/Privilege";
 
-import Pin from "../content/icons/pin";
 import Link from "next/link";
 import { Holtwood_One_SC, M_PLUS_Rounded_1c, Noto_Sans_Tamil_Supplement } from "next/font/google";
 
@@ -148,7 +147,8 @@ const Filter = (props) => {
 
   function price1(price) {
     // пробелы каждые 3 символа
-    price = price.toString().split("").reverse();
+    if (!price) return;
+    price = price?.toString().split("").reverse();
     let res = "";
     for (let i = 0; i < price.length; i++) {
       if (i % 3 === 0 && i !== 0) res += " ";

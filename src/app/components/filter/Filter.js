@@ -1,7 +1,10 @@
 'use client';
 import MediaQuery from 'react-responsive'
 import React, { useEffect, useState, useRef } from 'react';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+
 import styles from './filter.module.css'
+
 
 import Image from 'next/image';
 
@@ -178,7 +181,9 @@ const Filter = (props) => {
 
 
     useEffect(() => {
-        setMounted(true);
+        // setTimeout(() => {
+            setMounted(true);
+        // }, 50000)
     }, []);
 
     return (
@@ -855,6 +860,30 @@ const Filter = (props) => {
                         </div>
                     </div>
                 </MediaQuery>
+            }
+            {!mounted &&
+                
+                <div className={styles.filter__in}>
+                    <SkeletonTheme height={30}>
+                        <div className={styles.filter__title}><Skeleton count={2}/></div>
+                        <div className={styles.filter__form}>
+                            <div className={styles.filter__form_section}>
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                            </div>
+                            <Skeleton />
+                        </div>
+                    </SkeletonTheme>
+                </div>
             }
         </div>
     );

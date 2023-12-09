@@ -10,6 +10,8 @@ import Header from './components/general/header/Header'
 import Footer from './components/general/footer/Footer'
 import { useEffect, useState } from 'react'
 
+import 'react-loading-skeleton/dist/skeleton.css'
+
 const inter = Inter({ subsets: ['latin'] })
 
 // export const metadata = {

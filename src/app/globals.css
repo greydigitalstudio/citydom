@@ -117,3 +117,13 @@ html {
         width: 0px;
       }
 }
+
+
+.carousel .control-dots .dot {
+  background: #fff !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+.carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
+  background: #F7C026 !important;
+}

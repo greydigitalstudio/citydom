@@ -22,10 +22,5 @@
     display: flex;
     gap: 35px 25px;
   }
+
   
-  
-  /* temp */
-  
-  .content {
-    min-height: 1000px;
-  }

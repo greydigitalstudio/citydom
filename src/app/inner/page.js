@@ -6,9 +6,16 @@ import Consultation from './components/consultation/Consultation'
 import Content from './components/content/Content'
 import React, { useEffect, useState } from 'react'
 import MediaQuery from 'react-responsive'
+import { Carousel } from 'react-responsive-carousel';
+
+import Image from 'next/image';
 
 import Banner from '../components/general/banner/Banner'
 import styles from './page.module.css'
+import banner_styles from '../components/general/banner/banner.module.css'
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Skeleton from 'react-loading-skeleton';
+import { Asap_Condensed } from 'next/font/google';
 /* Component imports */
 const getData = async () => {
   // get parameters from url
@@ -42,7 +49,7 @@ export default class Test extends React.Component {
     this.state = {
       data: {
         flatsCount: 0,
-
+        photos: []
       },
       layouts: [],
       filteredLayouts: [],
@@ -114,7 +121,7 @@ export default class Test extends React.Component {
       data: data
     })
     let layouts = await getLayouts()
-    await this.setState({
+    this.setState({
       layouts: layouts,
       filteredLayouts: layouts,
       loaded: true
@@ -124,11 +131,17 @@ export default class Test extends React.Component {
   render() {
     return (
       <>
-        <Banner
-          data={this.state.data}
-          photoIndex={this.state.photoIndex}
-          setPhoto={this.setPhoto}
-        />
+        <div className={`${banner_styles.banner} ${styles.center} ${banner_styles.banner__big}`}>
+            <div className={banner_styles.banner__in}>
+              { this.state.data.photos.length > 0 ? 
+                <Carousel style={{height: '100%'}} dynamicHeight={true} emulateTouch={true} infiniteLoop={true} showArrows={false} autoPlay={true} showStatus={false}>
+                  {this.state.data.photos.map((image, key) => (
+                    <img src={`https://files.citidom.com/${image.name}`} key={key} alt='Banner' width={1140} height={513} style={{height: '513px'}} />
+                  ))}
+                </Carousel> : <Skeleton style={{display: 'block'}} width={'100%'} height={'100%'} />
+              }
+            </div>
+        </div> 
         <main className={`${styles.main} ${styles.center}`}>
           {
             this.state.loaded &&
@@ -168,6 +181,7 @@ export default class Test extends React.Component {
               </div>
             </MediaQuery>
           }
+          
 
           {
             this.state.loaded &&
@@ -197,6 +211,25 @@ export default class Test extends React.Component {
               <div className={styles.left}>
                 <Consultation data={this.state.data} />
               </div>
+            </MediaQuery>
+          }
+
+          {
+            !this.state.loaded && 
+              <MediaQuery minWidth={768}>
+                <div className={styles.left}>
+                  <Skeleton width={314} height={320} style={{display: 'block'}}/>
+
+                  <Skeleton width={314} style={{display: 'block'}} count={5}/>
+                </div>
+                <div className={styles.content} style={{flex: '1 1 auto',}}>
+                  <Skeleton height={150} style={{display: 'block'}}/>
+                  <Skeleton style={{display: 'block'}} count={5}/>
+                  <Skeleton height={320} style={{display: 'block'}}/>
+                </div>
+                <div className={styles.left}>
+                  <Skeleton width={230} height={420} style={{display: 'block'}}/>
+                </div>
             </MediaQuery>
           }
         </main>

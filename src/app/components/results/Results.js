@@ -7,6 +7,7 @@ import Item from './components/item/item'
 import Select from './components/select/Select'
 
 import MediaQuery from 'react-responsive'
+import Skeleton from 'react-loading-skeleton';
 
 async function getHousing(options = {
     page: 1,
@@ -57,9 +58,6 @@ class Results extends React.Component {
 
     async componentDidMount() {
         // ширина окна
-        this.setState({
-            mounted: true
-        })
         let width = window.innerWidth;
 
         getHousing({
@@ -84,7 +82,8 @@ console.log('res', res);
             })
             this.setState({
                 housing: res.items,
-                houseCount: res.count
+                houseCount: res.count,
+                mounted: true
             })
         })
         await getHousingForMap().then(res => {
@@ -146,45 +145,87 @@ console.log('res', res);
                 <div className={styles.results__in}>
                     <div className={styles.results__header}>
                         <div className={styles.results__title}>
-                            <div>
-                                Продажа новостроек в Тюмени
-                            </div>
+                            {this.state.mounted ?  
+                                <div>
+                                    Продажа новостроек в Тюмени
+                                </div> : <Skeleton height={20} width={300} />
+                            }
                             <div id="sort-select">
-                                <Select
-                                    change={this.onChange}
-                                    options={[
-                                        {
-                                            value: "fresh_at_asc",
-                                            label: 'В начале новые',
-                                        },
-                                        {
-                                            value: "fresh_at_desc",
-                                            label: 'В начале старые'
-                                        },
-                                        {
-                                            value: "popularity_asc",
-                                            label: 'В начале популярные'
-                                        },
-                                        {
-                                            value: "popularity_desc",
-                                            label: 'В начале не популярные'
-                                        }
-                                    ]}
-                                />
+                                
+                                {this.state.mounted ?  
+                                    <Select
+                                        change={this.onChange}
+                                        options={[
+                                            {
+                                                value: "fresh_at_asc",
+                                                label: 'В начале новые',
+                                            },
+                                            {
+                                                value: "fresh_at_desc",
+                                                label: 'В начале старые'
+                                            },
+                                            {
+                                                value: "popularity_asc",
+                                                label: 'В начале популярные'
+                                            },
+                                            {
+                                                value: "popularity_desc",
+                                                label: 'В начале не популярные'
+                                            }
+                                        ]}
+                                    /> : <Skeleton height={30} width={150} />
+                                }
                             </div>
 
                         </div>
-
-                        <div className={styles.results__select}></div>
-                        <div className={styles.results__lighttext}>Найдено {this.state.houseCount}
+                        {this.state.mounted ?  
+                            <div className={styles.results__lighttext}>Найдено {this.state.houseCount}
                             {
                                 this.state.houseCount % 100 < 20 && this.state.houseCount % 100 > 10 ? ' предложений' :
                                     this.state.houseCount % 10 === 1 ? ' предложение' :
                                         this.state.houseCount % 10 < 5 && this.state.houseCount % 10 > 0 ? ' предложения' :
                                             ' предложений'
-                            }</div>
-                        <div className={styles.results__subtitle}>Услуги компании бесплатны</div>
+                            }</div> : <Skeleton height={20} width={200} />
+                        }
+                        {this.state.mounted ?  
+                            <div className={styles.results__subtitle}>Услуги компании бесплатны</div> : <Skeleton height={20} width={250} />
+                        }
+                        
                     </div>
+
+                    {!this.state.mounted && 
+                        <>
+                            <div className={styles.results__content}>
+                                <div className={styles.results__box}>
+                                    {
+                                        Array.from(Array(this.state.pageData.pageSize).keys()).map((item) => (
+                                            <Skeleton height={300}/>
+                                        ))
+                                    }
+                                </div>
+                                <MediaQuery minDeviceWidth={768}>
+                                    <div className={styles.results__map}>
+                                        <div className={styles.results__map_in}>
+                                            <div className={styles.results__map_in}>
+                                                <Skeleton height={'100%'}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </MediaQuery>
+                            </div>
+                            <div className={styles.results__pagination}>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                                <Skeleton height={40} width={40} circle={true}/>
+                            </div> 
+                        </>
+                    }
                     {this.state.mounted &&
                         <MediaQuery minDeviceWidth={768}>
                             <div className={styles.results__content}>
@@ -205,7 +246,6 @@ console.log('res', res);
                                             >
                                                 {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
                                             </Clusterer>
-                                                <div className={styles.results__map_scroller}></div>
                                         </Map>
                                     </YMaps>
                                 </div>
