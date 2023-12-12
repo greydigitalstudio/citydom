@@ -84,7 +84,7 @@ const Item = (props) => {
 
     return (
         <div className={styles.item}>
-            <Link href={`/inner?id=${props.item.id}`}>
+            <div>
                 <div className={styles.item__in}>
                     <div className={styles.item__dates} >
                         <div className={styles.item__updated}>
@@ -94,7 +94,7 @@ const Item = (props) => {
                             Внесён {getDate(new Date(props.item.createdAt))}
                         </div>
                     </div>
-                    <div className={styles.item__img_wrap}>
+                    <Link href={`/inner?id=${props.item.id}`} className={styles.item__img_wrap}>
                         <img className={styles.item__img} src={image} alt="" />
                         {props.item.minFlatPrice &&
                             <div className={styles.item__cost}>
@@ -107,7 +107,7 @@ const Item = (props) => {
                                 от {String(props.item.minFlatPrice).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, "$1 ")} ₽ &nbsp;
                             </div>
                         }
-                    </div> 
+                    </Link> 
 
                     <div className={styles.item__star}
                         style={{ display: "none" }}
@@ -128,7 +128,7 @@ const Item = (props) => {
                         <div></div>
                     </div>
 
-                    <div className={styles.item__row}>
+                    <Link href={`/inner?id=${props.item.id}`} className={styles.item__row}>
                         <div className={styles.item__address}>
                             {/* <Pin /> */}
                             <div className={styles.item__address_text}>
@@ -141,7 +141,7 @@ const Item = (props) => {
                             </div>
                         }
 
-                    </div>
+                    </Link>
 
                     <div className={styles.item__row}>
 
@@ -181,16 +181,16 @@ const Item = (props) => {
 
 
                     <div className={styles.item__row}>
-                        <div className={styles.item__phone}>
+                        <a href={`tel:${phone(props.item.publicPhone)}`} className={styles.item__phone}>
                             <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M2.07272 0.500008C2.4338 0.500008 2.79019 0.495321 3.15127 0.500008C3.70461 0.509383 4.1032 0.907821 4.12196 1.46095C4.1454 2.15001 4.22512 2.8297 4.43614 3.48595C4.57213 3.90313 4.50648 4.27345 4.21574 4.61563C3.90156 4.98595 3.62489 5.3797 3.34353 5.77345C3.30132 5.83438 3.29195 5.96563 3.32946 6.03595C4.04693 7.4047 5.09265 8.44532 6.45724 9.16251C6.52758 9.20001 6.65889 9.19532 6.71985 9.14845C7.13251 8.85313 7.54048 8.54845 7.93438 8.23438C8.22512 8.00001 8.544 7.9297 8.8957 8.03751C9.60379 8.24845 10.3213 8.36563 11.0622 8.3797C11.5968 8.38907 11.9953 8.81095 12 9.35001C12.0047 10.0672 12.0047 10.7891 12 11.5063C11.9953 12.0969 11.5827 12.5 10.9871 12.4953C8.91914 12.4813 6.98714 11.9469 5.24271 10.8453C2.55572 9.14845 0.862872 6.73907 0.225122 3.62188C0.0844425 2.93282 0.0469278 2.21563 0.00941313 1.50782C-0.0327909 0.917196 0.403317 0.509383 0.994173 0.500008C1.35056 0.500008 1.71164 0.500008 2.07272 0.500008Z" fill="black" />
                             </svg>
                             {phone(props.item.publicPhone)}
-                        </div>
+                        </a>
                     </div>
 
                 </div>
-            </Link>
+            </div>
             {/*mounted && <MediaQuery minWidth={768}>
                 <Link href={`/inner?id=${props.item.id}`}>
                     <div className={styles.item__in}>

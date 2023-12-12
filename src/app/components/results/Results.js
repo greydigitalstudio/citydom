@@ -194,7 +194,7 @@ console.log('res', res);
                     </div>
 
                     {!this.state.mounted && 
-                        <>
+                        <div>
                             <div className={styles.results__content}>
                                 <div className={styles.results__box}>
                                     {
@@ -203,15 +203,13 @@ console.log('res', res);
                                         ))
                                     }
                                 </div>
-                                <MediaQuery minDeviceWidth={768}>
-                                    <div className={styles.results__map}>
+                                <div className={styles.results__map}>
+                                    <div className={styles.results__map_in}>
                                         <div className={styles.results__map_in}>
-                                            <div className={styles.results__map_in}>
-                                                <Skeleton height={'100%'}/>
-                                            </div>
+                                            <Skeleton height={'100%'}/>
                                         </div>
                                     </div>
-                                </MediaQuery>
+                                </div>
                             </div>
                             <div className={styles.results__pagination}>
                                 <Skeleton height={40} width={40} circle={true}/>
@@ -224,7 +222,7 @@ console.log('res', res);
                                 <Skeleton height={40} width={40} circle={true}/>
                                 <Skeleton height={40} width={40} circle={true}/>
                             </div> 
-                        </>
+                        </div>
                     }
                     {this.state.mounted &&
                         <MediaQuery minDeviceWidth={768}>

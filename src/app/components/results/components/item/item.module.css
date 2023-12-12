@@ -9,6 +9,7 @@
     overflow: hidden;
     border-radius: 15px;
     position: relative;
+    display: block;
 }
 .item__img {
     width: 100%;
@@ -223,6 +224,7 @@
     .item__img_wrap {
         width: 100%;
         aspect-ratio: 3/2;
+        display: block;
     }
 
     .item__mortgage {

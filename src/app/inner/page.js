@@ -126,6 +126,8 @@ export default class Test extends React.Component {
       filteredLayouts: layouts,
       loaded: true
     })
+
+    console.log(this.state);
   }
 
   render() {
@@ -146,7 +148,9 @@ export default class Test extends React.Component {
           {
             this.state.loaded &&
             <MediaQuery minWidth={768}>
+              
               <div className={styles.left}>
+              
                 <Filter
                   change={this.changeSection}
                   layouts={this.state.filteredLayouts}
@@ -216,7 +220,7 @@ export default class Test extends React.Component {
 
           {
             !this.state.loaded && 
-              <MediaQuery minWidth={768}>
+              <>
                 <div className={styles.left}>
                   <Skeleton width={314} height={320} style={{display: 'block'}}/>
 
@@ -230,7 +234,7 @@ export default class Test extends React.Component {
                 <div className={styles.left}>
                   <Skeleton width={230} height={420} style={{display: 'block'}}/>
                 </div>
-            </MediaQuery>
+            </>
           }
         </main>
       </>
