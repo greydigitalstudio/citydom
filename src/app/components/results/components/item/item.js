@@ -94,7 +94,7 @@ const Item = (props) => {
                             Внесён {getDate(new Date(props.item.createdAt))}
                         </div>
                     </div>
-                    <Link href={`/inner?id=${props.item.id}`} className={styles.item__img_wrap}>
+                    <Link href={`/${props.item.id}`} className={styles.item__img_wrap}>
                         <img className={styles.item__img} src={image} alt="" />
                         {props.item.minFlatPrice &&
                             <div className={styles.item__cost}>
@@ -128,7 +128,7 @@ const Item = (props) => {
                         <div></div>
                     </div>
 
-                    <Link href={`/inner?id=${props.item.id}`} className={styles.item__row}>
+                    <Link href={`/${props.item.id}`} className={styles.item__row}>
                         <div className={styles.item__address}>
                             {/* <Pin /> */}
                             <div className={styles.item__address_text}>
