@@ -69,16 +69,33 @@ export default function Page({ params }) {
           </div>
       </div>
       <main className={`${styles.main} ${styles.center}`}>
-        <div className={styles.left}></div>
+        <div className={styles.left}>
+          <Filter
+            change={this.changeSection}
+            layouts={this.state.filteredLayouts}
+            filteredLayouts={this.state.filteredLayouts}
+            filter={this.filterLayouts}
+            chess={this.state.chess}
+            section={this.state.section}
+            setHouse={this.setHouse}
+            setPorche={this.setPorche}
+            data={this.state.data}
+            house={this.state.house}
+            porche={this.state.porche}
+            photoIndex={this.state.photoIndex}
+            setPhoto={this.setPhoto}
+          />
+          <Privilege data={this.state.data} />
+        </div>
         <div className={styles.content}>
-          {/* <Content
-            data={data}
-            section={section}
-            layouts={filteredLayouts}
-            house={house}
-            porche={porche}
-            openDescription={oppenDescription}
-          /> */}
+          <Content
+            data={this.state.data}
+            section={this.state.section}
+            layouts={this.state.filteredLayouts}
+            house={this.state.house}
+            porche={this.state.porche}
+            openDescription={this.oppenDescription}
+          />
         </div>
         <div className={styles.left}>
           <Consultation data={data} />
