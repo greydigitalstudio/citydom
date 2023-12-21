@@ -70,7 +70,7 @@ export default function Page({ params }) {
       </div>
       <main className={`${styles.main} ${styles.center}`}>
         <div className={styles.left}>
-          <Filter
+          {/* <Filter
             change={this.changeSection}
             layouts={this.state.filteredLayouts}
             filteredLayouts={this.state.filteredLayouts}
@@ -85,17 +85,17 @@ export default function Page({ params }) {
             photoIndex={this.state.photoIndex}
             setPhoto={this.setPhoto}
           />
-          <Privilege data={this.state.data} />
+          <Privilege data={this.state.data} /> */}
         </div>
         <div className={styles.content}>
-          <Content
+          {/* <Content
             data={this.state.data}
             section={this.state.section}
             layouts={this.state.filteredLayouts}
             house={this.state.house}
             porche={this.state.porche}
             openDescription={this.oppenDescription}
-          />
+          /> */}
         </div>
         <div className={styles.left}>
           <Consultation data={data} />
