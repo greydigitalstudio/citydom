@@ -59,6 +59,15 @@ export default function Page({ params }) {
     setFilteredLayouts(layouts);
   }
 
+  const changeHouse = (house) => {
+    setHouse(house);
+  }
+
+  const changePorche = (porche) => {
+    setPorche(porche);
+  }
+
+
   useEffect( () => {
       fetch(`https://tyumen.citidom.com/housing-estate/${params.slug}/public`).then(res => res.json()).then(result => {
         setData(result);
