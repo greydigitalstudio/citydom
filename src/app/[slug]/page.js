@@ -36,6 +36,8 @@ export default function Page({ params }) {
   const [porche, setPorche] = useState(0);
 
 
+
+
   const oppenDescription = () => {
     setData({
       data: {
@@ -46,6 +48,16 @@ export default function Page({ params }) {
     })
   }
 
+
+  const changeSection = (section) => {
+    setSection(section)
+  }
+
+
+
+  const filterLayouts = (layouts) => {
+    setFilteredLayouts(layouts);
+  }
 
   useEffect( () => {
       fetch(`https://tyumen.citidom.com/housing-estate/${params.slug}/public`).then(res => res.json()).then(result => {
