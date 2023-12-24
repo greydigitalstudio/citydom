@@ -54,7 +54,7 @@ const Filter = (props) => {
                 case 'mortgagePayment':
                     title = `${numberWithSpaces(filters[key])}`;
                     break;
-                case 'room':
+                case 'rooms':
                     title = `${filters[key] === "0" ? "" : filters[key]} ${filters[key] === '0' ? "Студия" : "комн"}`;
                     break;
                 case 'priceMin':
@@ -87,10 +87,10 @@ const Filter = (props) => {
                 case 'spaceKitchenMax':
                     title = `кухня до ${numberWithSpaces(filters[key])} м2`;
                     break;
-                case 'year_from':
+                case 'builtYearFrom':
                     title = `Срок ввода дома от ${filters[key]}`;
                     break;
-                case 'year_to':
+                case 'builtYearTo':
                     title = `Срок ввода дома до ${filters[key]}`;
                     break;
                 case 'multilevel':
@@ -196,7 +196,7 @@ const Filter = (props) => {
                             <div className={styles.filter__form_section}>
                                 <div className={styles.filter__row}>
                                     <RadioGroup
-                                        onChange={(e) => setFilters({ ...filters, room: e.target.value })}
+                                        onChange={(e) => setFilters({ ...filters, rooms: [e.target.value] })}
                                         title="Комнатность"
                                         value={filters.rooms}
                                         options={[
@@ -317,15 +317,15 @@ const Filter = (props) => {
                                     <FromTo
                                         title="Срок ввода дома"
                                         from_type="number"
-                                        from_name="year_from"
+                                        from_name="builtYearFrom"
                                         from_placeholder="1998"
                                         to_type="number"
-                                        to_name="year_to"
+                                        to_name="builtYearTo"
                                         to_placeholder="2020"
-                                        from={filters.year_from}
-                                        to={filters.year_to}
-                                        changeFrom={(e) => setFilters({ ...filters, year_from: e.target.value })}
-                                        changeTo={(e) => setFilters({ ...filters, year_to: e.target.value })}
+                                        from={filters.builtYearFrom}
+                                        to={filters.builtYearTo}
+                                        changeFrom={(e) => setFilters({ ...filters, builtYearFrom: e.target.value })}
+                                        changeTo={(e) => setFilters({ ...filters, builtYearTo: e.target.value })}
                                     />
                                     <Switch
                                         title="Многоуровневая"
@@ -509,6 +509,7 @@ const Filter = (props) => {
             }
             {mounted &&
                 <MediaQuery maxWidth={767}>
+                    {JSON.stringify(filters)}
                     <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
                     <div className={styles.filter__in}>
                         <div className={styles.filter__form}>
@@ -543,10 +544,10 @@ const Filter = (props) => {
                                 </div>
                                 <div className={styles.filter__row}>
                                     <TextInput
-                                        onChange={(e) => setFilters({ ...filters, place: e.target.value })}
-                                        value={filters.place}
+                                        onChange={(e) => setFilters({ ...filters, q: e.target.value })}
+                                        value={filters.q}
                                         type="text"
-                                        name="place"
+                                        name="й"
                                         title="Местоположение"
                                         placeholder="Введите район или ЖК"
                                     />
@@ -561,37 +562,37 @@ const Filter = (props) => {
                                     />
                                     <TextInput
                                         onChange={(e) => setFilters({ ...filters, priceMax: e.target.value })}
-                                        value={filters.priceMin}
+                                        value={filters.priceMax}
                                         type="number"
                                         name="priceMax"
                                         placeholder="Цена до"
                                     />
 
 
-                                </div>
+                                </div>builtYearFrom
                                 <div className={styles.filter__row}>
                                     <TextInput
-                                        onChange={(e) => setFilters({ ...filters, payment: e.target.value })}
-                                        value={filters.payment}
+                                        onChange={(e) => setFilters({ ...filters, mortgagePayment: e.target.value })}
+                                        value={filters.mortgagePayment}
                                         type="number"
-                                        name="payment"
+                                        name="mortgagePayment"
                                         title="Ваш комфортный платеж по ипотеке"
                                         placeholder="Введите сумму платежа"
                                     />
                                 </div>
                                 <div className={styles.filter__row}>
                                     <TextInput
-                                        onChange={(e) => setFilters({ ...filters, year_from: e.target.value })}
-                                        value={filters.year_from}
+                                        onChange={(e) => setFilters({ ...filters, builtYearFrom: e.target.value })}
+                                        value={filters.builtYearFrom}
                                         type="text"
-                                        name="year_from"
+                                        name="builtYearFrom"
                                         placeholder="Срок ввода от"
                                     />
                                     <TextInput
-                                        onChange={(e) => setFilters({ ...filters, year_to: e.target.value })}
-                                        value={filters.year_to}
+                                        onChange={(e) => setFilters({ ...filters, builtYearTo: e.target.value })}
+                                        value={filters.builtYearTo}
                                         type="text"
-                                        name="year_to"
+                                        name="builtYearTo"
                                         placeholder="до"
                                     />
                                 </div>
