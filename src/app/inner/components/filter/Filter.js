@@ -23,29 +23,29 @@ const Filter = (props) => {
     (item) => item.house.title === house.title
   );
 
-  /*const rooms = props.house.porches.map(i => i.storeys[0])[0].flats.map(j => j.rooms).sort()*/
+  /*const rooms = props?.house?.porches?.map(i => i.storeys[0])[0].flats.map(j => j.rooms).sort()*/
 
-  /*console.log(props.house.porches.map(i => i.storeys.map(k => k.flats)))*/
+  /*console.log(props?.house?.porches?.map(i => i.storeys.map(k => k.flats)))*/
 
   let rooms = []
   
   let r1 = []
 
-  r1 = r1.concat(props.house.porches.map(i => i.storeys.map(k => k.flats.map(j => j.rooms))))
+  r1 = r1.concat(props?.house?.porches?.map(i => i.storeys.map(k => k.flats.map(j => j.rooms))))
 
-  const porshes = props.house.porches.map(j => j.number)
+  const porshes = props?.house?.porches?.map(j => j.number)
 
-  r1.forEach(f => {
-    f.forEach(x => {
+  r1?.forEach(f => {
+    f?.forEach(x => {
       rooms = rooms.concat(x).sort()
     })
   })
   
-  const porsh1 = porshes.filter(r => r === '1')
-  const porsh2 = porshes.filter(r => r === '2')
-  const porsh3 = porshes.filter(r => r === '3')
-  const porsh4 = porshes.filter(r => r === '4')
-  const porsh5 = porshes.filter(r => r === '5')
+  const porsh1 = porshes?.filter(r => r === '1')
+  const porsh2 = porshes?.filter(r => r === '2')
+  const porsh3 = porshes?.filter(r => r === '3')
+  const porsh4 = porshes?.filter(r => r === '4')
+  const porsh5 = porshes?.filter(r => r === '5')
 
   const rooms0 = rooms.filter(r => r === 0)
   const rooms1 = rooms.filter(r => r === 1)
@@ -68,7 +68,7 @@ const Filter = (props) => {
       return x;
   }
 
-  let photo = "https://files.citidom.com/" + data.photos[0].name;
+  let photo = "https://files.citidom.com/" + data?.photos[0]?.name;
 
   let photos = data.photos.map((item) => {
     return "https://files.citidom.com/" + item.name;

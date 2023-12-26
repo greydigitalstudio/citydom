@@ -28,8 +28,10 @@ import { Asap_Condensed } from 'next/font/google';
 
 
 export default function Page({ params }) {
+  const [mounted, setMounted] = useState(false);
   const [data, setData] = useState({});
   const [photos, setPhotos] = useState([]);
+  const [chess, setChess] = useState([]);
   const [section, setSection] = useState("floats");
   const [filteredLayouts, setFilteredLayouts] = useState([]);
   const [house, setHouse] = useState(null);
@@ -68,12 +70,20 @@ export default function Page({ params }) {
   }
 
 
+
   useEffect( () => {
       fetch(`https://tyumen.citidom.com/housing-estate/${params.slug}/public`).then(res => res.json()).then(result => {
         setData(result);
         setPhotos(result.photos);
         console.log('photos', photos);
       });
+      fetch(`https://tyumen.citidom.com/housing-estate/${params.slug}/chess`).then(res => res.json()).then(result => {
+        setChess(result.houses);
+        setHouse(result.houses[0]);
+        console.log('chess', chess);
+      });
+
+      setMounted(true);
   }, []);
 
   return (
@@ -91,28 +101,35 @@ export default function Page({ params }) {
       </div>
       <main className={`${styles.main} ${styles.center}`}>
         <div className={styles.left}>
-          {/* <Filter
-            change={this.changeSection}
-            layouts={this.state.filteredLayouts}
-            filteredLayouts={this.state.filteredLayouts}
-            filter={this.filterLayouts}
-            chess={this.state.chess}
-            section={this.state.section}
-            setHouse={this.setHouse}
-            setPorche={this.setPorche}
-            data={this.state.data}
-            house={this.state.house}
-            porche={this.state.porche}
-            photoIndex={this.state.photoIndex}
-            setPhoto={this.setPhoto}
-          />
-          <Privilege data={this.state.data} /> */}
+          {
+            mounted ? 
+              <>
+                <Filter
+                  change={changeSection}
+                  layouts={filteredLayouts}
+                  filteredLayouts={filteredLayouts}
+                  filter={filterLayouts}
+                  chess={chess}
+                  section={section}
+                  setHouse={changeHouse}
+                  setPorche={changePorche}
+                  data={data}
+                  house={house}
+                  porche={porche}
+                  photoIndex={0}
+                  setPhoto={null}
+                /> 
+                <Privilege data={data} />
+              </>
+            : false
+            
+          }
         </div>
         <div className={styles.content}>
           {/* <Content
             data={this.state.data}
             section={this.state.section}
-            layouts={this.state.filteredLayouts}
+            layouts={filteredLayouts}
             house={this.state.house}
             porche={this.state.porche}
             openDescription={this.oppenDescription}
