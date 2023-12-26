@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Privilege from "../privilege/Privilege";
 
 import Link from "next/link";
-import { Holtwood_One_SC, M_PLUS_Rounded_1c, Noto_Sans_Tamil_Supplement } from "next/font/google";
+// import { Holtwood_One_SC, M_PLUS_Rounded_1c, Noto_Sans_Tamil_Supplement } from "next/font/google";
 
 const Filter = (props) => {
   const [mounted, setMounted] = useState(false);
