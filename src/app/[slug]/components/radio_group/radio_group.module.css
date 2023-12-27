@@ -41,6 +41,9 @@
     background: #F7C026;
     color: #2C2C2E;
 }
+.radio_group_item_dark {
+    color: #000;
+}
 
 .filter__field input {
     width: 100%;
