@@ -44,6 +44,25 @@ export default function Page({ params }) {
   const [selectedPorche, setSelectedPorche] = useState(null);
   const [selectedRooms, setSelectedRooms] = useState([]);
 
+  const [modalLayout, setModalLayout] = useState(null)
+  const [modal, setModal] = useState(false)
+
+
+  function showModal({ target }) {
+      while (!target.id) {
+          target = target.parentNode
+      }
+      let layoutId = target.id.split('-')[1]
+      let layout = layouts.filter(item => item.id === parseInt(layoutId))[0]
+
+      console.log(layout);
+      setModalLayout(layout)
+      setModal(true)
+  }
+
+  function closeModal() {
+      setModal(false)
+  }
 
   const onRoomsChange = (e) => {
     let options = [...selectedRooms];
@@ -325,8 +344,8 @@ export default function Page({ params }) {
                         item.storeys.map((storey) => {
                           return <div className={styles.content__chess_storey}>
                             {
-                              storey.flats.map((flat) => {
-                                return <div className={`${styles.content__chess_flat} ${selectedPorche.number == flat.porch.number && selectedRooms.includes(flat.rooms) ? styles.content__chess_flat_displayed : styles.content__chess_flat_hidden}`}>
+                              storey?.flats?.map((flat) => {
+                                return <div className={`${styles.content__chess_flat} ${selectedPorche.number == flat?.porch?.number && selectedRooms.includes(flat.rooms) ? styles.content__chess_flat_displayed : styles.content__chess_flat_hidden}`}>
                                   { flat.price !== '0' ? calcPrice(flat.price) : false }
                                 </div>
                               })
@@ -345,7 +364,7 @@ export default function Page({ params }) {
                         {
                             layouts.map((item, index) => {
                                 return (
-                                    <div className={styles.content__layout} id={"layout-" + item.id} key={index}>
+                                    <div className={styles.content__layout} id={"layout-" + item.id} key={index} onClick={showModal}>
                                         <div className={styles.content__layout_wrapper}>
                                             <div className={styles.content__layout_image}>
                                                 <img src={"https://files.citidom.com/" + item.layout} alt="" />
@@ -374,7 +393,49 @@ export default function Page({ params }) {
 
                     </div>
                 }
+                <div className={styles.content__button}>
+                    Скачать презентацию этого проекта
+                </div>
           </div>
+          {modal &&
+                <div className={styles.content__modal}>
+                    <div className={styles.content__modal_wrapper}>
+                        <div className={styles.content__modal_close} onClick={closeModal}>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.5 1.5L14.5 14.5" stroke="white" strokeWidth="2" />
+                                <path d="M14.5 1.5L1.5 14.5" stroke="white" strokeWidth="2" />
+                            </svg>
+                        </div>
+                        <div className={styles.content__modal_content}>
+                            <div className={styles.content__modal_image}>
+                                <img src={"https://files.citidom.com/" + modalLayout.layout} alt="" />
+                            </div>
+                            {/* {JSON.stringify(modalLayout)} */}
+                            <div className={styles.content__modal_info}>
+                                <div className={styles.content__modal_title}>
+                                    {modalLayout.estate.title}
+                                </div>
+                                <div className={styles.content__modal_text}>
+                                    {modalLayout.rooms} - комнатная
+                                </div>
+                                <div className={styles.content__modal_text}>
+                                    {modalLayout.spaceTotal} кв.м.
+                                </div>
+                                <div className={styles.content__modal_text}>
+                                    {modalLayout.storey.number}-этаж
+                                </div>
+                                <div className={styles.content__modal_text}>
+                                    {modalLayout.house.quarter}-квартал {modalLayout.house.year} года.
+                                </div>
+                                <div className={styles.content__modal_button}>
+                                    Купить со скидкой
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
         </div> : <div className={styles.content}>
             <div className={styles.content__wrapper}>
               <Skeleton style={{display: 'block'}} width={'100%'} height={'100%'} />

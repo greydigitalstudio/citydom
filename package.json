@@ -5,7 +5,7 @@
   "homepage": "https://greydigitalstudio.github.io/citydom",
   "scripts": {
     "predeploy": "",
-    "deploy": "gh-pages -d out",
+    "deploy": "npm run build && gh-pages -d dist",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

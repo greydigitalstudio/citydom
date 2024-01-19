@@ -5,9 +5,27 @@
     align-items: center;
     border: 1px solid #D6D6D6;
     border-radius: 4px;
-    overflow: hidden;
+    overflow: auto;
     width: min-content;
+    max-width: 100%;
 }
+
+
+.radio_group::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  /* Track */
+  .radio_group::-webkit-scrollbar-track {
+    background: #ECECEC;
+    border-radius: 2px;
+  }
+  
+  /* Handle */
+  .radio_group::-webkit-scrollbar-thumb {
+    background: #F7C026;
+    border-radius: 2px;
+  }
 
 .radio_group__label input {
     display: none;
