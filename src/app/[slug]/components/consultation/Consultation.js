@@ -14,14 +14,16 @@ const Consultation = ({data}) => {
             </div>
 
             <div className={styles.consultation__content}>
-                <div className={styles.consultation__text}>
-                    Проконсультирую и помогу купить с выгодой  и без комиссии
-                </div>
-                <a href={`tel: +7${data?.owner?.phone}`} className={styles.consultation__text_bold}>
+                
+                
+                {data?.owner && <div className={styles.consultation__text}>Проконсультирую и помогу купить с выгодой  и без комиссии</div>}
+                
+                {data?.owner && <a href={`tel: +7${data?.owner?.phone}`} className={styles.consultation__text_bold}>
                     <Phone /> {`+7${data?.owner?.phone}`}
-                </a>
+                </a>}
+                
                 <div className={styles.consultation__text}>
-                    или оставьте номер я позвоню вам через 2 мминуты
+                {data?.owner ? 'или о' : 'О'}ставьте номер я позвоню вам через 2 мминуты
                 </div>
             </div>
 

@@ -27,7 +27,6 @@
 
 .filter {
   padding: 22px;
-  width: 314px;
   background: #FFFFFF;
   box-shadow: 0px 4px 22px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
@@ -264,6 +263,7 @@
   .content__flats {
     overflow-x: scroll;
     margin-top: 20px;
+    padding-bottom: 20px;
   }
 
   .content__flats_item {
@@ -708,8 +708,14 @@
 .content {
   max-width: 514px;
 }
-.main .right {
+.main .left {
+  width: 314px;
+}
+.main .content {
   flex: 1 1 auto;
+}
+.main .right {
+  width: 230px;
 }
 
 .item__flatscount {
@@ -823,25 +829,48 @@
 .content__flats {
   overflow-x: scroll;
   max-width: 546px;
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+  padding-bottom: 28px;
+}
+.content__chess_porch {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 17px;
+}
+.content__chess_storey {
+  display: flex;
+  gap: 10px;
 }
 
-.content__flats_item {
+.content__chess_flat {
   font-style: normal;
   font-weight: 400;
   font-size: 13.7251px;
   line-height: 17px;
   /* identical to box height */
-
+  width: 63px;
   letter-spacing: -0.055em;
   min-height: 37px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #595757;
+  
+  
   white-space: nowrap;
   background: #F9F9F9;
   border-radius: 5.30202px;
   padding: 10px 5px;
+  
+}
+.content__chess_flat_displayed {
+  color: #595757;
+}
+.content__chess_flat_hidden {
+  color: #F9F9F9;
+  user-select: none;
 }
 
 .content__flats_row {
@@ -861,12 +890,11 @@
   font-style: normal;
   font-weight: 600;
   font-size: 13.7251px;
-  line-height: 16px;
+  line-height: 37px;
   text-align: center;
   letter-spacing: -0.055em;
 
   color: #000000;
-  margin-top: 9px;
 }
 
 .content__flats_index_first {

@@ -38,6 +38,7 @@ export default function Page({ params }) {
   const [photos, setPhotos] = useState([]);
   const [chess, setChess] = useState([]);
   const [section, setSection] = useState("floats");
+  const [layouts, setLayouts] = useState([]);
 
   const [selectedHouse, setSelectedHouse] = useState(null);
   const [selectedPorche, setSelectedPorche] = useState(null);
@@ -61,19 +62,43 @@ export default function Page({ params }) {
     setSelectedRooms(options);
   }
 
+  const calcPrice = (price) => {
+    if (price == "0") return '0'
+    return (price / 1000000).toFixed(1) + ' млн'
+  }
+
   const onPorcheChange = (porche) => {
     setSelectedPorche(porche)
-    setSelectedRooms([])
+    setSelectedRooms([...porche.saleRooms])
   }
 
   const setHouse = (house) => {
     setSelectedHouse(house);
     setSelectedPorche(house.porches ? house.porches[0] : null)
-    setSelectedRooms([])
+    fetchChess(house.id)
+    console.log('selectedPorche?.saleRooms', selectedPorche)
+    setSelectedRooms(house.porches ? house.porches[0].saleRooms : null)
     
   }
 
+  const fetchChess = async (houseId) => {
+    setChess([]);
+    await fetch(`https://tyumen.citidom.com/housing-estate/house/${houseId}/chess`).then(res => res.json()).then(result => {
+      console.log('result', result?.porches)
+      setChess(result?.porches);
+    });
+    setMounted(true);
+  }
 
+  const fetchLayouts = async (houseId) => {
+    setChess([]);
+    await fetch(`https://tyumen.citidom.com/housing-estate/${houseId}/layouts`).then(res => res.json()).then(result => {
+      console.log('fetchLayouts', result.items)
+      // setChess(result?.porches);
+      setLayouts(result.items)
+    });
+    // setMounted(true);
+  }
 
   const fetchData = async () => {
     await fetch(`https://tyumen.citidom.com/housing-estate/${params.slug}/public`).then(res => res.json()).then(result => {
@@ -81,20 +106,18 @@ export default function Page({ params }) {
 
       result.houses ? setSelectedHouse(result.houses[0]) : null;
       result.houses ? setSelectedPorche(result.houses[0].porches ? result.houses[0].porches[0] : null) : null;
-
+      result.houses ? setSelectedRooms(result.houses[0].porches ? result.houses[0].porches[0].saleRooms : []) : null;
       setPhotos(result.photos);
-      
+
+      fetchChess(result.houses[0] ? result.houses[0].id : null)
+      fetchLayouts(result.houses[0] ? result.houses[0].id : null)
       console.log('photos', result.photos);
       console.log('data', result);
     });
 
-    await fetch(`https://tyumen.citidom.com/housing-estate/house/porch/storey/flat/all`).then(res => res.json()).then(result => {
-      
-      setChess(result.items);
-      console.log('chess', result.items);
-    });
+    // 
 
-    setMounted(true);
+    
     console.log('setMounted(true);');
   }
 
@@ -166,10 +189,13 @@ export default function Page({ params }) {
                     <button className={styles.filter__row_button} onClick={() => {setSection('floats')}}>
                       <Checkerboard selected={section == "floats"} /> Шахматка{" "}
                     </button>
-                    <div className={styles.filter__row_vertical_divider}></div>
-                    <button className={styles.filter__row_button} onClick={() => {setSection('layouts')}}>
-                      <Layouts selected={section == "layouts"} /> Планировки
-                    </button>
+                    {layouts ? <>
+                        <div className={styles.filter__row_vertical_divider}></div>
+                        <button className={styles.filter__row_button} onClick={() => {setSection('layouts')}}>
+                          <Layouts selected={section == "layouts"} /> Планировки
+                        </button> 
+                      </> : false
+                    }
                   </div>
                   {
                     data.houses.map((house, index) => {
@@ -245,7 +271,7 @@ export default function Page({ params }) {
             
           }
         </div>
-        <div className={styles.content}>
+        { mounted ? <div className={styles.content}>
           <div className={styles.content__wrapper}>
             <div className={styles.content__title}>
                 {/* <Pin /> */}
@@ -275,57 +301,51 @@ export default function Page({ params }) {
                 </div>
                 <div className={styles.content__description_text}>
                     {data.description}
-
-                    {section}
-          {selectedHouse?.title}
-          {JSON.stringify(selectedPorche)}
-          {JSON.stringify(selectedRooms)}
-                    {/*
-                        !data.descriptionOpened &&
-                        <div className={styles.content__description_opener}>
-                            Показать ещё
-                        </div>
-                  */}
                 </div>
             </div>
-          </div>
 
-          {/*section === 'floats' &&
-                    <div className={styles.content__flats}>
+            {section === 'floats' &&
+              <div className={styles.content__flats}>
+                {/* {JSON.stringify(chess)} */}
+                <div className={styles.content__chess_porch}>
+                  {
+                    chess[0]?.storeys.map((storey, index) => {
+                      return <div className={styles.content__flats_index}>
                         {
-                            flats.map((row, index) => {
-                                maxCount < row.flats.length ? maxCount = row.flats.length : maxCount = maxCount;
-                            })
+                          chess[0]?.storeys.length - (index)
                         }
-                        {
-                            flats.map((row, index) => {
-                                return <div className={styles.content__flats_row} key={index}>
-                                    <div className={styles.content__flats_wrapper} style={{ gridTemplateColumns: `repeat(${maxCount + 1}, 80px)` }}>
-                                        <div className={index === 0 ? styles.content__flats_index_first : styles.content__flats_index}>
-                                            {row.number}
-                                        </div>
-                                        {
-                                            row.flats.map((item, index) => {
-                                                return (
-                                                    <div className={styles.content__flats_item} key={index} id={"layout-19193"} onClick={showModal}>
-                                                        {item}
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
+                      </div>
+                    })
+                  }
+                </div>
+                {
+                  chess.map((item) => {
+                    return selectedPorche.number == item.number ? <div className={styles.content__chess_porch}>
+                      {
+                        item.storeys.map((storey) => {
+                          return <div className={styles.content__chess_storey}>
+                            {
+                              storey.flats.map((flat) => {
+                                return <div className={`${styles.content__chess_flat} ${selectedPorche.number == flat.porch.number && selectedRooms.includes(flat.rooms) ? styles.content__chess_flat_displayed : styles.content__chess_flat_hidden}`}>
+                                  { flat.price !== '0' ? calcPrice(flat.price) : false }
                                 </div>
-                            })
-                        }
-                    </div>
+                              })
+                            }
+                          </div>
+                        })
+                      }
+                    </div> : false;
+                  })
                 }
-                {section === 'layouts' &&
+              </div> 
+            }
+            {section === 'layouts' &&
                     <div className={styles.content__layouts}>
 
                         {
                             layouts.map((item, index) => {
                                 return (
-                                    <div className={styles.content__layout} id={"layout-" + item.id} key={index} onClick={showModal}>
+                                    <div className={styles.content__layout} id={"layout-" + item.id} key={index}>
                                         <div className={styles.content__layout_wrapper}>
                                             <div className={styles.content__layout_image}>
                                                 <img src={"https://files.citidom.com/" + item.layout} alt="" />
@@ -353,17 +373,17 @@ export default function Page({ params }) {
                         }
 
                     </div>
-                      */}
-          
-          {/* <Content
-            data={this.state.data}
-            section={this.state.section}
-            layouts={filteredLayouts}
-            house={this.state.house}
-            porche={this.state.porche}
-            openDescription={this.oppenDescription}
-          /> */}
-        </div>
+                }
+          </div>
+        </div> : <div className={styles.content}>
+            <div className={styles.content__wrapper}>
+              <Skeleton style={{display: 'block'}} width={'100%'} height={'100%'} />
+              <Skeleton style={{display: 'block'}} width={'100%'} height={400} />
+              <Skeleton style={{display: 'block'}} width={'100%'} height={400} />
+            </div>
+          </div>
+        }
+        
         <div className={styles.right}>
           <Consultation data={data} />
         </div>
