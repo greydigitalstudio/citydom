@@ -14,15 +14,15 @@
 
 
 /* main */
-
-.main {
-  margin-top: 27px;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 35px 25px;
+@media all and (min-width: 1025px) {
+  .main {
+    margin-top: 27px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 35px 25px;
+  }
 }
-
 
 
 .filter {
@@ -708,14 +708,16 @@
 .content {
   max-width: 514px;
 }
-.main .left {
-  width: 314px;
-}
-.main .content {
-  flex: 1 1 auto;
-}
-.main .right {
-  width: 230px;
+@media all and (min-width: 1025px) {
+  .main .left {
+    width: 314px;
+  }
+  .main .content {
+    flex: 1 1 auto;
+  }
+  .main .right {
+    width: 230px;
+  }
 }
 
 .item__flatscount {

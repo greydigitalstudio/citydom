@@ -111,6 +111,7 @@ export default function Page({ params }) {
 
   const fetchLayouts = async (houseId) => {
     setChess([]);
+    console.log('houseId', houseId)
     await fetch(`https://tyumen.citidom.com/housing-estate/${houseId}/layouts`).then(res => res.json()).then(result => {
       console.log('fetchLayouts', result.items)
       // setChess(result?.porches);
@@ -129,56 +130,13 @@ export default function Page({ params }) {
       setPhotos(result.photos);
 
       fetchChess(result.houses[0] ? result.houses[0].id : null)
-      fetchLayouts(result.houses[0] ? result.houses[0].id : null)
+      fetchLayouts(params.slug ? params.slug : null)
       console.log('photos', result.photos);
       console.log('data', result);
     });
 
-    // 
-
     
-    console.log('setMounted(true);');
   }
-
-
-
-
-
-
-  // let flats = []
-
-  //   function price(price) {
-  //       if (price == "0") return ''
-  //       return (price / 1000000).toFixed(1) + ' млн'
-  //   }
-
-
-  //   for (let i = 0; i < selectedHouse.storeys.length; i++) {
-  //       flats.push({
-  //           number: selectedHouse.storeys[i].number,
-  //           flats: []
-  //       })
-  //       for (let j = 0; j < selectedHouse.storeys[i].flats.length; j++) {
-  //           flats[i].flats[j] = price(selectedHouse.storeys[i].flats[j].price)
-  //       }
-  //   }
-
-
-  //   function showModal({ target }) {
-  //       while (!target.id) {
-  //           target = target.parentNode
-  //       }
-  //       let layoutId = target.id.split('-')[1]
-  //       let layout = layouts.filter(item => item.id === parseInt(layoutId))[0]
-  //       setModalLayout(layout)
-  //       setModal(true)
-  //   }
-
-  //   function closeModal() {
-  //       setModal(false)
-  //   }
-
-  //   let maxCount = 0;
 
 
   useEffect( () => {
@@ -199,97 +157,99 @@ export default function Page({ params }) {
           </div>
       </div>
       <main className={`${styles.main} ${styles.center}`}>
-        <div className={styles.left}>
-          {
-            mounted ? 
-              <>
-                <div className={styles.filter}>
-                  <div className={styles.filter__row}>
-                    <button className={styles.filter__row_button} onClick={() => {setSection('floats')}}>
-                      <Checkerboard selected={section == "floats"} /> Шахматка{" "}
-                    </button>
-                    {layouts ? <>
-                        <div className={styles.filter__row_vertical_divider}></div>
-                        <button className={styles.filter__row_button} onClick={() => {setSection('layouts')}}>
-                          <Layouts selected={section == "layouts"} /> Планировки
-                        </button> 
-                      </> : false
-                    }
-                  </div>
-                  {
-                    data.houses.map((house, index) => {
-                      return (
-                        <div
-                          id={"house-" + index}
-                          key={index}
-                          className={styles.filter__row}
-                          onClick={() => {
-                            setHouse(house);
-                          }}
-                        >
+        {/* <MediaQuery minWidth={768}> */}
+          <div className={styles.left}>
+            {
+              mounted ? 
+                <>
+                  <div className={styles.filter}>
+                    <div className={styles.filter__row}>
+                      <button className={styles.filter__row_button} onClick={() => {setSection('floats')}}>
+                        <Checkerboard selected={section == "floats"} /> Шахматка{" "}
+                      </button>
+                      {layouts ? <>
+                          <div className={styles.filter__row_vertical_divider}></div>
+                          <button className={styles.filter__row_button} onClick={() => {setSection('layouts')}}>
+                            <Layouts selected={section == "layouts"} /> Планировки
+                          </button> 
+                        </> : false
+                      }
+                    </div>
+                    {
+                      data.houses.map((house, index) => {
+                        return (
                           <div
-                            className={
-                              house.id == selectedHouse.id
-                                ? styles.filter__button_primary
-                                : styles.filter__button_secondary
-                            }
+                            id={"house-" + index}
+                            key={index}
+                            className={styles.filter__row}
+                            onClick={() => {
+                              setHouse(house);
+                            }}
                           >
-                            {house.title}
+                            <div
+                              className={
+                                house.id == selectedHouse.id
+                                  ? styles.filter__button_primary
+                                  : styles.filter__button_secondary
+                              }
+                            >
+                              {house.title}
+                            </div>
+                          </div>
+                        );
+                      })
+                    }
+
+                    <div className={styles.filter__horizontal_divider}></div>
+                      {section == "floats" ? (
+                        <div className={styles.filter__radio_row}>
+                          <div className={styles__radio_group.filter__field}>
+                              <div className={styles__radio_group.filter__field_title}></div>
+                              <div className={styles__radio_group.radio_group}>
+                                  <span className={styles__radio_group.radio_group__label}>
+                                    <div className={`${styles__radio_group.radio_group_item} ${styles__radio_group.radio_group_item_dark}`}>
+                                      Подъезд
+                                    </div>
+                                  </span>
+                                  {selectedHouse?.porches?.map((porche, index) => 
+                                      <label className={styles__radio_group.radio_group__label} key={index} >
+                                          <input type="radio" name={'porche'} checked={+porche.id == +selectedPorche.id} value={porche.number} onChange={() => {
+                                            onPorcheChange(porche)
+                                          }} />
+                                          <div className={styles__radio_group.radio_group_item}>
+                                              {porche.number}
+                                          </div>
+                                      </label>
+                                  )}
+                              </div>
+                          </div>
+                          <div className={styles__radio_group.filter__field}>
+                              <div className={styles__radio_group.filter__field_title}>Комнатность</div>
+                              <div className={styles__radio_group.radio_group}>
+                                  {selectedPorche?.saleRooms?.map((room, index) => 
+                                      <label className={styles__radio_group.radio_group__label} key={index} >
+                                          <input type="checkbox" name={'room'} checked={selectedRooms.includes(room)} value={room} onChange={() => {
+                                            onRoomsChange(room)
+                                          }} />
+                                          <div className={`${styles__radio_group.radio_group_item} ${room == 0 ? styles__radio_group.radio_group_item_dark : false}`}>
+                                              {room == 0 ? 'Студия' : room}
+                                          </div>
+                                      </label>
+                                  )}
+                              </div>
                           </div>
                         </div>
-                      );
-                    })
-                  }
-
-                  <div className={styles.filter__horizontal_divider}></div>
-                    {section == "floats" ? (
-                      <div className={styles.filter__radio_row}>
-                        <div className={styles__radio_group.filter__field}>
-                            <div className={styles__radio_group.filter__field_title}></div>
-                            <div className={styles__radio_group.radio_group}>
-                                <span className={styles__radio_group.radio_group__label}>
-                                  <div className={`${styles__radio_group.radio_group_item} ${styles__radio_group.radio_group_item_dark}`}>
-                                    Подъезд
-                                  </div>
-                                </span>
-                                {selectedHouse?.porches?.map((porche, index) => 
-                                    <label className={styles__radio_group.radio_group__label} key={index} >
-                                        <input type="radio" name={'porche'} checked={+porche.id == +selectedPorche.id} value={porche.number} onChange={() => {
-                                          onPorcheChange(porche)
-                                        }} />
-                                        <div className={styles__radio_group.radio_group_item}>
-                                            {porche.number}
-                                        </div>
-                                    </label>
-                                )}
-                            </div>
-                        </div>
-                        <div className={styles__radio_group.filter__field}>
-                            <div className={styles__radio_group.filter__field_title}>Комнатность</div>
-                            <div className={styles__radio_group.radio_group}>
-                                {selectedPorche?.saleRooms?.map((room, index) => 
-                                    <label className={styles__radio_group.radio_group__label} key={index} >
-                                        <input type="checkbox" name={'room'} checked={selectedRooms.includes(room)} value={room} onChange={() => {
-                                          onRoomsChange(room)
-                                        }} />
-                                        <div className={`${styles__radio_group.radio_group_item} ${room == 0 ? styles__radio_group.radio_group_item_dark : false}`}>
-                                            {room == 0 ? 'Студия' : room}
-                                        </div>
-                                    </label>
-                                )}
-                            </div>
-                        </div>
-                      </div>
-                    ) : (
-                      false
-                    )}
-                </div>
-                <Privilege data={data} />
-              </>
-            : <Skeleton style={{display: 'block'}} width={314} height={200} />
-            
-          }
-        </div>
+                      ) : (
+                        false
+                      )}
+                  </div>
+                  <Privilege data={data} />
+                </>
+              : <Skeleton style={{display: 'block'}} width={314} height={200} />
+              
+            }
+          </div>
+        {/* </MediaQuery> */}
         { mounted ? <div className={styles.content}>
           <div className={styles.content__wrapper}>
             <div className={styles.content__title}>

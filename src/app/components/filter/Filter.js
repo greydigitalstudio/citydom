@@ -509,7 +509,6 @@ const Filter = (props) => {
             }
             {mounted &&
                 <MediaQuery maxWidth={767}>
-                    {JSON.stringify(filters)}
                     <div className={styles.filter__title}>Полный каталог новостроек Тюмени, с планировками ценами и самой полной информацией</div>
                     <div className={styles.filter__in}>
                         <div className={styles.filter__form}>
@@ -569,7 +568,7 @@ const Filter = (props) => {
                                     />
 
 
-                                </div>builtYearFrom
+                                </div>
                                 <div className={styles.filter__row}>
                                     <TextInput
                                         onChange={(e) => setFilters({ ...filters, mortgagePayment: e.target.value })}
