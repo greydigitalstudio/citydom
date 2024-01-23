@@ -117,6 +117,7 @@
 
 
 @media only screen and (max-width: 767px) {
+  
   .filter {
     width: 100vw;
 
@@ -125,7 +126,9 @@
     border-radius: 41px;
 
     margin-left: -20px;
-    margin-top: 280px;
+    margin-top: -85px;
+    position: relative;
+    z-index: 10;
   }
 
   .filter__row {

@@ -127,3 +127,10 @@ html {
 .carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
   background: #F7C026 !important;
 }
+
+@media only screen and (max-width: 767px) {
+  .carousel .control-dots {
+    bottom: 105px !important;
+    margin: 0 !important;
+  }
+}

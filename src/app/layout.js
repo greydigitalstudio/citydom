@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <div className={styles.wrapper}>
           {
-            (device !== 'mobile' || path === '/' || path === '/citydom/') && <Header />
+            ((device !== 'mobile' || path === '/') && path !== '/inner') && <Header />
           }
 
           {children}
