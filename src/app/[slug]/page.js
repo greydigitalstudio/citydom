@@ -353,10 +353,33 @@ export default function Page({ params }) {
 
                     </div>
                 }
-                <div className={styles.content__button}>
-                    Скачать презентацию этого проекта
-                </div>
+                <MediaQuery minWidth={768}>
+                  <div className={styles.content__button}>
+                      Скачать презентацию этого проекта
+                  </div>
+                </MediaQuery>
           </div>
+          <div className={styles.filter__call_buttons_row}>
+            <div className={styles.filter__call_button_yellow}>Позвонить</div>
+            <div className={styles.filter__call_button_black}>Заказать звонок</div>
+          </div>
+          <div className={styles.filter__date_text}>
+                    Внесён {(() => {
+                        let date = new Date(data.createdAt)
+                        return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
+                    })()} Обновлён {(() => {
+                        let date = new Date(data.updatedAt)
+                        return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
+                    })()}
+                </div>
+
+                <div className={styles.filter__flats_title}>
+                    Квартиры от дольщиков в этом ЖК
+                </div>
+
+                {/* {
+                    flatsRow()
+                } */}
           {modal &&
                 <div className={styles.content__modal}>
                     <div className={styles.content__modal_wrapper}>
