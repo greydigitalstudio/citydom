@@ -723,6 +723,12 @@
   }
 }
 
+@media all and (max-width: 1024px) {
+  .main .right {
+    display: none;
+  }
+}
+
 .item__flatscount {
   display: inline;
   white-space: nowrap;

@@ -203,13 +203,15 @@ console.log('res', res);
                                         ))
                                     }
                                 </div>
-                                <div className={styles.results__map}>
-                                    <div className={styles.results__map_in}>
+                                <MediaQuery minWidth={768}>
+                                    <div className={styles.results__map}>
                                         <div className={styles.results__map_in}>
-                                            <Skeleton height={'100%'}/>
+                                            <div className={styles.results__map_in}>
+                                                <Skeleton height={'100%'}/>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </MediaQuery>
                             </div>
                             <div className={styles.results__pagination}>
                                 <Skeleton height={40} width={40} circle={true}/>
@@ -225,7 +227,7 @@ console.log('res', res);
                         </div>
                     }
                     {this.state.mounted &&
-                        <MediaQuery minDeviceWidth={768}>
+                        <>
                             <div className={styles.results__content}>
                                 <div className={styles.results__box}>
                                     {this.state.housing.length > 0 && items.filter(i => i.flatsCount != 0).map((item) => (
@@ -233,20 +235,22 @@ console.log('res', res);
                                     ))}
                                 </div>
                                 {this.state.maps &&
-                                <div className={styles.results__map}>
-                                    <YMaps className={styles.results__map_in}>
-                                        <Map width='100%' className={styles.results__map_in} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
-                                            <Clusterer
-                                                options={{
-                                                    preset: "islands#greenClusterIcons",
-                                                    groupByCoordinates: false,
-                                                }}
-                                            >
-                                                {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
-                                            </Clusterer>
-                                        </Map>
-                                    </YMaps>
-                                </div>
+                                <MediaQuery minWidth={768}>
+                                    <div className={styles.results__map}>
+                                        <YMaps className={styles.results__map_in}>
+                                            <Map width='100%' className={styles.results__map_in} defaultState={{ center: this.state.mapsData.center, zoom: this.state.mapsData.zoom }}>
+                                                <Clusterer
+                                                    options={{
+                                                        preset: "islands#greenClusterIcons",
+                                                        groupByCoordinates: false,
+                                                    }}
+                                                >
+                                                    {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
+                                                </Clusterer>
+                                            </Map>
+                                        </YMaps>
+                                    </div>
+                                </MediaQuery>
                                 }
                             </div>
                             <div className={styles.results__pagination}>
@@ -258,7 +262,7 @@ console.log('res', res);
                                     последняя
                                 </div>
                             </div>
-                        </MediaQuery>
+                        </>
                     }
 
                     {this.state.mounted &&

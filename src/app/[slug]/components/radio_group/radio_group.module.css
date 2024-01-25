@@ -94,7 +94,8 @@
     .radio_group {
         border: none;
         overflow: hidden;
-        overflow-x: scroll;
+        overflow-x: auto;
+        width: 100%;
     }
 
     .radio_group__label input:checked + .radio_group_item {
