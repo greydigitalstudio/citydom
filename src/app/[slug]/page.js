@@ -359,27 +359,85 @@ export default function Page({ params }) {
                   </div>
                 </MediaQuery>
           </div>
-          <div className={styles.filter__call_buttons_row}>
-            <div className={styles.filter__call_button_yellow}>Позвонить</div>
-            <div className={styles.filter__call_button_black}>Заказать звонок</div>
-          </div>
-          <div className={styles.filter__date_text}>
-                    Внесён {(() => {
-                        let date = new Date(data.createdAt)
-                        return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
-                    })()} Обновлён {(() => {
-                        let date = new Date(data.updatedAt)
-                        return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
-                    })()}
-                </div>
+          <MediaQuery maxWidth={768}>
+            <div className={styles.filter__call_buttons_row}>
+              <div className={styles.filter__call_button_yellow}>Позвонить</div>
+              <div className={styles.filter__call_button_black}>Заказать звонок</div>
+            </div>
+            <div className={styles.filter__date_text}>
+                Внесён {(() => {
+                    let date = new Date(data.createdAt)
+                    return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
+                })()} Обновлён {(() => {
+                    let date = new Date(data.updatedAt)
+                    return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear()
+                })()}
+            </div>
 
-                <div className={styles.filter__flats_title}>
-                    Квартиры от дольщиков в этом ЖК
+            <div className={styles.filter__flats_title}>
+                Квартиры от дольщиков в этом ЖК
+            </div>
+            <div className={styles.content__flats_add}>
+              <div className={styles.content__flats_add_flat}>
+                <div className={styles.content__flats_add_flat_image}>
+                    <img src={'https://files.citidom.com/a57e65987d434e5b82c067ae65edde4f.jpg'} alt="" />
                 </div>
-
-                {/* {
-                    flatsRow()
-                } */}
+                <div className={styles.content__flats_add_flat_info}>
+                  студия 88 м2
+                </div>
+                <div className={styles.content__flats_add_flat_price}>
+                  2 4000 000 ₽ 
+                </div>
+              </div>
+              <div className={styles.content__flats_add_flat}>
+                <div className={styles.content__flats_add_flat_image}>
+                    <img src={'https://files.citidom.com/a57e65987d434e5b82c067ae65edde4f.jpg'} alt="" />
+                </div>
+                <div className={styles.content__flats_add_flat_info}>
+                  студия 88 м2
+                </div>
+                <div className={styles.content__flats_add_flat_price}>
+                  2 4000 000 ₽ 
+                </div>
+              </div>
+              <div className={styles.content__flats_add_flat}>
+                <div className={styles.content__flats_add_flat_image}>
+                    <img src={'https://files.citidom.com/a57e65987d434e5b82c067ae65edde4f.jpg'} alt="" />
+                </div>
+                <div className={styles.content__flats_add_flat_info}>
+                  студия 88 м2
+                </div>
+                <div className={styles.content__flats_add_flat_price}>
+                  2 4000 000 ₽ 
+                </div>
+              </div>
+              <div className={styles.content__flats_add_flat}>
+                <div className={styles.content__flats_add_flat_image}>
+                    <img src={'https://files.citidom.com/a57e65987d434e5b82c067ae65edde4f.jpg'} alt="" />
+                </div>
+                <div className={styles.content__flats_add_flat_info}>
+                  студия 88 м2
+                </div>
+                <div className={styles.content__flats_add_flat_price}>
+                  2 4000 000 ₽ 
+                </div>
+              </div>
+              <div className={styles.content__flats_add_flat}>
+                <div className={styles.content__flats_add_flat_image}>
+                    <img src={'https://files.citidom.com/a57e65987d434e5b82c067ae65edde4f.jpg'} alt="" />
+                </div>
+                <div className={styles.content__flats_add_flat_info}>
+                  студия 88 м2
+                </div>
+                <div className={styles.content__flats_add_flat_price}>
+                  2 4000 000 ₽ 
+                </div>
+              </div>
+            </div>
+          </MediaQuery>
+          {/* {
+              flatsRow()
+          } */}
           {modal &&
                 <div className={styles.content__modal}>
                     <div className={styles.content__modal_wrapper}>
