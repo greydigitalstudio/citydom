@@ -15,7 +15,7 @@ export default function Banner(props) {
 
     const pathname = usePathname();
     return (
-        <div className={`${banner_styles.banner} ${styles.center} ${pathname == '/' ? banner_styles.banner__small : banner_styles.banner__big}`}>
+        <div className={`${banner_styles.banner} ${styles.center} ${pathname == '/' ? banner_styles.banner__small : banner_styles.banner__big}`} suppressHydrationWarning>
             <div className={banner_styles.banner__in}>
                 
                 <Image

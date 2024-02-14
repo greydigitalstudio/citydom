@@ -6,6 +6,7 @@ import { YMaps, Map, Placemark, Clusterer } from '@pbe/react-yandex-maps';
 import Item from './components/item/item'
 import Select from './components/select/Select'
 
+import Router from 'next/router'
 import MediaQuery from 'react-responsive'
 import Skeleton from 'react-loading-skeleton';
 
@@ -30,6 +31,7 @@ async function getHousingForMap() {
     return res;
 }
 
+
 class Results extends React.Component {
     constructor(props) {
         super(props);
@@ -46,7 +48,8 @@ class Results extends React.Component {
             sort: 'fresh_at_asc',
             houseCount: 0,
             mounted: false,
-            maps: false
+            maps: false,
+            isLoading: false,
         }
     }
 
@@ -193,7 +196,7 @@ console.log('res', res);
                         
                     </div>
 
-                    {!this.state.mounted && 
+                    {(!this.state.mounted || this.state.isLoading) && 
                         <div>
                             <div className={styles.results__content}>
                                 <div className={styles.results__box}>
@@ -226,7 +229,7 @@ console.log('res', res);
                             </div> 
                         </div>
                     }
-                    {this.state.mounted &&
+                    {(this.state.mounted && !this.state.isLoading) &&
                         <>
                             <div className={styles.results__content}>
                                 <div className={styles.results__box}>
@@ -245,7 +248,9 @@ console.log('res', res);
                                                         groupByCoordinates: false,
                                                     }}
                                                 >
-                                                    {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} />)}
+                                                    {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} onClick={() => {
+                alert("Вы нажали метку ");
+              }} />)}
                                                 </Clusterer>
                                             </Map>
                                         </YMaps>
@@ -342,6 +347,9 @@ console.log('res', res);
     }
 
     async changePage(e) {
+        this.setState({
+            isLoading: true,
+        })
         let page = e ? e.target.id.split('-')[1] : this.state.pageData.page;
         let res = await getHousing({
             page, limit: this.state.pageData.pageSize, sort: this.state.sort, filters: this.props.filters
@@ -365,7 +373,8 @@ console.log('res', res);
                 page: page,
                 pageSize: this.state.pageData.pageSize,
                 last: res.pagination.last
-            }
+            },
+            isLoading: false,
         })
     }
 }

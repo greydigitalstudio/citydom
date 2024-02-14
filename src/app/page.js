@@ -29,19 +29,19 @@ export default function Home() {
 
   return (
     <>
-    <MediaQuery minWidth={768}>
-      <Banner/>
-    </MediaQuery>
-    <main className={`${styles.main} ${styles.center}`}>
-      <Filter
-        filters={filters}
-        setFilters={setFilters}
-        useFilters={useFilters}
-      />
-      <Results
-        filters={usedFilters}
-      />
-    </main>
+      <MediaQuery minWidth={768}>
+        <Banner/>
+      </MediaQuery>
+      <main className={`${styles.main} ${styles.center}`}>
+        <Filter
+          filters={filters}
+          setFilters={setFilters}
+          useFilters={useFilters}
+        />
+        <Results
+          filters={usedFilters}
+        />
+      </main>
     </>
   )
 }
