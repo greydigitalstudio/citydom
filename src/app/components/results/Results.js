@@ -43,7 +43,7 @@ class Results extends React.Component {
             pageData: {
                 page: 1,
                 pageSize: 20,
-                last: 20
+                last: 5
             },
             sort: 'fresh_at_asc',
             houseCount: 0,
