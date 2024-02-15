@@ -189,7 +189,6 @@ const Filter = (props) => {
 
     return (
         <div className={styles.filter}>
-            {JSON.stringify(filters)}
             {mounted &&
                 <MediaQuery minWidth={768}>
                     <div className={styles.filter__in}>
