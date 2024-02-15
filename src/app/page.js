@@ -4,7 +4,7 @@ import styles from './page.module.css'
 /* Component imports */
 import Filter from './components/filter/Filter'
 import Results from './components/results/Results'
-
+import { useRouter } from 'next/navigation';
 import { useState } from 'react'
 
 import Banner from './components/general/banner/Banner'
@@ -16,7 +16,7 @@ export default function Home() {
   function setFilters(f) {
     setFilter(f);
   }
-
+  const router = useRouter();
   let [ filters, setFilter ] = useState({
     multilevel: false
   })
@@ -40,6 +40,7 @@ export default function Home() {
         />
         <Results
           filters={usedFilters}
+          router={router}
         />
       </main>
     </>

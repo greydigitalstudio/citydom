@@ -55,7 +55,8 @@ const Filter = (props) => {
                     title = `${numberWithSpaces(filters[key])}`;
                     break;
                 case 'rooms':
-                    title = `${filters[key] === "0" ? "" : filters[key]} ${filters[key] === '0' ? "Студия" : "комн"}`;
+                    let str = filters[key];
+                    title = `${JSON.stringify(str.sort()).replaceAll('"', '').replace('[', '').replace(']', '').replace('0', 'Студия')}`;
                     break;
                 case 'priceMin':
                     title = `от ${numberWithSpaces(filters[key])} ₽`;
@@ -188,6 +189,7 @@ const Filter = (props) => {
 
     return (
         <div className={styles.filter}>
+            {JSON.stringify(filters)}
             {mounted &&
                 <MediaQuery minWidth={768}>
                     <div className={styles.filter__in}>
@@ -195,8 +197,8 @@ const Filter = (props) => {
                         <div className={styles.filter__form}>
                             <div className={styles.filter__form_section}>
                                 <div className={styles.filter__row}>
-                                    <RadioGroup
-                                        onChange={(e) => setFilters({ ...filters, rooms: [e.target.value] })}
+                                    <CheckboxGroup
+                                        onChange={(e, selected) => setFilters({ ...filters, rooms: [...selected] })}
                                         title="Комнатность"
                                         value={filters.rooms}
                                         options={[
@@ -514,7 +516,7 @@ const Filter = (props) => {
                         <div className={styles.filter__form}>
                             <div className={styles.filter__form_section}>
                                 <div className={styles.filter__row}>
-                                    <RadioGroup
+                                    <CheckboxGroup
                                         onChange={(e) => setFilters({ ...filters, room: e.target.value })}
                                         value={filters.room}
                                         options={[
@@ -540,6 +542,8 @@ const Filter = (props) => {
                                             }
                                         ]}
                                     />
+
+                                    
                                 </div>
                                 <div className={styles.filter__row}>
                                     <TextInput

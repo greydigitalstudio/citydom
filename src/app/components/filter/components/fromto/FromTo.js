@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 import styles__filter from '../../filter.module.css'
 import styles__from_to from './fromto.module.css'
@@ -35,19 +36,8 @@ const FromTo = (props) => {
         <div className={`${styles__filter.filter__field} ${styles__filter.filter__flexed} ${styles__from_to.from_to}`}>
             <div className={styles__filter.filter__field_title}>{props.title}</div>
             <div className={styles__filter.filter__field_row}>
-                <input
-                    type={props.from_type}
-                    value={from}
-                    name={props.from_name}
-                    onChange={handleInputFrom}
-                    placeholder={props.from_placeholder}
-                />                <input
-                    type={props.to_type}
-                    value={to}
-                    name={props.to_name}
-                    onChange={handleInputTo}
-                    placeholder={props.to_placeholder}
-                />
+                <NumericFormat name={props.from_name} value={from} displayType={props.from_type} thousandSeparator={' '} placeholder={props.from_placeholder} onChange={handleInputFrom} />
+                <NumericFormat name={props.to_name} value={to} displayType={props.to_type} thousandSeparator={' '} placeholder={props.to_placeholder} onChange={handleInputTo} />
             </div>
         </div>
     );

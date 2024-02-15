@@ -105,6 +105,9 @@
     transition: background 0.3s ease-in-out;
     cursor: pointer;
 }
+.results__pagination_item_dots {
+    pointer-events: none;
+}
 
 .results__pagination_item:hover {
     background: #a4a4a4;

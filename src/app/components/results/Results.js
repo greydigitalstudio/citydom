@@ -5,8 +5,6 @@ import styles from './results.module.css'
 import { YMaps, Map, Placemark, Clusterer } from '@pbe/react-yandex-maps';
 import Item from './components/item/item'
 import Select from './components/select/Select'
-
-import Router from 'next/router'
 import MediaQuery from 'react-responsive'
 import Skeleton from 'react-loading-skeleton';
 
@@ -32,9 +30,11 @@ async function getHousingForMap() {
 }
 
 
+
 class Results extends React.Component {
     constructor(props) {
         super(props);
+        console.log('props', props)
         this.state = {
             housing: [],
             mapsData: {
@@ -61,7 +61,9 @@ class Results extends React.Component {
 
     async componentDidMount() {
         // ширина окна
+        console.log('this.props', this.state.router)
         let width = window.innerWidth;
+
 
         getHousing({
             page: 1,
@@ -132,17 +134,13 @@ console.log('res', res);
         }, 1000)
     }
 
-    onChange = (e) => {
-        this.setState({
-            sort: e.target.value
-        })
-        this.changePage()
-    }
 
     render() {
         const items = this.state.housing.map((i) => (
             i
-        ))
+        ));
+        
+        
         return (
             <div className={styles.results}>
                 <div className={styles.results__in}>
@@ -249,7 +247,7 @@ console.log('res', res);
                                                     }}
                                                 >
                                                     {this.state.mapsData.items?.map(item => <Placemark modules={['geoObject.addon.hint']} geometry={item.geometry} properties={item.properties} options={item.options} key={item.id} onClick={() => {
-                alert("Вы нажали метку ");
+                this.props.router.push(`/${item.id}`);
               }} />)}
                                                 </Clusterer>
                                             </Map>
@@ -301,14 +299,14 @@ console.log('res', res);
         for (let i = 0; i < this.state.pageData.last; i++) {
             if (i < parseInt(this.state.pageData.page) - 4) {
                 if (!firstdots) {
-                    pages.push(<div id="page-1" className={styles.results__pagination_item}>...</div>)
+                    pages.push(<div id="page-1" className={`${styles.results__pagination_item} ${styles.results__pagination_item_dots}`}>...</div>)
                     firstdots = true;
                 }
                 continue;
             }
             if (i >= parseInt(this.state.pageData.page) + 3) {
                 if (!lastdots) {
-                    pages.push(<div id={`page-${this.state.pageData.last}`} className={styles.results__pagination_item}>...</div>)
+                    pages.push(<div id={`page-${this.state.pageData.last}`} className={`${styles.results__pagination_item} ${styles.results__pagination_item_dots}`}>...</div>)
                     lastdots = true;
                 }
                 continue;
@@ -376,6 +374,12 @@ console.log('res', res);
             },
             isLoading: false,
         })
+    }
+
+    
+    goToPage(link) {
+        alert(link);
+        redirect(link);
     }
 }
 

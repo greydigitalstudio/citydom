@@ -175,54 +175,57 @@ export default function Page({ params }) {
                         </> : false
                       }
                     </div>
-                    {
-                      data.houses.map((house, index) => {
-                        return (
-                          <div
-                            id={"house-" + index}
-                            key={index}
-                            className={styles.filter__row}
-                            onClick={() => {
-                              setHouse(house);
-                            }}
-                          >
+                    {section == "floats" ? 
+                        data.houses.map((house, index) => {
+                          return (
                             <div
-                              className={
-                                house.id == selectedHouse.id
-                                  ? styles.filter__button_primary
-                                  : styles.filter__button_secondary
-                              }
+                              id={"house-" + index}
+                              key={index}
+                              className={styles.filter__row}
+                              onClick={() => {
+                                setHouse(house);
+                              }}
                             >
-                              {house.title}
+                              <div
+                                className={
+                                  house.id == selectedHouse.id
+                                    ? styles.filter__button_primary
+                                    : styles.filter__button_secondary
+                                }
+                              >
+                                {house.title}
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })
+                          );
+                        }) :  false
                     }
 
                     <div className={styles.filter__horizontal_divider}></div>
-                      {section == "floats" ? (
                         <div className={styles.filter__radio_row}>
-                          <div className={styles__radio_group.filter__field}>
-                              <div className={styles__radio_group.filter__field_title}></div>
-                              <div className={styles__radio_group.radio_group}>
-                                  <span className={styles__radio_group.radio_group__label}>
-                                    <div className={`${styles__radio_group.radio_group_item} ${styles__radio_group.radio_group_item_dark}`}>
-                                      Подъезд
-                                    </div>
-                                  </span>
-                                  {selectedHouse?.porches?.map((porche, index) => 
-                                      <label className={styles__radio_group.radio_group__label} key={index} >
-                                          <input type="radio" name={'porche'} checked={+porche.id == +selectedPorche.id} value={porche.number} onChange={() => {
-                                            onPorcheChange(porche)
-                                          }} />
-                                          <div className={styles__radio_group.radio_group_item}>
-                                              {porche.number}
-                                          </div>
-                                      </label>
-                                  )}
-                              </div>
-                          </div>
+                          {section == "floats" ? (
+                            <div className={styles__radio_group.filter__field}>
+                                <div className={styles__radio_group.filter__field_title}></div>
+                                <div className={styles__radio_group.radio_group}>
+                                    <span className={styles__radio_group.radio_group__label}>
+                                      <div className={`${styles__radio_group.radio_group_item} ${styles__radio_group.radio_group_item_dark}`}>
+                                        Подъезд
+                                      </div>
+                                    </span>
+                                    {selectedHouse?.porches?.map((porche, index) => 
+                                        <label className={styles__radio_group.radio_group__label} key={index} >
+                                            <input type="radio" name={'porche'} checked={+porche.id == +selectedPorche.id} value={porche.number} onChange={() => {
+                                              onPorcheChange(porche)
+                                            }} />
+                                            <div className={styles__radio_group.radio_group_item}>
+                                                {porche.number}
+                                            </div>
+                                        </label>
+                                    )}
+                                </div>
+                            </div>
+                          ) : (
+                            false
+                          )}
                           <div className={styles__radio_group.filter__field}>
                               <div className={styles__radio_group.filter__field_title}>Комнатность</div>
                               <div className={styles__radio_group.radio_group}>
@@ -239,9 +242,7 @@ export default function Page({ params }) {
                               </div>
                           </div>
                         </div>
-                      ) : (
-                        false
-                      )}
+                      
                   </div>
                   <Privilege data={data} />
                 </>
